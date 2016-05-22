@@ -99,6 +99,7 @@ namespace WhoIsTweeting
                     idSet = new HashSet<string>(ids.ids);
                 }
 
+                UserListItem.lastUpdated = DateTime.Now;
                 HashSet<string> tmpSet = new HashSet<string>(idSet);
                 followings.Clear();
                 do
@@ -112,10 +113,12 @@ namespace WhoIsTweeting
                         { "include_entities", "true" }
                     }))
                     {
-                        followings.Add(new UserListItem(x.id_str, x.name, x.screen_name, x.status));
+                        UserListItem i = new UserListItem(x.id_str, x.name, x.screen_name, x.status);
+                        if (!showAway && i.Status == UserStatus.Away) continue;
+                        if (!showOffline && i.Status == UserStatus.Offline) continue;
+                        followings.Add(i);
                     }
                 } while (tmpSet.Count != 0);
-                UserListItem.lastUpdated = DateTime.Now;
 
                 followings.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
                 listBox.DataSource = null;
@@ -154,94 +157,6 @@ namespace WhoIsTweeting
                 listBox.DataSource = null;
                 listBox.DataSource = followings;
             }
-        }
-    }
-
-    public enum UserStatus { Online, Away, Offline };
-
-    public class UserListBox : ListBox
-    {
-        public UserListBox()
-        {
-            DrawMode = DrawMode.OwnerDrawFixed;
-            ItemHeight = 20;
-        }
-
-        protected override void OnDrawItem(DrawItemEventArgs e)
-        {
-            if (e.Index < 0) return;
-            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
-                e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index,
-                    e.State ^ DrawItemState.Selected, e.ForeColor, Color.FromArgb(240, 240, 240));
-
-            UserListItem i = Items[e.Index] as UserListItem;
-
-            e.DrawBackground();
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            FontFamily itemFontFamily = new FontFamily("Segoe UI");
-            Font itemFont;
-            SolidBrush itemTextBrush;
-            string additionalInfo;
-
-            switch (i.Status)
-            {
-                case UserStatus.Online:
-                    e.Graphics.FillEllipse(Brushes.MediumSpringGreen, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Bold);
-                    itemTextBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
-                    additionalInfo = "";
-                    break;
-                case UserStatus.Away:
-                    e.Graphics.FillEllipse(Brushes.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Regular);
-                    itemTextBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
-                    additionalInfo = $"({i.MinutesFromLastTweet} minutes ago)";
-                    break;
-                default:
-                    e.Graphics.DrawEllipse(Pens.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Regular);
-                    itemTextBrush = new SolidBrush(Color.Gray);
-                    additionalInfo = $"{i.LastTweet.ToString("(yy/MM/dd HH:mm)")}";
-                    break;
-            }
-            e.Graphics.DrawString($"{i.Name} (@{i.ScreenName}) {additionalInfo}", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
-        }
-    }
-
-    public class UserListItem
-    {
-        public static DateTime lastUpdated;
-
-        public string ID { get; private set; }
-        public string Name { get; private set; }
-        public string ScreenName { get; private set; }
-        public DateTime LastTweet { get; private set; }
-
-        public int MinutesFromLastTweet
-        {
-            get
-            {
-                return (int)(lastUpdated - LastTweet).TotalMinutes;
-            }
-        }
-
-        public UserStatus Status
-        {
-            get
-            {
-                return MinutesFromLastTweet <= 5 ? UserStatus.Online :
-                    MinutesFromLastTweet <= 15 ? UserStatus.Away : UserStatus.Offline;
-            }
-        }
-
-        public UserListItem(string id_str, string name, string screenName, Tweet lastTweet)
-        {
-            ID = id_str;
-            Name = name;
-            ScreenName = screenName;
-            if (lastTweet == null) LastTweet = DateTime.FromBinary(0);
-            else LastTweet = lastTweet.created_at.ToLocalTime();
         }
     }
 }
