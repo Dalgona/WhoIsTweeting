@@ -23,15 +23,19 @@ namespace WhoIsTweeting
         private HashSet<string> idSet;
         private List<UserListItem> followings = new List<UserListItem>();
 
+        private bool showAway = true;
+        private bool showOffline = true;
+
         public Form1()
         {
             InitializeComponent();
 
             // TODO: REMOVE HARDCODED TOKENS
-            api = new API("Your Consumer Key", "Your Consumer Key Secret");
-            api.Token = "Your OAuth Token";
-            api.TokenSecret = "Your OAuth Token Secret";
+            api = new API("", "");
+            api.Token = "";
+            api.TokenSecret = "";
 
+            // Create User ListBox
             listBox = new UserListBox();
             listBox.Margin = new Padding(0);
             listBox.Dock = DockStyle.Fill;
@@ -40,8 +44,11 @@ namespace WhoIsTweeting
 
             if (api.Token.Equals("") || api.TokenSecret.Equals(""))
             {
-                mainMenu_user.Text = "Please Login";
+                menuItemUser.Text = "Please Login";
             }
+
+            menuItemAway.Checked = showAway;
+            menuItemOffline.Checked = showOffline;
 
             new Task(() =>
             {
@@ -64,7 +71,7 @@ namespace WhoIsTweeting
                 try
                 {
                     me = await api.Get<User>("/1.1/account/verify_credentials.json");
-                    mainMenu_user.Text = "@" + me.screen_name;
+                    menuItemUser.Text = "@" + me.screen_name;
                 }
                 catch (APIException e)
                 {
@@ -116,7 +123,41 @@ namespace WhoIsTweeting
             }
         }
         // end of UpdateUserList()
+
+        private void OnQuitClick(object sender, EventArgs e)
+            => Application.Exit();
+
+        private void OnAwayClick(object sender, EventArgs e)
+        {
+            menuItemAway.Checked = showAway = !showAway;
+            if (!showAway)
+            {
+                List<UserListItem> tmp = new List<UserListItem>(followings);
+                foreach (UserListItem c in tmp)
+                    if (c.Status == UserStatus.Away)
+                        followings.Remove(c);
+                listBox.DataSource = null;
+                listBox.DataSource = followings;
+            }
+            else UpdateUserList();
+        }
+
+        private void OnOfflineClick(object sender, EventArgs e)
+        {
+            menuItemOffline.Checked = showOffline = !showOffline;
+            if (!showOffline)
+            {
+                List<UserListItem> tmp = new List<UserListItem>(followings);
+                foreach (UserListItem c in tmp)
+                    if (c.Status == UserStatus.Offline)
+                        followings.Remove(c);
+                listBox.DataSource = null;
+                listBox.DataSource = followings;
+            }
+        }
     }
+
+    public enum UserStatus { Online, Away, Offline };
 
     public class UserListBox : ListBox
     {
@@ -143,26 +184,26 @@ namespace WhoIsTweeting
             SolidBrush itemTextBrush;
             string additionalInfo;
 
-            if (i.MinutesFromLastTweet <= 5)
+            switch (i.Status)
             {
-                e.Graphics.FillEllipse(Brushes.MediumSpringGreen, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                itemFont = new Font(itemFontFamily, 9f, FontStyle.Bold);
-                itemTextBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
-                additionalInfo = "";
-            }
-            else if (i.MinutesFromLastTweet <= 15)
-            {
-                e.Graphics.FillEllipse(Brushes.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                itemFont = new Font(itemFontFamily, 9f, FontStyle.Regular);
-                itemTextBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
-                additionalInfo = $"({i.MinutesFromLastTweet} minutes ago)";
-            }
-            else
-            {
-                e.Graphics.DrawEllipse(Pens.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                itemFont = new Font(itemFontFamily, 9f, FontStyle.Regular);
-                itemTextBrush = new SolidBrush(Color.Gray);
-                additionalInfo = $"{i.LastTweet.ToString("(yy/MM/dd HH:mm)")}";
+                case UserStatus.Online:
+                    e.Graphics.FillEllipse(Brushes.MediumSpringGreen, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
+                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Bold);
+                    itemTextBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
+                    additionalInfo = "";
+                    break;
+                case UserStatus.Away:
+                    e.Graphics.FillEllipse(Brushes.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
+                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Regular);
+                    itemTextBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
+                    additionalInfo = $"({i.MinutesFromLastTweet} minutes ago)";
+                    break;
+                default:
+                    e.Graphics.DrawEllipse(Pens.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
+                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Regular);
+                    itemTextBrush = new SolidBrush(Color.Gray);
+                    additionalInfo = $"{i.LastTweet.ToString("(yy/MM/dd HH:mm)")}";
+                    break;
             }
             e.Graphics.DrawString($"{i.Name} (@{i.ScreenName}) {additionalInfo}", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
         }
@@ -170,12 +211,12 @@ namespace WhoIsTweeting
 
     public class UserListItem
     {
+        public static DateTime lastUpdated;
+
         public string ID { get; private set; }
         public string Name { get; private set; }
         public string ScreenName { get; private set; }
         public DateTime LastTweet { get; private set; }
-
-        public static DateTime lastUpdated;
 
         public int MinutesFromLastTweet
         {
@@ -185,15 +226,22 @@ namespace WhoIsTweeting
             }
         }
 
+        public UserStatus Status
+        {
+            get
+            {
+                return MinutesFromLastTweet <= 5 ? UserStatus.Online :
+                    MinutesFromLastTweet <= 15 ? UserStatus.Away : UserStatus.Offline;
+            }
+        }
+
         public UserListItem(string id_str, string name, string screenName, Tweet lastTweet)
         {
             ID = id_str;
             Name = name;
             ScreenName = screenName;
-            if (lastTweet == null)
-                LastTweet = DateTime.FromBinary(0);
-            else
-                LastTweet = lastTweet.created_at.ToLocalTime();
+            if (lastTweet == null) LastTweet = DateTime.FromBinary(0);
+            else LastTweet = lastTweet.created_at.ToLocalTime();
         }
     }
 }
