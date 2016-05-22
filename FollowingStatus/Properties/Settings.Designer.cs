@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FollowingStatus.Properties
+namespace WhoIsTweeting.Properties
 {
 
 

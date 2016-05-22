@@ -12,7 +12,7 @@ using PicoBird.Objects;
 using System.Collections.Specialized;
 using System.Drawing.Drawing2D;
 
-namespace FollowingStatus
+namespace WhoIsTweeting
 {
     public partial class Form1 : Form
     {

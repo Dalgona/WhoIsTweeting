@@ -1,4 +1,4 @@
-﻿namespace FollowingStatus
+﻿namespace WhoIsTweeting
 {
     partial class Form1
     {
