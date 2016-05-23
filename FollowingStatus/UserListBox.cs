@@ -6,6 +6,13 @@ namespace WhoIsTweeting
 {
     public class UserListBox : ListBox
     {
+        private static readonly FontFamily fontFamily = new FontFamily("Segoe UI");
+        private static readonly Font boldFont = new Font(fontFamily, 9.0f, FontStyle.Bold);
+        private static readonly Font regularFont = new Font(fontFamily, 9.0f, FontStyle.Regular);
+        private static readonly Font infoFont = new Font(fontFamily, 8.0f, FontStyle.Regular); // TODO: display time information using this font.
+        private static readonly SolidBrush blackBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
+        private static readonly SolidBrush grayBrush = new SolidBrush(Color.Gray);
+
         public UserListBox()
         {
             DrawMode = DrawMode.OwnerDrawFixed;
@@ -24,7 +31,6 @@ namespace WhoIsTweeting
             e.DrawBackground();
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            FontFamily itemFontFamily = new FontFamily("Segoe UI");
             Font itemFont;
             SolidBrush itemTextBrush;
             string additionalInfo;
@@ -33,20 +39,20 @@ namespace WhoIsTweeting
             {
                 case UserStatus.Online:
                     e.Graphics.FillEllipse(Brushes.MediumSpringGreen, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Bold);
-                    itemTextBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
+                    itemFont = boldFont;
+                    itemTextBrush = blackBrush;
                     additionalInfo = "";
                     break;
                 case UserStatus.Away:
                     e.Graphics.FillEllipse(Brushes.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Regular);
-                    itemTextBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
+                    itemFont = regularFont;
+                    itemTextBrush = blackBrush;
                     additionalInfo = $"({i.MinutesFromLastTweet} minutes ago)";
                     break;
                 default:
                     e.Graphics.DrawEllipse(Pens.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
-                    itemFont = new Font(itemFontFamily, 9f, FontStyle.Regular);
-                    itemTextBrush = new SolidBrush(Color.Gray);
+                    itemFont = regularFont;
+                    itemTextBrush = grayBrush;
                     additionalInfo = $"{i.LastTweet.ToString("(yy/MM/dd HH:mm)")}";
                     break;
             }

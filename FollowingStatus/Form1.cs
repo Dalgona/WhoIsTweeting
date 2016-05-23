@@ -10,7 +10,8 @@ using System.Windows.Forms;
 using PicoBird;
 using PicoBird.Objects;
 using System.Collections.Specialized;
-using System.Drawing.Drawing2D;
+using Microsoft.VisualBasic;
+using System.Diagnostics;
 
 namespace WhoIsTweeting
 {
@@ -19,6 +20,9 @@ namespace WhoIsTweeting
         private API api;
         private UserListBox listBox;
 
+        private bool loggedIn = false;
+        private bool running = false;
+        private bool updating = false;
         private User me;
         private HashSet<string> idSet;
         private List<UserListItem> followings = new List<UserListItem>();
@@ -32,8 +36,10 @@ namespace WhoIsTweeting
 
             // TODO: REMOVE HARDCODED TOKENS
             api = new API("", "");
+            api.OAuthCallback = "oob";
             api.Token = "";
             api.TokenSecret = "";
+            //api.Token = api.TokenSecret = "";
 
             // Create User ListBox
             listBox = new UserListBox();
@@ -42,40 +48,53 @@ namespace WhoIsTweeting
             listBox.BorderStyle = BorderStyle.None;
             mainLayout.Controls.Add(listBox);
 
-            if (api.Token.Equals("") || api.TokenSecret.Equals(""))
-            {
-                menuItemUser.Text = "Please Login";
-            }
-
             menuItemAway.Checked = showAway;
             menuItemOffline.Checked = showOffline;
 
-            new Task(() =>
+            if (api.Token.Equals("") || api.TokenSecret.Equals(""))
             {
-                while (true)
-                {
-                    UpdateUserList();
-                    System.Threading.Thread.Sleep(TimeSpan.FromMinutes(0.5));
-                }
-            }).Start();
+                menuItemUser.Text = "Please sign in";
+                return;
+            }
+
+            Run();
+        }
+
+        private void Run(Task _ = null)
+        {
+            if (!running)
+            {
+                running = true;
+                UpdateMyInfo()
+                    .ContinueWith((x) =>
+                    {
+                        while (true)
+                        {
+                            UpdateUserList();
+                            System.Threading.Thread.Sleep(TimeSpan.FromMinutes(0.5));
+                        }
+                    }, TaskContinuationOptions.NotOnFaulted);
+            }
         }
 
         private async Task UpdateMyInfo()
         {
             if (mainMenu.InvokeRequired)
-            {
-                mainMenu.Invoke(new Func<Task>(UpdateMyInfo));
-            }
+                await (Task)mainMenu.Invoke(new Func<Task>(UpdateMyInfo));
             else
             {
                 try
                 {
                     me = await api.Get<User>("/1.1/account/verify_credentials.json");
+                    loggedIn = true;
                     menuItemUser.Text = "@" + me.screen_name;
+                    menuItemSignIn.Enabled = false;
                 }
                 catch (APIException e)
                 {
-                    MessageBox.Show(e.Info.errors[0].message);
+                    MessageBox.Show($"{e.Message}\n\nMessage: {e.Info.errors[0].message} [{e.Info.errors[0].code}]");
+                    api.Token = api.TokenSecret = "";
+                    throw e;
                 }
             }
         }
@@ -89,7 +108,6 @@ namespace WhoIsTweeting
                 // Populate initial data
                 if (idSet == null)
                 {
-                    await UpdateMyInfo();
                     CursoredIdStrings ids = await api.Get<CursoredIdStrings>("/1.1/friends/ids.json",
                         new NameValueCollection
                         {
@@ -99,6 +117,9 @@ namespace WhoIsTweeting
                     idSet = new HashSet<string>(ids.ids);
                 }
 
+                if (updating) return;
+                updating = true;
+
                 UserListItem.lastUpdated = DateTime.Now;
                 HashSet<string> tmpSet = new HashSet<string>(idSet);
                 followings.Clear();
@@ -107,6 +128,7 @@ namespace WhoIsTweeting
                     HashSet<string> _ = new HashSet<string>(tmpSet.Take(100));
                     tmpSet.ExceptWith(_);
                     string data = string.Join(",", _);
+                    Debug.Write("(");
                     foreach (var x in await api.Post<User[]>("/1.1/users/lookup.json", null, new NameValueCollection
                     {
                         { "user_id", data },
@@ -117,12 +139,16 @@ namespace WhoIsTweeting
                         if (!showAway && i.Status == UserStatus.Away) continue;
                         if (!showOffline && i.Status == UserStatus.Offline) continue;
                         followings.Add(i);
+                        Debug.Write("*");
                     }
+                    Debug.WriteLine(")");
                 } while (tmpSet.Count != 0);
 
                 followings.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
                 listBox.DataSource = null;
                 listBox.DataSource = followings;
+
+                updating = false;
             }
         }
         // end of UpdateUserList()
@@ -156,6 +182,19 @@ namespace WhoIsTweeting
                         followings.Remove(c);
                 listBox.DataSource = null;
                 listBox.DataSource = followings;
+            }
+            else UpdateUserList();
+        }
+
+        private void OnSignInClick(object sender, EventArgs e)
+        {
+            if (!loggedIn)
+            {
+                api.RequestToken((url) =>
+                {
+                    Process.Start(url);
+                    return Interaction.InputBox("Input PIN", "Sign in with Twitter");
+                }).ContinueWith(Run);
             }
         }
     }

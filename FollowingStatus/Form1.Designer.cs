@@ -34,6 +34,7 @@
             this.menuItemAway = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemOffline = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemQuit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemSignIn = new System.Windows.Forms.ToolStripMenuItem();
             this.mainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.mainMenu.SuspendLayout();
             this.mainLayout.SuspendLayout();
@@ -54,6 +55,7 @@
             // menuItemUser
             // 
             this.menuItemUser.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemSignIn,
             this.viewToolStripMenuItem,
             this.menuItemQuit});
             this.menuItemUser.Name = "menuItemUser";
@@ -66,7 +68,7 @@
             this.menuItemAway,
             this.menuItemOffline});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.viewToolStripMenuItem.Text = "&View";
             // 
             // menuItemAway
@@ -86,9 +88,16 @@
             // menuItemQuit
             // 
             this.menuItemQuit.Name = "menuItemQuit";
-            this.menuItemQuit.Size = new System.Drawing.Size(152, 22);
+            this.menuItemQuit.Size = new System.Drawing.Size(184, 22);
             this.menuItemQuit.Text = "&Quit";
             this.menuItemQuit.Click += new System.EventHandler(this.OnQuitClick);
+            // 
+            // menuItemSignIn
+            // 
+            this.menuItemSignIn.Name = "menuItemSignIn";
+            this.menuItemSignIn.Size = new System.Drawing.Size(184, 22);
+            this.menuItemSignIn.Text = "Sign &in with Twitter...";
+            this.menuItemSignIn.Click += new System.EventHandler(this.OnSignInClick);
             // 
             // mainLayout
             // 
@@ -132,6 +141,7 @@
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuItemAway;
         private System.Windows.Forms.ToolStripMenuItem menuItemOffline;
+        private System.Windows.Forms.ToolStripMenuItem menuItemSignIn;
     }
 }
 
