@@ -63,7 +63,7 @@ namespace WhoIsTweeting
                     additionalInfo = i.MinutesFromLastTweet <= 1440 ? i.LastTweet.ToString("HH:mm") : i.LastTweet.ToString("yy/MM/dd");
                     break;
             }
-            e.Graphics.DrawString($"{i.Name} (@{i.ScreenName})", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
+            e.Graphics.DrawString($"@{i.ScreenName}", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
             Size infoSize = TextRenderer.MeasureText(e.Graphics, additionalInfo, infoFont);
             e.Graphics.DrawString(additionalInfo, infoFont, grayBrush, e.Bounds.Right - infoSize.Width - 2, e.Bounds.Top + 10 - infoSize.Height / 2.0f);
         }
