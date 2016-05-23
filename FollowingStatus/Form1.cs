@@ -27,19 +27,19 @@ namespace WhoIsTweeting
         private HashSet<string> idSet;
         private List<UserListItem> followings = new List<UserListItem>();
 
-        private bool showAway = true;
-        private bool showOffline = true;
+        private bool showAway = Properties.Settings.Default.ShowAway;
+        private bool showOffline = Properties.Settings.Default.ShowOffline;
 
         public Form1()
         {
             InitializeComponent();
 
-            // TODO: REMOVE HARDCODED TOKENS
-            api = new API("", "");
+            // TODO
+            api = new API("your consumer key", "your consumer secret");
             api.OAuthCallback = "oob";
-            api.Token = "";
-            api.TokenSecret = "";
-            //api.Token = api.TokenSecret = "";
+
+            api.Token = Properties.Settings.Default.Token;
+            api.TokenSecret = Properties.Settings.Default.TokenSecret;
 
             // Create User ListBox
             listBox = new UserListBox();
@@ -89,6 +89,9 @@ namespace WhoIsTweeting
                     loggedIn = true;
                     menuItemUser.Text = "@" + me.screen_name;
                     menuItemSignIn.Enabled = false;
+                    Properties.Settings.Default.Token = api.Token;
+                    Properties.Settings.Default.TokenSecret = api.TokenSecret;
+                    Properties.Settings.Default.Save();
                 }
                 catch (APIException e)
                 {
@@ -159,6 +162,8 @@ namespace WhoIsTweeting
         private void OnAwayClick(object sender, EventArgs e)
         {
             menuItemAway.Checked = showAway = !showAway;
+            Properties.Settings.Default.ShowAway = showAway;
+            Properties.Settings.Default.Save();
             if (!showAway)
             {
                 List<UserListItem> tmp = new List<UserListItem>(followings);
@@ -168,12 +173,14 @@ namespace WhoIsTweeting
                 listBox.DataSource = null;
                 listBox.DataSource = followings;
             }
-            else UpdateUserList();
+            else if (loggedIn) UpdateUserList();
         }
 
         private void OnOfflineClick(object sender, EventArgs e)
         {
             menuItemOffline.Checked = showOffline = !showOffline;
+            Properties.Settings.Default.ShowOffline = showOffline;
+            Properties.Settings.Default.Save();
             if (!showOffline)
             {
                 List<UserListItem> tmp = new List<UserListItem>(followings);
@@ -183,7 +190,7 @@ namespace WhoIsTweeting
                 listBox.DataSource = null;
                 listBox.DataSource = followings;
             }
-            else UpdateUserList();
+            else if (loggedIn) UpdateUserList();
         }
 
         private void OnSignInClick(object sender, EventArgs e)
