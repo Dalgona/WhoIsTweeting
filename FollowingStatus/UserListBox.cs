@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -9,7 +10,7 @@ namespace WhoIsTweeting
         private static readonly FontFamily fontFamily = new FontFamily("Segoe UI");
         private static readonly Font boldFont = new Font(fontFamily, 9.0f, FontStyle.Bold);
         private static readonly Font regularFont = new Font(fontFamily, 9.0f, FontStyle.Regular);
-        private static readonly Font infoFont = new Font(fontFamily, 8.0f, FontStyle.Regular); // TODO: display time information using this font.
+        private static readonly Font infoFont = new Font(fontFamily, 8.0f, FontStyle.Regular);
         private static readonly SolidBrush blackBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
         private static readonly SolidBrush grayBrush = new SolidBrush(Color.Gray);
 
@@ -17,6 +18,12 @@ namespace WhoIsTweeting
         {
             DrawMode = DrawMode.OwnerDrawFixed;
             ItemHeight = 20;
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            Refresh();
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
@@ -47,16 +54,18 @@ namespace WhoIsTweeting
                     e.Graphics.FillEllipse(Brushes.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
                     itemFont = regularFont;
                     itemTextBrush = blackBrush;
-                    additionalInfo = $"({i.MinutesFromLastTweet} minutes ago)";
+                    additionalInfo = $"{i.MinutesFromLastTweet} min";
                     break;
                 default:
                     e.Graphics.DrawEllipse(Pens.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
                     itemFont = regularFont;
                     itemTextBrush = grayBrush;
-                    additionalInfo = $"{i.LastTweet.ToString("(yy/MM/dd HH:mm)")}";
+                    additionalInfo = i.MinutesFromLastTweet <= 1440 ? i.LastTweet.ToString("HH:mm") : i.LastTweet.ToString("yy/MM/dd");
                     break;
             }
-            e.Graphics.DrawString($"{i.Name} (@{i.ScreenName}) {additionalInfo}", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
+            e.Graphics.DrawString($"{i.Name} (@{i.ScreenName})", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
+            Size infoSize = TextRenderer.MeasureText(e.Graphics, additionalInfo, infoFont);
+            e.Graphics.DrawString(additionalInfo, infoFont, grayBrush, e.Bounds.Right - infoSize.Width - 2, e.Bounds.Top + 10 - infoSize.Height / 2.0f);
         }
     }
 }

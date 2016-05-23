@@ -35,7 +35,7 @@ namespace WhoIsTweeting
             InitializeComponent();
 
             // TODO
-            api = new API("your consumer key", "your consumer secret");
+            api = new API("", "");
             api.OAuthCallback = "oob";
 
             api.Token = Properties.Settings.Default.Token;
