@@ -123,6 +123,8 @@ namespace WhoIsTweeting
                 if (updating) return;
                 updating = true;
 
+                int nAway = 0;
+                int nOffline = 0;
                 UserListItem.lastUpdated = DateTime.Now;
                 HashSet<string> tmpSet = new HashSet<string>(idSet);
                 followings.Clear();
@@ -131,7 +133,6 @@ namespace WhoIsTweeting
                     HashSet<string> _ = new HashSet<string>(tmpSet.Take(100));
                     tmpSet.ExceptWith(_);
                     string data = string.Join(",", _);
-                    Debug.Write("(");
                     foreach (var x in await api.Post<User[]>("/1.1/users/lookup.json", null, new NameValueCollection
                     {
                         { "user_id", data },
@@ -139,13 +140,15 @@ namespace WhoIsTweeting
                     }))
                     {
                         UserListItem i = new UserListItem(x.id_str, x.name, x.screen_name, x.status);
-                        if (!showAway && i.Status == UserStatus.Away) continue;
-                        if (!showOffline && i.Status == UserStatus.Offline) continue;
+                        if (i.Status == UserStatus.Away) { ++nAway; if (!showAway) continue; }
+                        if (i.Status == UserStatus.Offline) { ++nOffline; if (!showOffline) continue; }
                         followings.Add(i);
-                        Debug.Write("*");
                     }
-                    Debug.WriteLine(")");
                 } while (tmpSet.Count != 0);
+
+                statAway.Text = nAway.ToString();
+                statOffline.Text = nOffline.ToString();
+                statOnline.Text = (idSet.Count - nAway - nOffline).ToString();
 
                 followings.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
                 listBox.DataSource = null;
