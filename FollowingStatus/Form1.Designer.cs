@@ -30,11 +30,11 @@
         {
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuItemUser = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemSignIn = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemAway = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemOffline = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemQuit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemSignIn = new System.Windows.Forms.ToolStripMenuItem();
             this.mainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.mainMenu.SuspendLayout();
             this.mainLayout.SuspendLayout();
@@ -48,7 +48,7 @@
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.mainMenu.Size = new System.Drawing.Size(524, 24);
+            this.mainMenu.Size = new System.Drawing.Size(434, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -62,6 +62,13 @@
             this.menuItemUser.Size = new System.Drawing.Size(71, 20);
             this.menuItemUser.Text = "Loading...";
             // 
+            // menuItemSignIn
+            // 
+            this.menuItemSignIn.Name = "menuItemSignIn";
+            this.menuItemSignIn.Size = new System.Drawing.Size(184, 22);
+            this.menuItemSignIn.Text = "Sign &in with Twitter...";
+            this.menuItemSignIn.Click += new System.EventHandler(this.OnSignInClick);
+            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -74,14 +81,14 @@
             // menuItemAway
             // 
             this.menuItemAway.Name = "menuItemAway";
-            this.menuItemAway.Size = new System.Drawing.Size(152, 22);
+            this.menuItemAway.Size = new System.Drawing.Size(141, 22);
             this.menuItemAway.Text = "A&way Users";
             this.menuItemAway.Click += new System.EventHandler(this.OnAwayClick);
             // 
             // menuItemOffline
             // 
             this.menuItemOffline.Name = "menuItemOffline";
-            this.menuItemOffline.Size = new System.Drawing.Size(152, 22);
+            this.menuItemOffline.Size = new System.Drawing.Size(141, 22);
             this.menuItemOffline.Text = "&Offline Users";
             this.menuItemOffline.Click += new System.EventHandler(this.OnOfflineClick);
             // 
@@ -91,13 +98,6 @@
             this.menuItemQuit.Size = new System.Drawing.Size(184, 22);
             this.menuItemQuit.Text = "&Quit";
             this.menuItemQuit.Click += new System.EventHandler(this.OnQuitClick);
-            // 
-            // menuItemSignIn
-            // 
-            this.menuItemSignIn.Name = "menuItemSignIn";
-            this.menuItemSignIn.Size = new System.Drawing.Size(184, 22);
-            this.menuItemSignIn.Text = "Sign &in with Twitter...";
-            this.menuItemSignIn.Click += new System.EventHandler(this.OnSignInClick);
             // 
             // mainLayout
             // 
@@ -111,7 +111,7 @@
             this.mainLayout.RowCount = 2;
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainLayout.Size = new System.Drawing.Size(524, 465);
+            this.mainLayout.Size = new System.Drawing.Size(434, 465);
             this.mainLayout.TabIndex = 1;
             // 
             // Form1
@@ -119,7 +119,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(524, 465);
+            this.ClientSize = new System.Drawing.Size(434, 465);
             this.Controls.Add(this.mainLayout);
             this.MainMenuStrip = this.mainMenu;
             this.Name = "Form1";
