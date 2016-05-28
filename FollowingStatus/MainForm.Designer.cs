@@ -1,6 +1,6 @@
 ﻿namespace WhoIsTweeting
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// 필수 디자이너 변수입니다.
@@ -53,7 +53,7 @@
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.mainMenu.Size = new System.Drawing.Size(451, 24);
+            this.mainMenu.Size = new System.Drawing.Size(234, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -117,7 +117,7 @@
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.mainLayout.Size = new System.Drawing.Size(451, 567);
+            this.mainLayout.Size = new System.Drawing.Size(234, 567);
             this.mainLayout.TabIndex = 1;
             // 
             // statusStrip1
@@ -130,7 +130,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 545);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(451, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(234, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -155,7 +155,7 @@
             this.statOffline.Size = new System.Drawing.Size(12, 17);
             this.statOffline.Text = "-";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -163,7 +163,7 @@
             this.ClientSize = new System.Drawing.Size(234, 567);
             this.Controls.Add(this.mainLayout);
             this.MainMenuStrip = this.mainMenu;
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Followings";
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
