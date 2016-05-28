@@ -124,7 +124,6 @@ namespace WhoIsTweeting
                 }
 
                 status = newStatus;
-                MessageBox.Show($"Current status: {status}");
             }
         }
 
