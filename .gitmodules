@@ -1,0 +1,3 @@
+[submodule "PicoBird"]
+	path = PicoBird
+	url = https://github.com/Dalgona/PicoBird.git
