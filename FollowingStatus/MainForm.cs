@@ -4,6 +4,7 @@ using PicoBird.Objects;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,6 @@ namespace WhoIsTweeting
         private API api;
 
         private ApplicationStatus status = ApplicationStatus.Initial;
-        private Task mainLoop;
 
         private User me;
         private HashSet<string> idSet;
@@ -44,7 +44,6 @@ namespace WhoIsTweeting
             menuItemAway.Checked = showAway;
             menuItemOffline.Checked = showOffline;
 
-            // TODO
             api = new API(AppSettings.ConsumerKey, AppSettings.ConsumerSecret);
             api.Token = AppSettings.Token;
             api.TokenSecret = AppSettings.TokenSecret;
@@ -113,11 +112,8 @@ namespace WhoIsTweeting
                             menuItemUser.Text = $"@{me.screen_name}";
                             menuItemSignIn.Enabled = false;
                         }
-                        else
-                        {
-                            // from "Running/Updating" status
-                            // TODO: put some code that stops the main loop task
-                        }
+                        else if (listUpdateWorker.IsBusy)
+                            listUpdateWorker.CancelAsync();
                         break;
 
                     case ApplicationStatus.Running:
@@ -130,9 +126,6 @@ namespace WhoIsTweeting
                             throw new Exception("Invalid status change");
                         break;
                 }
-#if DEBUG
-                Debug.WriteLine(newStatus);
-#endif
 
                 status = newStatus;
             }
@@ -143,19 +136,7 @@ namespace WhoIsTweeting
             if (status >= ApplicationStatus.Running) return;
             SetStatus(ApplicationStatus.Running);
 
-            // TODO: implement task cancellation.
-            if (mainLoop == null)
-            {
-                mainLoop = new Task(() =>
-                {
-                    while (true)
-                    {
-                        UpdateUserList();
-                        System.Threading.Thread.Sleep(TimeSpan.FromMinutes(0.5));
-                    }
-                });
-            }
-            mainLoop.Start();
+            listUpdateWorker.RunWorkerAsync();
         }
 
         private async void UpdateUserList()
@@ -178,6 +159,7 @@ namespace WhoIsTweeting
 
                 if (status == ApplicationStatus.Updating) return;
                 SetStatus(ApplicationStatus.Updating);
+                statUpdating.Text = "Updating";
 
                 int nAway = 0;
                 int nOffline = 0;
@@ -211,6 +193,7 @@ namespace WhoIsTweeting
                 listBox.DataSource = followings;
 
                 SetStatus(ApplicationStatus.Running);
+                statUpdating.Text = "";
             }
         }
         // end of UpdateUserList()
@@ -260,6 +243,7 @@ namespace WhoIsTweeting
                 AppSettings.ConsumerKey = form.ConsumerKey;
                 AppSettings.ConsumerSecret = form.ConsumerSecret;
                 AppSettings.Save();
+                if (listUpdateWorker.IsBusy) listUpdateWorker.CancelAsync();
                 if (form.ConsumerKey == "" || form.ConsumerSecret == "")
                 {
                     MessageBox.Show("Both of two fields cannot be left blank.\n"
@@ -336,6 +320,21 @@ namespace WhoIsTweeting
                 {
                     { "status", form.MentionText }
                 });
+            }
+        }
+
+        private void listUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            while (true)
+            {
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                UpdateUserList();
+                System.Threading.Thread.Sleep(TimeSpan.FromMinutes(0.5));
             }
         }
     }

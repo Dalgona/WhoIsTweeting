@@ -46,9 +46,13 @@
             this.ctxItemNickname = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxItemID = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ctxItemOpenProfile = new System.Windows.Forms.ToolStripMenuItem();
-            this.listBox = new WhoIsTweeting.UserListBox();
             this.ctxItemMention = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxItemOpenProfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.listUpdateWorker = new System.ComponentModel.BackgroundWorker();
+            this.statUpdating = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.listBox = new WhoIsTweeting.UserListBox();
             this.mainMenu.SuspendLayout();
             this.mainLayout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -73,7 +77,9 @@
             this.menuItemUser.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemSignIn,
             this.menuItemConsumer,
+            this.toolStripSeparator2,
             this.viewToolStripMenuItem,
+            this.toolStripSeparator3,
             this.menuItemQuit});
             this.menuItemUser.Name = "menuItemUser";
             this.menuItemUser.Size = new System.Drawing.Size(71, 20);
@@ -147,7 +153,8 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statOnline,
             this.statAway,
-            this.statOffline});
+            this.statOffline,
+            this.statUpdating});
             this.statusStrip1.Location = new System.Drawing.Point(0, 545);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
@@ -190,7 +197,7 @@
             this.ctxItemOpenProfile});
             this.listCtxMenu.Name = "listCtxMenu";
             this.listCtxMenu.ShowImageMargin = false;
-            this.listCtxMenu.Size = new System.Drawing.Size(155, 120);
+            this.listCtxMenu.Size = new System.Drawing.Size(155, 98);
             // 
             // ctxItemNickname
             // 
@@ -213,12 +220,41 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(151, 6);
             // 
+            // ctxItemMention
+            // 
+            this.ctxItemMention.Name = "ctxItemMention";
+            this.ctxItemMention.Size = new System.Drawing.Size(154, 22);
+            this.ctxItemMention.Text = "Send a &Mention";
+            this.ctxItemMention.Click += new System.EventHandler(this.OnCtxMentionClick);
+            // 
             // ctxItemOpenProfile
             // 
             this.ctxItemOpenProfile.Name = "ctxItemOpenProfile";
             this.ctxItemOpenProfile.Size = new System.Drawing.Size(154, 22);
             this.ctxItemOpenProfile.Text = "Open Twitter &Profile";
             this.ctxItemOpenProfile.Click += new System.EventHandler(this.OnCtxOpenProfileClick);
+            // 
+            // listUpdateWorker
+            // 
+            this.listUpdateWorker.WorkerSupportsCancellation = true;
+            this.listUpdateWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.listUpdateWorker_DoWork);
+            // 
+            // statUpdating
+            // 
+            this.statUpdating.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.statUpdating.Name = "statUpdating";
+            this.statUpdating.Size = new System.Drawing.Size(0, 17);
+            this.statUpdating.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(181, 6);
             // 
             // listBox
             // 
@@ -234,13 +270,6 @@
             this.listBox.Size = new System.Drawing.Size(234, 521);
             this.listBox.TabIndex = 3;
             this.listBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listBox_MouseUp);
-            // 
-            // ctxItemMention
-            // 
-            this.ctxItemMention.Name = "ctxItemMention";
-            this.ctxItemMention.Size = new System.Drawing.Size(154, 22);
-            this.ctxItemMention.Text = "Send a &Mention";
-            this.ctxItemMention.Click += new System.EventHandler(this.OnCtxMentionClick);
             // 
             // MainForm
             // 
@@ -286,6 +315,10 @@
         private System.Windows.Forms.ToolStripMenuItem ctxItemOpenProfile;
         private System.Windows.Forms.ToolStripMenuItem ctxItemID;
         private System.Windows.Forms.ToolStripMenuItem ctxItemMention;
+        private System.ComponentModel.BackgroundWorker listUpdateWorker;
+        private System.Windows.Forms.ToolStripStatusLabel statUpdating;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
 
