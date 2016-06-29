@@ -337,5 +337,10 @@ namespace WhoIsTweeting
                 System.Threading.Thread.Sleep(TimeSpan.FromMinutes(0.5));
             }
         }
+
+        private void OnAboutClick(object sender, EventArgs e)
+        {
+            new AboutForm().ShowDialog(this);
+        }
     }
 }

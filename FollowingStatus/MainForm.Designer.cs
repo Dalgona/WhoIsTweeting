@@ -53,6 +53,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.listBox = new WhoIsTweeting.UserListBox();
+            this.menuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.mainLayout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -80,6 +81,7 @@
             this.toolStripSeparator2,
             this.viewToolStripMenuItem,
             this.toolStripSeparator3,
+            this.menuItemAbout,
             this.menuItemQuit});
             this.menuItemUser.Name = "menuItemUser";
             this.menuItemUser.Size = new System.Drawing.Size(71, 20);
@@ -96,7 +98,7 @@
             // 
             this.menuItemConsumer.Name = "menuItemConsumer";
             this.menuItemConsumer.Size = new System.Drawing.Size(184, 22);
-            this.menuItemConsumer.Text = "Set &Consumer Key";
+            this.menuItemConsumer.Text = "Set &Consumer Key...";
             this.menuItemConsumer.Click += new System.EventHandler(this.OnConsumerClick);
             // 
             // viewToolStripMenuItem
@@ -271,6 +273,13 @@
             this.listBox.TabIndex = 3;
             this.listBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listBox_MouseUp);
             // 
+            // menuItemAbout
+            // 
+            this.menuItemAbout.Name = "menuItemAbout";
+            this.menuItemAbout.Size = new System.Drawing.Size(184, 22);
+            this.menuItemAbout.Text = "&About...";
+            this.menuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -281,7 +290,6 @@
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
-            this.Text = "Followings";
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.mainLayout.ResumeLayout(false);
@@ -319,6 +327,7 @@
         private System.Windows.Forms.ToolStripStatusLabel statUpdating;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem menuItemAbout;
     }
 }
 

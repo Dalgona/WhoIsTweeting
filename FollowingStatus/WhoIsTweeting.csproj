@@ -87,6 +87,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConsumerKeyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +117,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserListItem.cs" />
+    <EmbeddedResource Include="AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConsumerKeyForm.resx">
       <DependentUpon>ConsumerKeyForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -148,6 +157,9 @@
       <Project>{e611194b-22fb-44fd-863d-7bb756069c5b}</Project>
       <Name>libpb</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\picobird.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
