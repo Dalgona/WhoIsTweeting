@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.mainLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtConsumerKey = new System.Windows.Forms.TextBox();
             this.txtConsumerSecret = new System.Windows.Forms.TextBox();
+            this.mainLayout = new System.Windows.Forms.FlowLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.btnLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             this.mainLayout.SuspendLayout();
             this.btnLayout.SuspendLayout();
@@ -59,30 +59,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(457, 58);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // mainLayout
-            // 
-            this.mainLayout.Controls.Add(this.label1);
-            this.mainLayout.Controls.Add(this.tableLayoutPanel1);
-            this.mainLayout.Controls.Add(this.btnLayout);
-            this.mainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.mainLayout.Location = new System.Drawing.Point(0, 0);
-            this.mainLayout.Name = "mainLayout";
-            this.mainLayout.Size = new System.Drawing.Size(464, 147);
-            this.mainLayout.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 6);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(383, 39);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Please copy and paste the consumer key and the consumer secret of\r\nyour Twitter a" +
-    "pplication. If you do not have an app, you can create one at\r\nhttps://dev.twitte" +
-    "r.com.\r\n";
             // 
             // label2
             // 
@@ -121,6 +97,41 @@
             this.txtConsumerSecret.TabIndex = 3;
             this.txtConsumerSecret.UseSystemPasswordChar = true;
             // 
+            // mainLayout
+            // 
+            this.mainLayout.Controls.Add(this.label1);
+            this.mainLayout.Controls.Add(this.tableLayoutPanel1);
+            this.mainLayout.Controls.Add(this.btnLayout);
+            this.mainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainLayout.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.mainLayout.Location = new System.Drawing.Point(0, 0);
+            this.mainLayout.Name = "mainLayout";
+            this.mainLayout.Size = new System.Drawing.Size(464, 147);
+            this.mainLayout.TabIndex = 1;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 6);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(383, 39);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Please copy and paste the consumer key and the consumer secret of\r\nyour Twitter a" +
+    "pplication. If you do not have an app, you can create one at\r\nhttps://dev.twitte" +
+    "r.com.\r\n";
+            // 
+            // btnLayout
+            // 
+            this.btnLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLayout.AutoSize = true;
+            this.btnLayout.Controls.Add(this.btnOK);
+            this.btnLayout.Controls.Add(this.btnCancel);
+            this.btnLayout.Location = new System.Drawing.Point(298, 115);
+            this.btnLayout.Name = "btnLayout";
+            this.btnLayout.Size = new System.Drawing.Size(162, 29);
+            this.btnLayout.TabIndex = 4;
+            // 
             // btnOK
             // 
             this.btnOK.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -143,20 +154,10 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // btnLayout
-            // 
-            this.btnLayout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLayout.AutoSize = true;
-            this.btnLayout.Controls.Add(this.btnOK);
-            this.btnLayout.Controls.Add(this.btnCancel);
-            this.btnLayout.Location = new System.Drawing.Point(298, 115);
-            this.btnLayout.Name = "btnLayout";
-            this.btnLayout.Size = new System.Drawing.Size(162, 29);
-            this.btnLayout.TabIndex = 4;
-            // 
             // ConsumerKeyForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(464, 147);
             this.Controls.Add(this.mainLayout);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));

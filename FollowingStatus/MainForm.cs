@@ -21,7 +21,6 @@ namespace WhoIsTweeting
     public partial class MainForm : Form
     {
         private API api;
-        private UserListBox listBox;
 
         private ApplicationStatus status = ApplicationStatus.Initial;
         private Task mainLoop;
@@ -41,13 +40,6 @@ namespace WhoIsTweeting
 
             showAway = AppSettings.ShowAway;
             showOffline = AppSettings.ShowOffline;
-
-            // Create User ListBox
-            listBox = new UserListBox();
-            listBox.Margin = new Padding(0);
-            listBox.Dock = DockStyle.Fill;
-            listBox.BorderStyle = BorderStyle.None;
-            mainLayout.Controls.Add(listBox);
 
             menuItemAway.Checked = showAway;
             menuItemOffline.Checked = showOffline;
@@ -210,9 +202,9 @@ namespace WhoIsTweeting
                     }
                 } while (tmpSet.Count != 0);
 
-                statAway.Text = nAway.ToString();
-                statOffline.Text = nOffline.ToString();
-                statOnline.Text = (idSet.Count - nAway - nOffline).ToString();
+                statAway.Text = nAway.ToString() + " away";
+                statOffline.Text = nOffline.ToString() + " offline";
+                statOnline.Text = (idSet.Count - nAway - nOffline).ToString() + " online";
 
                 followings.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
                 listBox.DataSource = null;
@@ -263,7 +255,7 @@ namespace WhoIsTweeting
         private void OnConsumerClick(object sender, EventArgs e)
         {
             ConsumerKeyForm form = new ConsumerKeyForm();
-            if (form.ShowDialog() == DialogResult.OK)
+            if (form.ShowDialog(this) == DialogResult.OK)
             {
                 AppSettings.ConsumerKey = form.ConsumerKey;
                 AppSettings.ConsumerSecret = form.ConsumerSecret;
@@ -311,6 +303,40 @@ namespace WhoIsTweeting
             {
                 MessageBox.Show("Invalid PIN was provided. Please try again.");
             }, TaskContinuationOptions.OnlyOnFaulted);
+        }
+
+        private void listBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                int idx = listBox.IndexFromPoint(e.Location);
+                if (e.Button == MouseButtons.Right)
+                {
+                    if (idx >= 0)
+                        listBox.SelectedIndex = listBox.IndexFromPoint(e.Location);
+                    UserListItem item = listBox.SelectedItem as UserListItem;
+                    ctxItemNickname.Text = item.Name;
+                    ctxItemID.Text = $"(@{item.ScreenName})";
+                }
+            }
+            catch (Exception) { }
+        }
+
+        private void OnCtxOpenProfileClick(object sender, EventArgs e)
+        {
+            Process.Start($"https://twitter.com/{(listBox.SelectedItem as UserListItem).ScreenName}");
+        }
+
+        private async void OnCtxMentionClick(object sender, EventArgs e)
+        {
+            MentionForm form = new MentionForm(listBox.SelectedItem as UserListItem);
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                await api.Post("/1.1/statuses/update.json", new NameValueCollection
+                {
+                    { "status", form.MentionText }
+                });
+            }
         }
     }
 }

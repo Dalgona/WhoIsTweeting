@@ -12,7 +12,6 @@ namespace WhoIsTweeting
         private static readonly Font regularFont = new Font(fontFamily, 9.0f, FontStyle.Regular);
         private static readonly Font infoFont = new Font(fontFamily, 8.0f, FontStyle.Regular);
         private static readonly SolidBrush blackBrush = new SolidBrush(Color.FromArgb(51, 51, 51));
-        private static readonly SolidBrush grayBrush = new SolidBrush(Color.Gray);
 
         public UserListBox()
         {
@@ -28,10 +27,11 @@ namespace WhoIsTweeting
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
+            if (DataSource == null) return;
             if (e.Index < 0) return;
             if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index,
-                    e.State ^ DrawItemState.Selected, e.ForeColor, Color.FromArgb(240, 240, 240));
+                    e.State ^ DrawItemState.Selected, e.ForeColor, Color.LightGray);
 
             UserListItem i = Items[e.Index] as UserListItem;
 
@@ -39,7 +39,7 @@ namespace WhoIsTweeting
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             Font itemFont;
-            SolidBrush itemTextBrush;
+            Brush itemTextBrush;
             string additionalInfo;
 
             switch (i.Status)
@@ -59,13 +59,13 @@ namespace WhoIsTweeting
                 default:
                     e.Graphics.DrawEllipse(Pens.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
                     itemFont = regularFont;
-                    itemTextBrush = grayBrush;
+                    itemTextBrush = Brushes.Gray;
                     additionalInfo = i.MinutesFromLastTweet <= 1440 ? i.LastTweet.ToString("HH:mm") : i.LastTweet.ToString("yy/MM/dd");
                     break;
             }
             e.Graphics.DrawString($"@{i.ScreenName}", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
             Size infoSize = TextRenderer.MeasureText(e.Graphics, additionalInfo, infoFont);
-            e.Graphics.DrawString(additionalInfo, infoFont, grayBrush, e.Bounds.Right - infoSize.Width - 2, e.Bounds.Top + 10 - infoSize.Height / 2.0f);
+            e.Graphics.DrawString(additionalInfo, infoFont, Brushes.Gray, e.Bounds.Right - infoSize.Width - 2, e.Bounds.Top + 10 - infoSize.Height / 2.0f);
         }
     }
 }

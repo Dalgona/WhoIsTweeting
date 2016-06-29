@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuItemUser = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSignIn = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemConsumer = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemAway = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemOffline = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,10 +42,17 @@
             this.statOnline = new System.Windows.Forms.ToolStripStatusLabel();
             this.statAway = new System.Windows.Forms.ToolStripStatusLabel();
             this.statOffline = new System.Windows.Forms.ToolStripStatusLabel();
-            this.menuItemConsumer = new System.Windows.Forms.ToolStripMenuItem();
+            this.listCtxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxItemNickname = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxItemID = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ctxItemOpenProfile = new System.Windows.Forms.ToolStripMenuItem();
+            this.listBox = new WhoIsTweeting.UserListBox();
+            this.ctxItemMention = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.mainLayout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.listCtxMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -60,6 +69,7 @@
             // 
             // menuItemUser
             // 
+            this.menuItemUser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.menuItemUser.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemSignIn,
             this.menuItemConsumer,
@@ -75,6 +85,13 @@
             this.menuItemSignIn.Size = new System.Drawing.Size(184, 22);
             this.menuItemSignIn.Text = "Sign &in with Twitter...";
             this.menuItemSignIn.Click += new System.EventHandler(this.OnSignInClick);
+            // 
+            // menuItemConsumer
+            // 
+            this.menuItemConsumer.Name = "menuItemConsumer";
+            this.menuItemConsumer.Size = new System.Drawing.Size(184, 22);
+            this.menuItemConsumer.Text = "Set &Consumer Key";
+            this.menuItemConsumer.Click += new System.EventHandler(this.OnConsumerClick);
             // 
             // viewToolStripMenuItem
             // 
@@ -112,6 +129,7 @@
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainLayout.Controls.Add(this.mainMenu, 0, 0);
             this.mainLayout.Controls.Add(this.statusStrip1, 0, 2);
+            this.mainLayout.Controls.Add(this.listBox, 0, 1);
             this.mainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainLayout.Location = new System.Drawing.Point(0, 0);
             this.mainLayout.Name = "mainLayout";
@@ -124,6 +142,7 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(54)))), ((int)(((byte)(54)))));
             this.statusStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statOnline,
@@ -131,14 +150,16 @@
             this.statOffline});
             this.statusStrip1.Location = new System.Drawing.Point(0, 545);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
             this.statusStrip1.Size = new System.Drawing.Size(234, 22);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // statOnline
             // 
             this.statOnline.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.statOnline.ForeColor = System.Drawing.Color.MediumSpringGreen;
             this.statOnline.Name = "statOnline";
             this.statOnline.Size = new System.Drawing.Size(12, 17);
             this.statOnline.Text = "-";
@@ -146,6 +167,7 @@
             // statAway
             // 
             this.statAway.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.statAway.ForeColor = System.Drawing.Color.LightGray;
             this.statAway.Name = "statAway";
             this.statAway.Size = new System.Drawing.Size(12, 17);
             this.statAway.Text = "-";
@@ -153,16 +175,72 @@
             // statOffline
             // 
             this.statOffline.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.statOffline.ForeColor = System.Drawing.Color.DimGray;
             this.statOffline.Name = "statOffline";
             this.statOffline.Size = new System.Drawing.Size(12, 17);
             this.statOffline.Text = "-";
             // 
-            // menuItemConsumer
+            // listCtxMenu
             // 
-            this.menuItemConsumer.Name = "menuItemConsumer";
-            this.menuItemConsumer.Size = new System.Drawing.Size(184, 22);
-            this.menuItemConsumer.Text = "Set &Consumer Key";
-            this.menuItemConsumer.Click += new System.EventHandler(this.OnConsumerClick);
+            this.listCtxMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctxItemNickname,
+            this.ctxItemID,
+            this.toolStripSeparator1,
+            this.ctxItemMention,
+            this.ctxItemOpenProfile});
+            this.listCtxMenu.Name = "listCtxMenu";
+            this.listCtxMenu.ShowImageMargin = false;
+            this.listCtxMenu.Size = new System.Drawing.Size(155, 120);
+            // 
+            // ctxItemNickname
+            // 
+            this.ctxItemNickname.Enabled = false;
+            this.ctxItemNickname.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.ctxItemNickname.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.ctxItemNickname.Name = "ctxItemNickname";
+            this.ctxItemNickname.Size = new System.Drawing.Size(154, 22);
+            this.ctxItemNickname.Text = "user";
+            // 
+            // ctxItemID
+            // 
+            this.ctxItemID.Enabled = false;
+            this.ctxItemID.Name = "ctxItemID";
+            this.ctxItemID.Size = new System.Drawing.Size(154, 22);
+            this.ctxItemID.Text = "@user";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(151, 6);
+            // 
+            // ctxItemOpenProfile
+            // 
+            this.ctxItemOpenProfile.Name = "ctxItemOpenProfile";
+            this.ctxItemOpenProfile.Size = new System.Drawing.Size(154, 22);
+            this.ctxItemOpenProfile.Text = "Open Twitter &Profile";
+            this.ctxItemOpenProfile.Click += new System.EventHandler(this.OnCtxOpenProfileClick);
+            // 
+            // listBox
+            // 
+            this.listBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBox.ContextMenuStrip = this.listCtxMenu;
+            this.listBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.listBox.FormattingEnabled = true;
+            this.listBox.ItemHeight = 20;
+            this.listBox.Location = new System.Drawing.Point(0, 24);
+            this.listBox.Margin = new System.Windows.Forms.Padding(0);
+            this.listBox.Name = "listBox";
+            this.listBox.Size = new System.Drawing.Size(234, 521);
+            this.listBox.TabIndex = 3;
+            this.listBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listBox_MouseUp);
+            // 
+            // ctxItemMention
+            // 
+            this.ctxItemMention.Name = "ctxItemMention";
+            this.ctxItemMention.Size = new System.Drawing.Size(154, 22);
+            this.ctxItemMention.Text = "Send a &Mention";
+            this.ctxItemMention.Click += new System.EventHandler(this.OnCtxMentionClick);
             // 
             // MainForm
             // 
@@ -171,6 +249,7 @@
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(234, 567);
             this.Controls.Add(this.mainLayout);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
             this.Text = "Followings";
@@ -180,6 +259,7 @@
             this.mainLayout.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.listCtxMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -199,6 +279,13 @@
         private System.Windows.Forms.ToolStripStatusLabel statAway;
         private System.Windows.Forms.ToolStripStatusLabel statOffline;
         private System.Windows.Forms.ToolStripMenuItem menuItemConsumer;
+        private System.Windows.Forms.ContextMenuStrip listCtxMenu;
+        private UserListBox listBox;
+        private System.Windows.Forms.ToolStripMenuItem ctxItemNickname;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem ctxItemOpenProfile;
+        private System.Windows.Forms.ToolStripMenuItem ctxItemID;
+        private System.Windows.Forms.ToolStripMenuItem ctxItemMention;
     }
 }
 
