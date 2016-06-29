@@ -29,19 +29,24 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.menuItemUser = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemSignIn = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemConsumer = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemAway = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemOffline = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemQuit = new System.Windows.Forms.ToolStripMenuItem();
             this.mainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statOnline = new System.Windows.Forms.ToolStripStatusLabel();
             this.statAway = new System.Windows.Forms.ToolStripStatusLabel();
             this.statOffline = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statUpdating = new System.Windows.Forms.ToolStripStatusLabel();
             this.listCtxMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxItemNickname = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxItemID = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,11 +54,7 @@
             this.ctxItemMention = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxItemOpenProfile = new System.Windows.Forms.ToolStripMenuItem();
             this.listUpdateWorker = new System.ComponentModel.BackgroundWorker();
-            this.statUpdating = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.listBox = new WhoIsTweeting.UserListBox();
-            this.menuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.mainLayout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -68,7 +69,7 @@
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.mainMenu.Size = new System.Drawing.Size(234, 24);
+            this.mainMenu.Size = new System.Drawing.Size(254, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -101,6 +102,11 @@
             this.menuItemConsumer.Text = "Set &Consumer Key...";
             this.menuItemConsumer.Click += new System.EventHandler(this.OnConsumerClick);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
+            // 
             // viewToolStripMenuItem
             // 
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -124,6 +130,18 @@
             this.menuItemOffline.Text = "&Offline Users";
             this.menuItemOffline.Click += new System.EventHandler(this.OnOfflineClick);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(181, 6);
+            // 
+            // menuItemAbout
+            // 
+            this.menuItemAbout.Name = "menuItemAbout";
+            this.menuItemAbout.Size = new System.Drawing.Size(184, 22);
+            this.menuItemAbout.Text = "&About...";
+            this.menuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
+            // 
             // menuItemQuit
             // 
             this.menuItemQuit.Name = "menuItemQuit";
@@ -145,7 +163,7 @@
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-            this.mainLayout.Size = new System.Drawing.Size(234, 567);
+            this.mainLayout.Size = new System.Drawing.Size(254, 567);
             this.mainLayout.TabIndex = 1;
             // 
             // statusStrip1
@@ -160,7 +178,7 @@
             this.statusStrip1.Location = new System.Drawing.Point(0, 545);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
-            this.statusStrip1.Size = new System.Drawing.Size(234, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(254, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
@@ -188,6 +206,13 @@
             this.statOffline.Name = "statOffline";
             this.statOffline.Size = new System.Drawing.Size(12, 17);
             this.statOffline.Text = "-";
+            // 
+            // statUpdating
+            // 
+            this.statUpdating.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.statUpdating.Name = "statUpdating";
+            this.statUpdating.Size = new System.Drawing.Size(0, 17);
+            this.statUpdating.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // listCtxMenu
             // 
@@ -241,23 +266,6 @@
             this.listUpdateWorker.WorkerSupportsCancellation = true;
             this.listUpdateWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.listUpdateWorker_DoWork);
             // 
-            // statUpdating
-            // 
-            this.statUpdating.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.statUpdating.Name = "statUpdating";
-            this.statUpdating.Size = new System.Drawing.Size(0, 17);
-            this.statUpdating.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(181, 6);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(181, 6);
-            // 
             // listBox
             // 
             this.listBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -269,27 +277,22 @@
             this.listBox.Location = new System.Drawing.Point(0, 24);
             this.listBox.Margin = new System.Windows.Forms.Padding(0);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(234, 521);
+            this.listBox.Size = new System.Drawing.Size(254, 521);
             this.listBox.TabIndex = 3;
             this.listBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listBox_MouseUp);
-            // 
-            // menuItemAbout
-            // 
-            this.menuItemAbout.Name = "menuItemAbout";
-            this.menuItemAbout.Size = new System.Drawing.Size(184, 22);
-            this.menuItemAbout.Text = "&About...";
-            this.menuItemAbout.Click += new System.EventHandler(this.OnAboutClick);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(234, 567);
+            this.ClientSize = new System.Drawing.Size(254, 567);
             this.Controls.Add(this.mainLayout);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
+            this.Text = "WhoIsTweeting";
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.mainLayout.ResumeLayout(false);

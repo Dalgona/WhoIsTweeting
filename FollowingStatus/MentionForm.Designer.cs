@@ -28,15 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MentionForm));
             this.mainLayout = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.lblScreenName = new System.Windows.Forms.Label();
-            this.btnOK = new System.Windows.Forms.Button();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.mentionText = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.mentionText = new System.Windows.Forms.TextBox();
             this.mainLayout.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -97,16 +98,6 @@
             this.lblScreenName.TabIndex = 1;
             this.lblScreenName.Text = "@user";
             // 
-            // btnOK
-            // 
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(3, 3);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "Send";
-            this.btnOK.UseVisualStyleBackColor = true;
-            // 
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -118,6 +109,16 @@
             this.flowLayoutPanel2.Size = new System.Drawing.Size(162, 29);
             this.flowLayoutPanel2.TabIndex = 1;
             // 
+            // btnOK
+            // 
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOK.Location = new System.Drawing.Point(3, 3);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 0;
+            this.btnOK.Text = "Send";
+            this.btnOK.UseVisualStyleBackColor = true;
+            // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -127,21 +128,6 @@
             this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
-            // 
-            // mentionText
-            // 
-            this.mentionText.BackColor = System.Drawing.Color.White;
-            this.mentionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.mentionText.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mentionText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.mentionText.Location = new System.Drawing.Point(5, 5);
-            this.mentionText.Margin = new System.Windows.Forms.Padding(5);
-            this.mentionText.MaxLength = 140;
-            this.mentionText.Multiline = true;
-            this.mentionText.Name = "mentionText";
-            this.mentionText.Size = new System.Drawing.Size(454, 84);
-            this.mentionText.TabIndex = 0;
-            this.mentionText.Text = "@user";
             // 
             // tableLayoutPanel1
             // 
@@ -159,6 +145,21 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(464, 94);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
+            // mentionText
+            // 
+            this.mentionText.BackColor = System.Drawing.Color.White;
+            this.mentionText.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.mentionText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mentionText.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.mentionText.Location = new System.Drawing.Point(5, 5);
+            this.mentionText.Margin = new System.Windows.Forms.Padding(5);
+            this.mentionText.MaxLength = 140;
+            this.mentionText.Multiline = true;
+            this.mentionText.Name = "mentionText";
+            this.mentionText.Size = new System.Drawing.Size(454, 84);
+            this.mentionText.TabIndex = 0;
+            this.mentionText.Text = "@user";
+            // 
             // MentionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -168,6 +169,7 @@
             this.Controls.Add(this.mainLayout);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MentionForm";
             this.Text = "Send a Mention";
