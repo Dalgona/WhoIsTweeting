@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using Microsoft.VisualBasic;
 using PicoBird;
 using PicoBird.Objects;
+using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
-using Microsoft.VisualBasic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+/*
+ * TODO: Stop updating loop when status goes to NeedConsumerKey or LoginRequired
+ * TODO: Add command for pausing the main loop
+ */
 
 namespace WhoIsTweeting
 {
-    enum ApplicationStatus { Initial, LoginRequired, Ready, Running, Updating };
+    enum ApplicationStatus { Initial, NeedConsumerKey, LoginRequired, Ready, Running, Updating };
 
     public partial class MainForm : Form
     {
@@ -29,12 +30,17 @@ namespace WhoIsTweeting
         private HashSet<string> idSet;
         private List<UserListItem> followings = new List<UserListItem>();
 
-        private bool showAway = Properties.Settings.Default.ShowAway;
-        private bool showOffline = Properties.Settings.Default.ShowOffline;
+        Properties.Settings AppSettings = Properties.Settings.Default;
+
+        private bool showAway;
+        private bool showOffline;
 
         public MainForm()
         {
             InitializeComponent();
+
+            showAway = AppSettings.ShowAway;
+            showOffline = AppSettings.ShowOffline;
 
             // Create User ListBox
             listBox = new UserListBox();
@@ -47,11 +53,16 @@ namespace WhoIsTweeting
             menuItemOffline.Checked = showOffline;
 
             // TODO
-            api = new API("", "");
+            api = new API(AppSettings.ConsumerKey, AppSettings.ConsumerSecret);
+            api.Token = AppSettings.Token;
+            api.TokenSecret = AppSettings.TokenSecret;
             api.OAuthCallback = "oob";
 
-            api.Token = Properties.Settings.Default.Token;
-            api.TokenSecret = Properties.Settings.Default.TokenSecret;
+            if (api.ConsumerKey == "" || api.ConsumerSecret == "")
+            {
+                SetStatus(ApplicationStatus.NeedConsumerKey);
+                return;
+            }
 
             SetStatus(ApplicationStatus.LoginRequired);
             Task.Factory.StartNew(async () =>
@@ -90,6 +101,11 @@ namespace WhoIsTweeting
                             throw new Exception("Invalid status change");
                         break;
 
+                    case ApplicationStatus.NeedConsumerKey:
+                        menuItemUser.Text = "Consumer Key Required";
+                        menuItemSignIn.Enabled = false;
+                        break;
+
                     case ApplicationStatus.LoginRequired:
                         listBox.DataSource = null;
                         listBox.Items.Clear();
@@ -122,6 +138,9 @@ namespace WhoIsTweeting
                             throw new Exception("Invalid status change");
                         break;
                 }
+#if DEBUG
+                Debug.WriteLine(newStatus);
+#endif
 
                 status = newStatus;
             }
@@ -210,8 +229,8 @@ namespace WhoIsTweeting
         private void OnAwayClick(object sender, EventArgs e)
         {
             menuItemAway.Checked = showAway = !showAway;
-            Properties.Settings.Default.ShowAway = showAway;
-            Properties.Settings.Default.Save();
+            AppSettings.ShowAway = showAway;
+            AppSettings.Save();
             if (!showAway)
             {
                 List<UserListItem> tmp = new List<UserListItem>(followings);
@@ -227,8 +246,8 @@ namespace WhoIsTweeting
         private void OnOfflineClick(object sender, EventArgs e)
         {
             menuItemOffline.Checked = showOffline = !showOffline;
-            Properties.Settings.Default.ShowOffline = showOffline;
-            Properties.Settings.Default.Save();
+            AppSettings.ShowOffline = showOffline;
+            AppSettings.Save();
             if (!showOffline)
             {
                 List<UserListItem> tmp = new List<UserListItem>(followings);
@@ -239,6 +258,31 @@ namespace WhoIsTweeting
                 listBox.DataSource = followings;
             }
             else if (status >= ApplicationStatus.Ready) UpdateUserList();
+        }
+
+        private void OnConsumerClick(object sender, EventArgs e)
+        {
+            ConsumerKeyForm form = new ConsumerKeyForm();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                AppSettings.ConsumerKey = form.ConsumerKey;
+                AppSettings.ConsumerSecret = form.ConsumerSecret;
+                AppSettings.Save();
+                if (form.ConsumerKey == "" || form.ConsumerSecret == "")
+                {
+                    MessageBox.Show("Both of two fields cannot be left blank.\n"
+                        + "You will not be able to use this program before you\n"
+                        + "provide valid consumer token and consumer secret.",
+                        "Invalid Consumer Key", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    SetStatus(ApplicationStatus.NeedConsumerKey);
+                }
+                else
+                {
+                    api = new API(AppSettings.ConsumerKey, AppSettings.ConsumerSecret);
+                    api.OAuthCallback = "oob";
+                    SetStatus(ApplicationStatus.LoginRequired);
+                }
+            }
         }
 
         private void OnSignInClick(object sender, EventArgs e)
@@ -254,9 +298,9 @@ namespace WhoIsTweeting
             {
                 if (await ValidateUser())
                 {
-                    Properties.Settings.Default.Token = api.Token;
-                    Properties.Settings.Default.TokenSecret = api.TokenSecret;
-                    Properties.Settings.Default.Save();
+                    AppSettings.Token = api.Token;
+                    AppSettings.TokenSecret = api.TokenSecret;
+                    AppSettings.Save();
                     SetStatus(ApplicationStatus.Ready);
                     Run();
                 }

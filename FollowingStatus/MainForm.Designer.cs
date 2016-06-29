@@ -40,6 +40,7 @@
             this.statOnline = new System.Windows.Forms.ToolStripStatusLabel();
             this.statAway = new System.Windows.Forms.ToolStripStatusLabel();
             this.statOffline = new System.Windows.Forms.ToolStripStatusLabel();
+            this.menuItemConsumer = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.mainLayout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -61,6 +62,7 @@
             // 
             this.menuItemUser.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemSignIn,
+            this.menuItemConsumer,
             this.viewToolStripMenuItem,
             this.menuItemQuit});
             this.menuItemUser.Name = "menuItemUser";
@@ -155,6 +157,13 @@
             this.statOffline.Size = new System.Drawing.Size(12, 17);
             this.statOffline.Text = "-";
             // 
+            // menuItemConsumer
+            // 
+            this.menuItemConsumer.Name = "menuItemConsumer";
+            this.menuItemConsumer.Size = new System.Drawing.Size(184, 22);
+            this.menuItemConsumer.Text = "Set &Consumer Key";
+            this.menuItemConsumer.Click += new System.EventHandler(this.OnConsumerClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -189,6 +198,7 @@
         private System.Windows.Forms.ToolStripStatusLabel statOnline;
         private System.Windows.Forms.ToolStripStatusLabel statAway;
         private System.Windows.Forms.ToolStripStatusLabel statOffline;
+        private System.Windows.Forms.ToolStripMenuItem menuItemConsumer;
     }
 }
 

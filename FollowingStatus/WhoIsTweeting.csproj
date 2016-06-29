@@ -67,6 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsumerKeyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConsumerKeyForm.Designer.cs">
+      <DependentUpon>ConsumerKeyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserListItem.cs" />
+    <EmbeddedResource Include="ConsumerKeyForm.resx">
+      <DependentUpon>ConsumerKeyForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

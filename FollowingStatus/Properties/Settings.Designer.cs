@@ -70,5 +70,29 @@ namespace WhoIsTweeting.Properties {
                 this["ShowOffline"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ConsumerKey {
+            get {
+                return ((string)(this["ConsumerKey"]));
+            }
+            set {
+                this["ConsumerKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ConsumerSecret {
+            get {
+                return ((string)(this["ConsumerSecret"]));
+            }
+            set {
+                this["ConsumerSecret"] = value;
+            }
+        }
     }
 }
