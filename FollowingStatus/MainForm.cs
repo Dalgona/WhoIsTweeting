@@ -40,6 +40,13 @@ namespace WhoIsTweeting
         {
             InitializeComponent();
 
+            if (AppSettings.UpdateSettings)
+            {
+                AppSettings.Upgrade();
+                AppSettings.UpdateSettings = false;
+                AppSettings.Save();
+            }
+
             showAway = AppSettings.ShowAway;
             showOffline = AppSettings.ShowOffline;
 
