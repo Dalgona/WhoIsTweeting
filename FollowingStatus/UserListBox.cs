@@ -29,7 +29,7 @@ namespace WhoIsTweeting
         {
             if (DataSource == null) return;
             if (e.Index < 0) return;
-            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+            if ((e.State & DrawItemState.Selected) != 0)
                 e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index,
                     e.State ^ DrawItemState.Selected, e.ForeColor, Color.LightGray);
 
@@ -64,7 +64,11 @@ namespace WhoIsTweeting
                         "" : (i.MinutesFromLastTweet <= 1440 ? i.LastTweet.ToString("HH:mm") : i.LastTweet.ToString("yy/MM/dd"));
                     break;
             }
+#if DEBUG
+            e.Graphics.DrawString("@example_user", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
+#else
             e.Graphics.DrawString($"@{i.ScreenName}", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);
+#endif
             Size infoSize = TextRenderer.MeasureText(e.Graphics, additionalInfo, infoFont);
             e.Graphics.DrawString(additionalInfo, infoFont, Brushes.Gray, e.Bounds.Right - infoSize.Width - 2, e.Bounds.Top + 10 - infoSize.Height / 2.0f);
         }

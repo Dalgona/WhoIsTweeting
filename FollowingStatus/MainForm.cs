@@ -33,6 +33,9 @@ namespace WhoIsTweeting
         private bool showAway;
         private bool showOffline;
 
+        private int titlebarThickness, leftBorderThickness;
+        private bool showBorder;
+
         public MainForm()
         {
             InitializeComponent();
@@ -43,6 +46,11 @@ namespace WhoIsTweeting
             menuItemAway.Checked = showAway;
             menuItemOffline.Checked = showOffline;
 
+            menuItemTopmost.Checked = TopMost = AppSettings.AlwaysOnTop;
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
             api = new API(AppSettings.ConsumerKey, AppSettings.ConsumerSecret);
             api.Token = AppSettings.Token;
             api.TokenSecret = AppSettings.TokenSecret;
@@ -63,6 +71,10 @@ namespace WhoIsTweeting
                     Run();
                 }
             });
+
+            showBorder = true;
+            titlebarThickness = RectangleToScreen(ClientRectangle).Top - Top;
+            leftBorderThickness = RectangleToScreen(ClientRectangle).Left - Left;
         }
 
         private async Task<bool> ValidateUser()
@@ -164,6 +176,7 @@ namespace WhoIsTweeting
                 int nOffline = 0;
                 UserListItem.lastUpdated = DateTime.Now;
                 HashSet<string> tmpSet = new HashSet<string>(idSet);
+                listBox.BeginUpdate();
                 followings.Clear();
                 do
                 {
@@ -190,6 +203,7 @@ namespace WhoIsTweeting
                 followings.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
                 listBox.DataSource = null;
                 listBox.DataSource = followings;
+                listBox.EndUpdate();
 
                 SetStatus(ApplicationStatus.Running);
                 statUpdating.Text = "";
@@ -207,12 +221,14 @@ namespace WhoIsTweeting
             AppSettings.Save();
             if (!showAway)
             {
+                listBox.BeginUpdate();
                 List<UserListItem> tmp = new List<UserListItem>(followings);
                 foreach (UserListItem c in tmp)
                     if (c.Status == UserStatus.Away)
                         followings.Remove(c);
                 listBox.DataSource = null;
                 listBox.DataSource = followings;
+                listBox.EndUpdate();
             }
             else if (status >= ApplicationStatus.Ready) UpdateUserList();
         }
@@ -224,12 +240,14 @@ namespace WhoIsTweeting
             AppSettings.Save();
             if (!showOffline)
             {
+                listBox.BeginUpdate();
                 List<UserListItem> tmp = new List<UserListItem>(followings);
                 foreach (UserListItem c in tmp)
                     if (c.Status == UserStatus.Offline)
                         followings.Remove(c);
                 listBox.DataSource = null;
                 listBox.DataSource = followings;
+                listBox.EndUpdate();
             }
             else if (status >= ApplicationStatus.Ready) UpdateUserList();
         }
@@ -340,6 +358,41 @@ namespace WhoIsTweeting
         private void OnAboutClick(object sender, EventArgs e)
         {
             new AboutForm().ShowDialog(this);
+        }
+
+        private void OnTopmostClick(object sender, EventArgs e)
+        {
+            AppSettings.AlwaysOnTop = menuItemTopmost.Checked = TopMost = !TopMost;
+            AppSettings.Save();
+        }
+
+        private void OnTransparencyClick(object sender, EventArgs e)
+        {
+            if (menuItemTransparency.Checked)
+                Opacity = 1;
+            else
+                Opacity = 0.65;
+            menuItemTransparency.Checked = !menuItemTransparency.Checked;
+        }
+
+        private void mainMenu_DoubleClick(object sender, EventArgs e)
+        {
+            // Show or hide the border of the main form.
+            SuspendLayout();
+            if (showBorder)
+            {
+                FormBorderStyle = FormBorderStyle.None;
+                Top = Top + titlebarThickness;
+                Left = Left + leftBorderThickness;
+            }
+            else
+            {
+                FormBorderStyle = FormBorderStyle.Sizable;
+                Top = Top - titlebarThickness;
+                Left = Left - leftBorderThickness;
+            }
+            showBorder = !showBorder;
+            ResumeLayout();
         }
     }
 }

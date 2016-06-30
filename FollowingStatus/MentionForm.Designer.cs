@@ -46,7 +46,7 @@
             // 
             // mainLayout
             // 
-            this.mainLayout.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.mainLayout.BackColor = System.Drawing.SystemColors.Control;
             this.mainLayout.ColumnCount = 1;
             this.mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainLayout.Controls.Add(this.flowLayoutPanel1, 0, 0);
