@@ -56,6 +56,10 @@ namespace WhoIsTweeting
             api.TokenSecret = AppSettings.TokenSecret;
             api.OAuthCallback = "oob";
 
+            showBorder = true;
+            titlebarThickness = RectangleToScreen(ClientRectangle).Top - Top;
+            leftBorderThickness = RectangleToScreen(ClientRectangle).Left - Left;
+
             if (api.ConsumerKey == "" || api.ConsumerSecret == "")
             {
                 SetStatus(ApplicationStatus.NeedConsumerKey);
@@ -71,10 +75,6 @@ namespace WhoIsTweeting
                     Run();
                 }
             });
-
-            showBorder = true;
-            titlebarThickness = RectangleToScreen(ClientRectangle).Top - Top;
-            leftBorderThickness = RectangleToScreen(ClientRectangle).Left - Left;
         }
 
         private async Task<bool> ValidateUser()
