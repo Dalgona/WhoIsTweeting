@@ -60,7 +60,8 @@ namespace WhoIsTweeting
                     e.Graphics.DrawEllipse(Pens.LightGray, e.Bounds.Left + 5, e.Bounds.Top + 5, 9, 9);
                     itemFont = regularFont;
                     itemTextBrush = Brushes.Gray;
-                    additionalInfo = i.MinutesFromLastTweet <= 1440 ? i.LastTweet.ToString("HH:mm") : i.LastTweet.ToString("yy/MM/dd");
+                    additionalInfo = i.LastTweet < new DateTime(2002, 1, 1) ?
+                        "" : (i.MinutesFromLastTweet <= 1440 ? i.LastTweet.ToString("HH:mm") : i.LastTweet.ToString("yy/MM/dd"));
                     break;
             }
             e.Graphics.DrawString($"@{i.ScreenName}", itemFont, itemTextBrush, e.Bounds.Left + 20, e.Bounds.Top + 2);

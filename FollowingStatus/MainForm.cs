@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 /*
- * TODO: Stop updating loop when status goes to NeedConsumerKey or LoginRequired
  * TODO: Add command for pausing the main loop
  */
 
