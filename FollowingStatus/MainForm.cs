@@ -218,6 +218,8 @@ namespace WhoIsTweeting
         }
         // end of UpdateUserList()
 
+        #region Main Menu Handlers
+
         private void OnQuitClick(object sender, EventArgs e)
             => Application.Exit();
 
@@ -313,55 +315,6 @@ namespace WhoIsTweeting
             }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
-        private void listBox_MouseUp(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                int idx = listBox.IndexFromPoint(e.Location);
-                if (e.Button == MouseButtons.Right)
-                {
-                    if (idx >= 0)
-                        listBox.SelectedIndex = listBox.IndexFromPoint(e.Location);
-                    UserListItem item = listBox.SelectedItem as UserListItem;
-                    ctxItemNickname.Text = item.Name;
-                    ctxItemID.Text = $"(@{item.ScreenName})";
-                }
-            }
-            catch (Exception) { }
-        }
-
-        private void OnCtxOpenProfileClick(object sender, EventArgs e)
-        {
-            Process.Start($"https://twitter.com/{(listBox.SelectedItem as UserListItem).ScreenName}");
-        }
-
-        private async void OnCtxMentionClick(object sender, EventArgs e)
-        {
-            MentionForm form = new MentionForm(listBox.SelectedItem as UserListItem);
-            if (form.ShowDialog(this) == DialogResult.OK)
-            {
-                await api.Post("/1.1/statuses/update.json", new NameValueCollection
-                {
-                    { "status", form.MentionText }
-                });
-            }
-        }
-
-        private void listUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker worker = sender as BackgroundWorker;
-            while (true)
-            {
-                if (worker.CancellationPending)
-                {
-                    e.Cancel = true;
-                    break;
-                }
-                UpdateUserList();
-                System.Threading.Thread.Sleep(TimeSpan.FromMinutes(0.5));
-            }
-        }
-
         private void OnAboutClick(object sender, EventArgs e)
         {
             new AboutForm().ShowDialog(this);
@@ -380,6 +333,57 @@ namespace WhoIsTweeting
             else
                 Opacity = 0.65;
             menuItemTransparency.Checked = !menuItemTransparency.Checked;
+        }
+
+        #endregion
+
+        private void OnCtxOpenProfileClick(object sender, EventArgs e)
+        {
+            Process.Start($"https://twitter.com/{(listBox.SelectedItem as UserListItem).ScreenName}");
+        }
+
+        private async void OnCtxMentionClick(object sender, EventArgs e)
+        {
+            MentionForm form = new MentionForm(listBox.SelectedItem as UserListItem);
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                await api.Post("/1.1/statuses/update.json", new NameValueCollection
+                {
+                    { "status", form.MentionText }
+                });
+            }
+        }
+
+        private void listBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                int idx = listBox.IndexFromPoint(e.Location);
+                if (e.Button == MouseButtons.Right)
+                {
+                    if (idx >= 0)
+                        listBox.SelectedIndex = listBox.IndexFromPoint(e.Location);
+                    UserListItem item = listBox.SelectedItem as UserListItem;
+                    ctxItemNickname.Text = item.Name;
+                    ctxItemID.Text = $"(@{item.ScreenName})";
+                }
+            }
+            catch (Exception) { }
+        }
+
+        private void listUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            while (true)
+            {
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                UpdateUserList();
+                System.Threading.Thread.Sleep(TimeSpan.FromMinutes(0.5));
+            }
         }
 
         private void mainMenu_DoubleClick(object sender, EventArgs e)
