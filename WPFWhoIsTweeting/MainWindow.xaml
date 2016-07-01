@@ -1,0 +1,187 @@
+﻿<Window x:Class="WPFWhoIsTweeting.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFWhoIsTweeting"
+        xmlns:p="clr-namespace:WPFWhoIsTweeting.Properties"
+        mc:Ignorable="d"
+        Title="WhoIsTweeting" Height="600" Width="270" Icon="wit.ico" Loaded="Window_Loaded"
+        Topmost="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=OneWay}"
+        d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}">
+    <Window.Resources>
+        <local:StatCountConverter x:Key="StatCountConverter"/>
+        <local:LastTweetConverter x:Key="LastTweetConverter"/>
+        <local:TransparencyConverter x:Key="TransparencyConverter"/>
+        <local:ExpanderConverter x:Key="ExpanderConverter"/>
+        <Style x:Key="CommandButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#18FFFFFF"/>
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="FontFamily" Value="Webdings"/>
+            <Setter Property="Margin" Value="3,0,0,3"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="MediumSpringGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.75"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Closed"/>
+        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Minimized"/>
+    </Window.CommandBindings>
+    <Window.Opacity>
+        <Binding Path="Transparency" Converter="{StaticResource TransparencyConverter}"/>
+    </Window.Opacity>
+    <Grid Background="#FF333333">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3"/>
+            <RowDefinition/>
+            <RowDefinition Height="3"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="3"/>
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="_61444" Grid.Row="0" Grid.Column="0" Cursor="SizeNWSE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid x:Name="_61443" Grid.Row="0" Grid.Column="1" Cursor="SizeNS" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid x:Name="_61445" Grid.Row="0" Grid.Column="2" Cursor="SizeNESW" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid x:Name="_61441" Grid.Row="1" Grid.Column="0" Cursor="SizeWE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid x:Name="_61442" Grid.Row="1" Grid.Column="2" Cursor="SizeWE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid x:Name="_61447" Grid.Row="2" Grid.Column="0" Cursor="SizeNESW" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid x:Name="_61446" Grid.Row="2" Grid.Column="1" Cursor="SizeNS" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid x:Name="_61448" Grid.Row="2" Grid.Column="2" Cursor="SizeNWSE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <DockPanel Background="#FF333333" MouseDown="DockPanel_MouseDown">
+                <Label DockPanel.Dock="Left" Content="WhoIsTweeting" Foreground="LightGray" FontWeight="Bold" Padding="5,2,5,5"/>
+                <Button DockPanel.Dock="right" Content="r" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.CloseWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
+                <Button DockPanel.Dock="right" Content="0" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
+            </DockPanel>
+            <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top">
+                <MenuItem Padding="6,3">
+                    <MenuItem.Header>
+                        <TextBlock Text="{Binding UserMenuText, Mode=OneWay}"/>
+                    </MenuItem.Header>
+                    <MenuItem x:Name="menuItemSignIn" Header="Sign _in with Twitter" Click="Menu_OnSignIn"/>
+                    <MenuItem Header="Set _Consumer Key" Click="Menu_OnConsumer"/>
+                    <Separator/>
+                    <MenuItem Header="_About" Click="Menu_OnAbout"/>
+                    <MenuItem Header="_Quit" Click="Menu_OnQuit"/>
+                </MenuItem>
+                <MenuItem Header="_View" Padding="6,3">
+                    <MenuItem Header="Always on _Top" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="Tr_ansparency" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
+                    <Separator/>
+                    <MenuItem Header="A_way Users" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="_Offline Users" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
+                </MenuItem>
+            </Menu>
+            <ListBox x:Name="listBox" Grid.Row="2" ItemsSource="{Binding UserList}" BorderThickness="0">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding DataContext.ShowAway, RelativeSource={RelativeSource AncestorType=Window}}" Value="False"/>
+                                    <Condition Binding="{Binding Status}" Value="Away"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding DataContext.ShowOffline, RelativeSource={RelativeSource AncestorType=Window}}" Value="False"/>
+                                    <Condition Binding="{Binding Status}" Value="Offline"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="14"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Ellipse Width="9" Height="9">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="MediumSpringGreen"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Status}" Value="Away">
+                                                <Setter Property="Fill" Value="LightGray"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Offline">
+                                                <Setter Property="Fill" Value="Transparent"/>
+                                                <Setter Property="Stroke" Value="LightGray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <Label Grid.Column="1" Padding="5,1">
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Setter Property="Foreground" Value="#FF333333"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Status}" Value="Online">
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Offline">
+                                                <Setter Property="Foreground" Value="Gray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                                <Label.Content>
+                                    <TextBlock Text="{Binding ScreenName, StringFormat=@{0}, Mode=OneWay}"/>
+                                </Label.Content>
+                            </Label>
+                            <Label Grid.Column="2" Content="{Binding Converter={StaticResource LastTweetConverter}, Mode=OneWay}" Padding="3,1" Foreground="Gray"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StatusBar Grid.Row="3" Background="#FF333333">
+                <Label Content="{Binding StatOnline, ConverterParameter=Online, Converter={StaticResource StatCountConverter}, Mode=OneWay}" Padding="0" Foreground="MediumSpringGreen"/>
+                <Label Content="{Binding StatAway, ConverterParameter=Away, Converter={StaticResource StatCountConverter}, Mode=OneWay}" Padding="0" Foreground="LightGray"/>
+                <Label Content="{Binding StatOffline, ConverterParameter=Offline, Converter={StaticResource StatCountConverter}, Mode=OneWay}" Padding="0" Foreground="DimGray"/>
+                <Label Padding="0" Foreground="#FFFF8000">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                            <Setter Property="Content" Value=""/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding StatUpdating, Mode=OneWay}" Value="True">
+                                    <Setter Property="Content" Value="&#xe117;"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+            </StatusBar>
+        </Grid>
+    </Grid>
+</Window>

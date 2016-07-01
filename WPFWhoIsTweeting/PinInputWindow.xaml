@@ -1,0 +1,21 @@
+﻿<Window x:Class="WPFWhoIsTweeting.PinInputWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPFWhoIsTweeting"
+        mc:Ignorable="d"
+        Title="Sign in with Twitter" Height="300" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" Icon="wit.ico">
+    <StackPanel Margin="5">
+        <Label HorizontalAlignment="Center">
+            <Label.Content>
+                <TextBlock TextAlignment="Center">
+                    Please input PIN in the textbox below<LineBreak/>
+                    to complete the sign-in process.
+                </TextBlock>
+            </Label.Content>
+        </Label>
+        <TextBox Text="{Binding PIN, Mode=TwoWay}" Margin="10,5" Padding="0,2" TextAlignment="Center" FontSize="16"/>
+        <Button Content="OK" HorizontalAlignment="Center" Margin="0,5" Padding="15,3" Click="OnOKClicked"/>
+    </StackPanel>
+</Window>
