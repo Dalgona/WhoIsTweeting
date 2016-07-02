@@ -37,6 +37,20 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="RestoreButtonStyle" TargetType="Button" BasedOn="{StaticResource CommandButtonStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Normal">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="MaximizeButtonStyle" TargetType="Button" BasedOn="{StaticResource CommandButtonStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="HideableBorder" TargetType="Grid">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding HideBorder}" Value="True">
@@ -54,12 +68,23 @@
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Closed"/>
+        <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Restored"/>
+        <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Maximized"/>
         <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Minimized"/>
     </Window.CommandBindings>
     <Window.Opacity>
         <Binding Path="Transparency" Converter="{StaticResource TransparencyConverter}"/>
     </Window.Opacity>
-    <Grid Background="#FF333333" Margin="5">
+    <Grid Background="#FF333333">
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
+                        <Setter Property="Margin" Value="4"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
@@ -85,9 +110,11 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <DockPanel Style="{StaticResource HideableTitlebar}" Background="#FF333333" MouseDown="DockPanel_MouseDown">
+            <DockPanel Style="{StaticResource HideableTitlebar}" Background="#FF333333" MouseLeftButtonDown="DockPanel_MouseLeftButtonDown" MouseLeftButtonUp="DockPanel_MouseLeftButtonUp" MouseMove="DockPanel_MouseMove">
                 <Label DockPanel.Dock="Left" Content="WhoIsTweeting" Foreground="LightGray" FontWeight="Bold" Padding="5,2,5,5"/>
                 <Button DockPanel.Dock="right" Content="r" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.CloseWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
+                <Button DockPanel.Dock="right" Content="2" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.RestoreWindowCommand}" Style="{StaticResource RestoreButtonStyle}"/>
+                <Button DockPanel.Dock="right" Content="1" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MaximizeWindowCommand}" Style="{StaticResource MaximizeButtonStyle}"/>
                 <Button DockPanel.Dock="right" Content="0" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
             </DockPanel>
             <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top" MouseDoubleClick="Menu_MouseDoubleClick">

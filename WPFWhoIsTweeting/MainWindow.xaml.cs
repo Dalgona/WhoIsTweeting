@@ -227,15 +227,55 @@ namespace WPFWhoIsTweeting
 
         #region Custom Window Frame Handler
 
-        private void DockPanel_MouseDown(object sender, MouseButtonEventArgs e)
+        private bool restoreIfMove = false;
+
+        private void SwitchWindowState()
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (WindowState == WindowState.Normal)
+                WindowState = WindowState.Maximized;
+            else if (WindowState == WindowState.Maximized)
+                WindowState = WindowState.Normal;
+        }
+
+        private void DockPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
             {
-                if (ResizeMode != ResizeMode.NoResize)
-                {
-                    ResizeMode = ResizeMode.NoResize;
-                    UpdateLayout();
-                }
+                SwitchWindowState();
+                return;
+            }
+
+            else if (WindowState == WindowState.Maximized)
+            {
+                restoreIfMove = true;
+                return;
+            }
+
+            DragMove();
+        }
+
+        private void DockPanel_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+            => restoreIfMove = false;
+
+        private void DockPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (restoreIfMove)
+            {
+                restoreIfMove = false;
+
+                double percentHorizontal = e.GetPosition(this).X / ActualWidth;
+                double targetHorizontal = RestoreBounds.Width * percentHorizontal;
+                double percentVertical = e.GetPosition(this).Y / ActualHeight;
+                double targetVertical = RestoreBounds.Height * percentVertical;
+
+                WindowState = WindowState.Normal;
+
+                POINT mousePosition;
+                GetCursorPos(out mousePosition);
+
+                Left = mousePosition.X - targetHorizontal;
+                Top = mousePosition.Y - targetVertical;
+
                 DragMove();
             }
         }
@@ -246,6 +286,12 @@ namespace WPFWhoIsTweeting
         private void CommandBinding_Closed(object sender, ExecutedRoutedEventArgs e)
             => SystemCommands.CloseWindow(this);
 
+        private void CommandBinding_Restored(object sender, ExecutedRoutedEventArgs e)
+            => SystemCommands.RestoreWindow(this);
+
+        private void CommandBinding_Maximized(object sender, ExecutedRoutedEventArgs e)
+            => SystemCommands.MaximizeWindow(this);
+
         private void CommandBinding_Minimized(object sender, ExecutedRoutedEventArgs e)
             => SystemCommands.MinimizeWindow(this);
 
@@ -254,6 +300,21 @@ namespace WPFWhoIsTweeting
             int wParam = int.Parse((sender as Grid).Name.Split('_')[1]);
             HwndSource hwndSource = PresentationSource.FromVisual((Visual)sender) as HwndSource;
             SendMessage(hwndSource.Handle, 0x112, (IntPtr)wParam, IntPtr.Zero);
+        }
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetCursorPos(out POINT lpPoint);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X, Y;
+            public POINT(int x, int y)
+            {
+                X = x;
+                Y = y;
+            }
         }
 
         #endregion
