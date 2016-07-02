@@ -16,6 +16,7 @@ namespace WPFWhoIsTweeting
         private bool showAway, showOffline;
         private bool transparency = false;
         private ObservableCollection<UserListItem> userList;
+        private UserListItem selectedItem;
 
         public object userListLock = new object();
 
@@ -40,6 +41,19 @@ namespace WPFWhoIsTweeting
         }
 
         public ObservableCollection<UserListItem> UserList { get { return userList; } }
+
+        public UserListItem SelectedItem
+        {
+            get
+            {
+                return selectedItem;
+            }
+            set
+            {
+                selectedItem = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("SelectedItem"));
+            }
+        }
 
         public int StatOnline
         {

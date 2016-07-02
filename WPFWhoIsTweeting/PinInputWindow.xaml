@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFWhoIsTweeting"
         mc:Ignorable="d"
-        Title="Sign in with Twitter" Height="300" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" Icon="wit.ico">
+        Title="Sign in with Twitter" Height="300" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" Icon="wit.ico" ShowInTaskbar="False">
     <StackPanel Margin="5">
         <Label HorizontalAlignment="Center">
             <Label.Content>

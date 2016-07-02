@@ -325,5 +325,53 @@ namespace WPFWhoIsTweeting
         }
 
         #endregion
+
+        #region Context Menu Handler
+
+        private void Context_OnMention(object sender, RoutedEventArgs e)
+        {
+            MessageWindow win = new MessageWindow(MessageWindowType.MentionWindow, viewModel.SelectedItem);
+            MessageViewModel mdl = win.DataContext as MessageViewModel;
+            win.Owner = this;
+            if ((bool)win.ShowDialog())
+            {
+                Task postTask = api.Post("/1.1/statuses/update.json", null, new NameValueCollection
+                {
+                    { "status", mdl.Content }
+                });
+                Task onError = postTask.ContinueWith(task =>
+                {
+                    MessageBox.Show($"Could not send a mention.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }, TaskContinuationOptions.OnlyOnFaulted);
+            }
+        }
+
+        private void Context_OnDirectMessage(object sender, RoutedEventArgs e)
+        {
+            MessageWindow win = new MessageWindow(MessageWindowType.DirectMessageWindow, viewModel.SelectedItem);
+            MessageViewModel mdl = win.DataContext as MessageViewModel;
+            win.Owner = this;
+            if ((bool)win.ShowDialog())
+            {
+                Task postTask = api.Post("/1.1/direct_messages/new.json", null, new NameValueCollection
+                {
+                    { "screen_name", mdl.ScreenName },
+                    { "text", mdl.Content }
+                });
+                Task onError = postTask.ContinueWith(task =>
+                {
+                    APIException ex = task.Exception.InnerException as APIException;
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    System.Diagnostics.Debug.WriteLine(ex.Info.errors[0].message);
+                    System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                    MessageBox.Show("Could not send a direct message to specied user.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }, TaskContinuationOptions.OnlyOnFaulted);
+            }
+        }
+
+        private void Context_OnProfile(object sender, RoutedEventArgs e)
+            => System.Diagnostics.Process.Start($"https://twitter.com/{viewModel.SelectedItem.ScreenName}");
+
+        #endregion
     }
 }

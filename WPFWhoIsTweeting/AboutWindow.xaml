@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFWhoIsTweeting"
         mc:Ignorable="d"
-        Title="About WhoIsTweeting" Height="425" Width="380" ResizeMode="NoResize" SizeToContent="Height" Icon="wit.ico" WindowStartupLocation="CenterOwner">
+        Title="About WhoIsTweeting" Height="425" Width="380" ResizeMode="NoResize" SizeToContent="Height" Icon="wit.ico" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Window.Resources>
         <Style x:Key="AboutDescStyle" TargetType="Label">
             <Setter Property="Margin" Value="25,0,0,0"/>

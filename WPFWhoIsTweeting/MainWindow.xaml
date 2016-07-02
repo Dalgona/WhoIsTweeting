@@ -95,7 +95,35 @@
                     <MenuItem Header="_Offline Users" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
                 </MenuItem>
             </Menu>
-            <ListBox x:Name="listBox" Grid.Row="2" ItemsSource="{Binding UserList}" BorderThickness="0">
+            <ListBox x:Name="listBox" Grid.Row="2" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <ContextMenu.Style>
+                            <Style TargetType="ContextMenu">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContextMenu.Style>
+                        <MenuItem IsEnabled="False" Foreground="#c0000000">
+                            <MenuItem.Header>
+                                <TextBlock Text="{Binding SelectedItem.Name}"/>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem IsEnabled="False" Foreground="#c0000000">
+                            <MenuItem.Header>
+                                <TextBlock Text="{Binding SelectedItem.ScreenName, StringFormat=@{0}}"/>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="Send a _Mention" Click="Context_OnMention"/>
+                        <MenuItem Header="Send a _Direct Message" Click="Context_OnDirectMessage"/>
+                        <Separator/>
+                        <MenuItem Header="Open Twitter Profile" Click="Context_OnProfile"/>
+                    </ContextMenu>
+                </ListBox.ContextMenu>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

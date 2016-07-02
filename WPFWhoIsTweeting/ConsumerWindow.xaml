@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFWhoIsTweeting"
         mc:Ignorable="d"
-        Title="Set Consumer Key" Height="200" Width="480" ResizeMode="NoResize" SizeToContent="Height" Icon="wit.ico" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded">
+        Title="Set Consumer Key" Height="200" Width="480" ResizeMode="NoResize" SizeToContent="Height" Icon="wit.ico" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" ShowInTaskbar="False">
     <StackPanel Margin="5">
         <Label>
             <Label.Content>
