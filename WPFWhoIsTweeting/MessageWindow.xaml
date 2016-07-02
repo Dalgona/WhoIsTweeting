@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFWhoIsTweeting"
         mc:Ignorable="d"
-        Title="MessageWindow" Height="215" Width="400" Background="{x:Null}" d:DataContext="{d:DesignInstance {x:Type local:MessageViewModel}}" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterOwner" SizeToContent="Height" ShowInTaskbar="False">
+        Title="MessageWindow" Height="215" Width="400" Background="{x:Null}" d:DataContext="{d:DesignInstance {x:Type local:MessageViewModel}}" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterOwner" SizeToContent="Height" ShowInTaskbar="False" Loaded="Window_Loaded">
     <Window.Effect>
         <DropShadowEffect Color="MediumSpringGreen" Direction="0" RenderingBias="Quality" ShadowDepth="0"/>
     </Window.Effect>
-    <Border BorderBrush="#FF333333" BorderThickness="5" CornerRadius="3" Margin="5">
+    <Border BorderBrush="#FF333333" BorderThickness="5" CornerRadius="1" Margin="5">
         <StackPanel Background="{x:Static SystemColors.ControlBrush}">
             <StackPanel Background="#FF333333">
                 <Label Content="{Binding WindowHeader, Mode=OneWay}" Foreground="whitesmoke" FontWeight="Bold" Padding="5,0"/>
@@ -19,7 +19,7 @@
                     </Label.Content>
                 </Label>
             </StackPanel>
-            <TextBox Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="{Binding MaxChars, Mode=OneWay}" BorderThickness="0" Padding="3" Height="80" TabIndex="0" AcceptsReturn="True" TextWrapping="Wrap"/>
+            <TextBox x:Name="content" Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="{Binding MaxChars, Mode=OneWay}" BorderThickness="0" Padding="3" Height="80" TabIndex="0" AcceptsReturn="True" TextWrapping="Wrap"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
                 <Button Content="Send" Padding="15,3" Click="OnOKClicked" TabIndex="1">
                     <Button.Style>

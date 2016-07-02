@@ -37,6 +37,20 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="HideableBorder" TargetType="Grid">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding HideBorder}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="HideableTitlebar" TargetType="DockPanel">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding HideBorder}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Closed"/>
@@ -45,25 +59,25 @@
     <Window.Opacity>
         <Binding Path="Transparency" Converter="{StaticResource TransparencyConverter}"/>
     </Window.Opacity>
-    <Grid Background="#FF333333">
+    <Grid Background="#FF333333" Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="3"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
-            <RowDefinition Height="3"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3"/>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="3"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
-        <Grid x:Name="_61444" Grid.Row="0" Grid.Column="0" Cursor="SizeNWSE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid x:Name="_61443" Grid.Row="0" Grid.Column="1" Cursor="SizeNS" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid x:Name="_61445" Grid.Row="0" Grid.Column="2" Cursor="SizeNESW" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid x:Name="_61441" Grid.Row="1" Grid.Column="0" Cursor="SizeWE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid x:Name="_61442" Grid.Row="1" Grid.Column="2" Cursor="SizeWE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid x:Name="_61447" Grid.Row="2" Grid.Column="0" Cursor="SizeNESW" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid x:Name="_61446" Grid.Row="2" Grid.Column="1" Cursor="SizeNS" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid x:Name="_61448" Grid.Row="2" Grid.Column="2" Cursor="SizeNWSE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid Style="{StaticResource HideableBorder}" x:Name="_61444" Grid.Row="0" Grid.Column="0" Cursor="SizeNWSE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow" Width="3" Height="3"/>
+        <Grid Style="{StaticResource HideableBorder}" x:Name="_61443" Grid.Row="0" Grid.Column="1" Cursor="SizeNS" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid Style="{StaticResource HideableBorder}" x:Name="_61445" Grid.Row="0" Grid.Column="2" Cursor="SizeNESW" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow" Width="3" Height="3"/>
+        <Grid Style="{StaticResource HideableBorder}" x:Name="_61441" Grid.Row="1" Grid.Column="0" Cursor="SizeWE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid Style="{StaticResource HideableBorder}" x:Name="_61442" Grid.Row="1" Grid.Column="2" Cursor="SizeWE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid Style="{StaticResource HideableBorder}" x:Name="_61447" Grid.Row="2" Grid.Column="0" Cursor="SizeNESW" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow" Width="3" Height="3"/>
+        <Grid Style="{StaticResource HideableBorder}" x:Name="_61446" Grid.Row="2" Grid.Column="1" Cursor="SizeNS" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
+        <Grid Style="{StaticResource HideableBorder}" x:Name="_61448" Grid.Row="2" Grid.Column="2" Cursor="SizeNWSE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow" Width="3" Height="3"/>
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -71,12 +85,12 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <DockPanel Background="#FF333333" MouseDown="DockPanel_MouseDown" MouseUp="DockPanel_MouseUp">
+            <DockPanel Style="{StaticResource HideableTitlebar}" Background="#FF333333" MouseDown="DockPanel_MouseDown">
                 <Label DockPanel.Dock="Left" Content="WhoIsTweeting" Foreground="LightGray" FontWeight="Bold" Padding="5,2,5,5"/>
                 <Button DockPanel.Dock="right" Content="r" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.CloseWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
                 <Button DockPanel.Dock="right" Content="0" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
             </DockPanel>
-            <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top">
+            <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top" MouseDoubleClick="Menu_MouseDoubleClick">
                 <MenuItem Padding="6,2">
                     <MenuItem.Header>
                         <TextBlock Text="{Binding UserMenuText, Mode=OneWay}"/>

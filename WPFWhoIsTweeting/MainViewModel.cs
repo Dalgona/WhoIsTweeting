@@ -15,6 +15,7 @@ namespace WPFWhoIsTweeting
         private bool statUpdating;
         private bool showAway, showOffline;
         private bool transparency = false;
+        private bool hideBorder = false;
         private ObservableCollection<UserListItem> userList;
         private UserListItem selectedItem;
 
@@ -143,6 +144,16 @@ namespace WPFWhoIsTweeting
             {
                 transparency = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("Transparency"));
+            }
+        }
+
+        public bool HideBorder
+        {
+            get { return hideBorder; }
+            set
+            {
+                hideBorder = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("HideBorder"));
             }
         }
 

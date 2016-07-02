@@ -34,6 +34,8 @@ namespace WPFWhoIsTweeting
             {
                 viewModel.ConsumerKey = Properties.Settings.Default.ConsumerKey;
                 viewModel.ConsumerSecret = Properties.Settings.Default.ConsumerSecret;
+                consumerKey.Focus();
+                Keyboard.Focus(consumerKey);
             }));
         }
 

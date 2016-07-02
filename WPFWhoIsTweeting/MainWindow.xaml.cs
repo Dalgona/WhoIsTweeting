@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Windows.Media.Effects;
 
 namespace WPFWhoIsTweeting
 {
@@ -22,6 +23,8 @@ namespace WPFWhoIsTweeting
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static BlurEffect blurry = null;
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
@@ -46,6 +49,13 @@ namespace WPFWhoIsTweeting
 
             listUpdateWorker = new BackgroundWorker();
             listUpdateWorker.DoWork += listUpdateWorker_DoWork;
+
+            if (blurry == null)
+            {
+                blurry = new BlurEffect();
+                blurry.Radius = 10.0;
+                blurry.KernelType = KernelType.Gaussian;
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -230,15 +240,6 @@ namespace WPFWhoIsTweeting
             }
         }
 
-        private void DockPanel_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (ResizeMode == ResizeMode.NoResize)
-            {
-                ResizeMode = ResizeMode.CanResizeWithGrip;
-                UpdateLayout();
-            }
-        }
-
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = true;
 
@@ -264,13 +265,16 @@ namespace WPFWhoIsTweeting
 
         private void Menu_OnAbout(object sender, RoutedEventArgs e)
         {
+            Effect = blurry;
             AboutWindow win = new AboutWindow();
             win.Owner = this;
             win.ShowDialog();
+            Effect = null;
         }
 
         private void Menu_OnConsumer(object sender, RoutedEventArgs e)
         {
+            Effect = blurry;
             ConsumerWindow win = new ConsumerWindow();
             TokenViewModel mdl = win.DataContext as TokenViewModel;
             win.Owner = this;
@@ -287,6 +291,7 @@ namespace WPFWhoIsTweeting
                     api.OAuthCallback = "oob";
                     SetStatus(ApplicationStatus.LoginRequired);
                 }
+            Effect = null;
         }
 
         private void Menu_OnSignIn(object sender, RoutedEventArgs e)
@@ -294,6 +299,7 @@ namespace WPFWhoIsTweeting
             MessageBoxResult cont = MessageBox.Show("If you click OK, a web browser will be opened and it will show you the PIN required for authentication.", "Sign in with Twitter", MessageBoxButton.OKCancel, MessageBoxImage.Information);
             if (cont == MessageBoxResult.OK)
             {
+                Effect = blurry;
                 api.Token = api.TokenSecret = "";
                 Task requestTask = api.RequestToken(url =>
                 {
@@ -321,6 +327,7 @@ namespace WPFWhoIsTweeting
                 {
                     MessageBox.Show("Invalid PIN was provided. Please try again.");
                 }, TaskContinuationOptions.OnlyOnFaulted);
+                Effect = null;
             }
         }
 
@@ -330,6 +337,7 @@ namespace WPFWhoIsTweeting
 
         private void Context_OnMention(object sender, RoutedEventArgs e)
         {
+            Effect = blurry;
             MessageWindow win = new MessageWindow(MessageWindowType.MentionWindow, viewModel.SelectedItem);
             MessageViewModel mdl = win.DataContext as MessageViewModel;
             win.Owner = this;
@@ -344,10 +352,12 @@ namespace WPFWhoIsTweeting
                     MessageBox.Show($"Could not send a mention.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }, TaskContinuationOptions.OnlyOnFaulted);
             }
+            Effect = null;
         }
 
         private void Context_OnDirectMessage(object sender, RoutedEventArgs e)
         {
+            Effect = blurry;
             MessageWindow win = new MessageWindow(MessageWindowType.DirectMessageWindow, viewModel.SelectedItem);
             MessageViewModel mdl = win.DataContext as MessageViewModel;
             win.Owner = this;
@@ -367,11 +377,17 @@ namespace WPFWhoIsTweeting
                     MessageBox.Show("Could not send a direct message to specied user.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }, TaskContinuationOptions.OnlyOnFaulted);
             }
+            Effect = null;
         }
 
         private void Context_OnProfile(object sender, RoutedEventArgs e)
             => System.Diagnostics.Process.Start($"https://twitter.com/{viewModel.SelectedItem.ScreenName}");
 
         #endregion
+
+        private void Menu_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            viewModel.HideBorder = !viewModel.HideBorder;
+        }
     }
 }

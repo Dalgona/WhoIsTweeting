@@ -43,5 +43,15 @@ namespace WPFWhoIsTweeting
             DialogResult = true;
             Close();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                content.Focus();
+                Keyboard.Focus(content);
+                content.Select(int.MaxValue, 0);
+            }));
+        }
     }
 }
