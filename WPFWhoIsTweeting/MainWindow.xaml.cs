@@ -218,7 +218,26 @@ namespace WPFWhoIsTweeting
         #region Custom Window Frame Handler
 
         private void DockPanel_MouseDown(object sender, MouseButtonEventArgs e)
-            => DragMove();
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (ResizeMode != ResizeMode.NoResize)
+                {
+                    ResizeMode = ResizeMode.NoResize;
+                    UpdateLayout();
+                }
+                DragMove();
+            }
+        }
+
+        private void DockPanel_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (ResizeMode == ResizeMode.NoResize)
+            {
+                ResizeMode = ResizeMode.CanResizeWithGrip;
+                UpdateLayout();
+            }
+        }
 
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
             => e.CanExecute = true;

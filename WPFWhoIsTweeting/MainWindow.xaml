@@ -71,13 +71,13 @@
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <DockPanel Background="#FF333333" MouseDown="DockPanel_MouseDown">
+            <DockPanel Background="#FF333333" MouseDown="DockPanel_MouseDown" MouseUp="DockPanel_MouseUp">
                 <Label DockPanel.Dock="Left" Content="WhoIsTweeting" Foreground="LightGray" FontWeight="Bold" Padding="5,2,5,5"/>
                 <Button DockPanel.Dock="right" Content="r" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.CloseWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
                 <Button DockPanel.Dock="right" Content="0" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
             </DockPanel>
             <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top">
-                <MenuItem Padding="6,3">
+                <MenuItem Padding="6,2">
                     <MenuItem.Header>
                         <TextBlock Text="{Binding UserMenuText, Mode=OneWay}"/>
                     </MenuItem.Header>
@@ -87,7 +87,7 @@
                     <MenuItem Header="_About" Click="Menu_OnAbout"/>
                     <MenuItem Header="_Quit" Click="Menu_OnQuit"/>
                 </MenuItem>
-                <MenuItem Header="_View" Padding="6,3">
+                <MenuItem Header="_View" Padding="6,2">
                     <MenuItem Header="Always on _Top" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
                     <MenuItem Header="Tr_ansparency" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
                     <Separator/>

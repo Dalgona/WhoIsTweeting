@@ -25,8 +25,8 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Content="Consumer Key" HorizontalAlignment="Right" Margin="0" VerticalContentAlignment="Center"/>
-            <Label Grid.Row="1" Content="Consumer Secret" HorizontalAlignment="Right" VerticalContentAlignment="Center"/>
+            <Label Content="Consumer Key" HorizontalAlignment="Right" Margin="0" VerticalContentAlignment="Center" FontWeight="Bold"/>
+            <Label Grid.Row="1" Content="Consumer Secret" HorizontalAlignment="Right" VerticalContentAlignment="Center" FontWeight="Bold"/>
             <TextBox Text="{Binding ConsumerKey, Mode=TwoWay}" Grid.Column="1" Margin="5,0,5,5" VerticalAlignment="Center" Padding="0,2" TabIndex="0"/>
             <TextBox Text="{Binding ConsumerSecret, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Margin="5,0" VerticalAlignment="Center" Padding="0,2" TabIndex="1"/>
         </Grid>
