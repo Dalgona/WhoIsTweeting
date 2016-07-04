@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
 
-namespace WPFWhoIsTweeting
+namespace WhoIsTweeting
 {
     enum ApplicationStatus { Initial, NeedConsumerKey, LoginRequired, Ready, Running, Updating };
 
@@ -25,30 +25,14 @@ namespace WPFWhoIsTweeting
     {
         private static BlurEffect blurry = null;
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-        private API api;
-        private ApplicationStatus status = ApplicationStatus.Initial;
-
-        private User me;
-        private HashSet<string> idSet;
-        private List<UserListItem> UserList = new List<UserListItem>();
-
-        private BackgroundWorker listUpdateWorker;
-
-        MainViewModel viewModel;
-
-        Properties.Settings AppSettings = Properties.Settings.Default;
+        private MainViewModel viewModel;
+        private Properties.Settings appSettings = Properties.Settings.Default;
 
         public MainWindow()
         {
             InitializeComponent();
 
             DataContext = viewModel = new MainViewModel(this);
-
-            listUpdateWorker = new BackgroundWorker();
-            listUpdateWorker.DoWork += listUpdateWorker_DoWork;
 
             if (blurry == null)
             {
@@ -62,168 +46,137 @@ namespace WPFWhoIsTweeting
         {
             Dispatcher.Invoke(new Action(() =>
             {
-                viewModel.ShowAway = AppSettings.ShowAway;
-                viewModel.ShowOffline = AppSettings.ShowOffline;
+                viewModel.ShowAway = appSettings.ShowAway;
+                viewModel.ShowOffline = appSettings.ShowOffline;
             }));
+        }
 
-            api = new API(AppSettings.ConsumerKey, AppSettings.ConsumerSecret);
-            api.Token = AppSettings.Token;
-            api.TokenSecret = AppSettings.TokenSecret;
-            api.OAuthCallback = "oob";
+        #region Main Menu Handler
 
-            if (api.ConsumerKey == "" || api.ConsumerSecret == "")
-            {
-                SetStatus(ApplicationStatus.NeedConsumerKey);
-                return;
-            }
+        private void Menu_OnQuit(object sender, RoutedEventArgs e)
+            => Application.Current.Shutdown();
 
-            SetStatus(ApplicationStatus.LoginRequired);
-            Task.Factory.StartNew(async () =>
-            {
-                if (await ValidateUser())
+        private void Menu_OnAbout(object sender, RoutedEventArgs e)
+        {
+            Effect = blurry;
+            AboutWindow win = new AboutWindow();
+            win.Owner = this;
+            win.ShowDialog();
+            Effect = null;
+        }
+
+        private void Menu_OnConsumer(object sender, RoutedEventArgs e)
+        {
+            Effect = blurry;
+            ConsumerWindow win = new ConsumerWindow();
+            TokenViewModel mdl = win.DataContext as TokenViewModel;
+            win.Owner = this;
+            if ((bool)win.ShowDialog())
+                if (!(mdl.ConsumerKey == appSettings.ConsumerKey
+                    && mdl.ConsumerSecret == appSettings.ConsumerSecret))
                 {
-                    SetStatus(ApplicationStatus.Ready);
-                    Run();
+                    appSettings.ConsumerKey = mdl.ConsumerKey;
+                    appSettings.ConsumerSecret = mdl.ConsumerSecret;
+                    appSettings.Save();
+                    //if (listUpdateWorker.IsBusy) listUpdateWorker.CancelAsync();
+
+                    api.ConsumerKey = appSettings.ConsumerKey;
+                    api.ConsumerSecret = appSettings.ConsumerSecret;
+                    SetStatus(ApplicationStatus.LoginRequired);
                 }
-            });
+            Effect = null;
         }
 
-        private async Task<bool> ValidateUser()
+        private void Menu_OnSignIn(object sender, RoutedEventArgs e)
         {
-            if (api.Token == "" || api.TokenSecret == "") return false;
-            try
+            MessageBoxResult cont = MessageBox.Show("If you click OK, a web browser will be opened and it will show you the PIN required for authentication.", "Sign in with Twitter", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            if (cont == MessageBoxResult.OK)
             {
-                me = await api.Get<User>("/1.1/account/verify_credentials.json");
-                return true;
-            }
-            catch (APIException) { return false; }
-        }
-
-        private void SetStatus(ApplicationStatus newStatus)
-        {
-            ApplicationStatus oldStatus = status;
-            Dispatcher.Invoke(new Action(() =>
+                Effect = blurry;
+                api.Token = api.TokenSecret = "";
+                Task requestTask = api.RequestToken(url =>
                 {
-                    switch (newStatus)
+                    PinInputWindow win = new PinInputWindow();
+                    TokenViewModel mdl = win.DataContext as TokenViewModel;
+                    System.Diagnostics.Process.Start(url);
+                    win.Owner = this;
+                    win.ShowDialog();
+                    return mdl.PIN;
+                });
+                Task onSuccess = requestTask.ContinueWith(async (_) =>
+                {
+                    if (await ValidateUser())
                     {
-                        case ApplicationStatus.Initial:
-                            if (oldStatus != ApplicationStatus.Initial)
-                                throw new Exception("Invalid status change");
-                            break;
-
-                        case ApplicationStatus.NeedConsumerKey:
-                            viewModel.UserMenuText = "Consumer Key Required";
-                            menuItemSignIn.IsEnabled = false;
-                            break;
-
-                        case ApplicationStatus.LoginRequired:
-                            viewModel.UserMenuText = "Please sign in";
-                            menuItemSignIn.IsEnabled = true;
-                            break;
-
-                        case ApplicationStatus.Ready:
-                            if (oldStatus == ApplicationStatus.Initial)
-                                throw new Exception("Invalid status change");
-                            if (oldStatus == ApplicationStatus.LoginRequired)
-                            {
-                                viewModel.UserMenuText = $"@{me.screen_name}";
-                                menuItemSignIn.IsEnabled = false;
-                            }
-                            else if (listUpdateWorker.IsBusy)
-                                listUpdateWorker.CancelAsync();
-                            break;
-
-                        case ApplicationStatus.Running:
-                            if (oldStatus < ApplicationStatus.Ready)
-                                throw new Exception("Invalid status change");
-                            viewModel.StatUpdating = false;
-                            break;
-
-                        case ApplicationStatus.Updating:
-                            if (oldStatus != ApplicationStatus.Running)
-                                throw new Exception("Invalid status change");
-                            viewModel.StatUpdating = true;
-                            break;
+                        appSettings.Token = api.Token;
+                        appSettings.TokenSecret = api.TokenSecret;
+                        appSettings.Save();
+                        SetStatus(ApplicationStatus.Ready);
+                        Run();
                     }
-                }));
-            status = newStatus;
-        }
-
-        private void Run()
-        {
-            if (status >= ApplicationStatus.Running) return;
-            SetStatus(ApplicationStatus.Running);
-            listUpdateWorker.RunWorkerAsync();
-        }
-
-        public async void UpdateUserList()
-        {
-            if (status < ApplicationStatus.Ready) return;
-
-            // Populate initial data
-            if (idSet == null)
-            {
-                CursoredIdStrings ids = await api.Get<CursoredIdStrings>("/1.1/friends/ids.json",
-                    new NameValueCollection
-                    {
-                        { "user_id", me.id_str },
-                        { "stringify_id", "true" }
-                    });
-                idSet = new HashSet<string>(ids.ids);
-            }
-
-            if (status == ApplicationStatus.Updating) return;
-            SetStatus(ApplicationStatus.Updating);
-
-            int nAway, nOffline;
-            UserListItem.lastUpdated = DateTime.Now;
-            HashSet<string> tmpSet = new HashSet<string>(idSet);
-            List<UserListItem> list = new List<UserListItem>();
-
-            do
-            {
-                HashSet<string> _ = new HashSet<string>(tmpSet.Take(100));
-                tmpSet.ExceptWith(_);
-                string data = string.Join(",", _);
-                List<User> tmp = api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
-                    {
-                        { "user_id", data },
-                        { "include_entities", "true" }
-                    }).Result;
-                foreach (var x in tmp) list.Add(new UserListItem(x.id_str, x.name, x.screen_name, x.status));
-            } while (tmpSet.Count != 0);
-
-            nAway = list.Count(x => x.Status == UserStatus.Away);
-            nOffline = list.Count(x => x.Status == UserStatus.Offline);
-
-            viewModel.StatAway = nAway;
-            viewModel.StatOffline = nOffline;
-            viewModel.StatOnline = (idSet.Count - nAway - nOffline);
-
-            list.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
-            lock (viewModel.userListLock)
-            {
-                viewModel.UserList.Clear();
-                foreach (var x in list) viewModel.UserList.Add(x);
-            }
-
-            SetStatus(ApplicationStatus.Running);
-        }
-
-        private void listUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker worker = sender as BackgroundWorker;
-            while (true)
-            {
-                if (worker.CancellationPending)
+                    else
+                        MessageBox.Show("Unable to retrieve user data.", "Sign in with Twitter", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }, TaskContinuationOptions.NotOnFaulted);
+                Task onFailure = requestTask.ContinueWith((_) =>
                 {
-                    e.Cancel = true;
-                    break;
-                }
-                UpdateUserList();
-                System.Threading.Thread.Sleep(TimeSpan.FromMinutes(0.5));
+                    MessageBox.Show("Invalid PIN was provided. Please try again.");
+                }, TaskContinuationOptions.OnlyOnFaulted);
+                Effect = null;
             }
         }
+
+        #endregion
+
+        #region Context Menu Handler
+
+        private void Context_OnMention(object sender, RoutedEventArgs e)
+        {
+            Effect = blurry;
+            MessageWindow win = new MessageWindow(MessageWindowType.MentionWindow, viewModel.SelectedItem);
+            MessageViewModel mdl = win.DataContext as MessageViewModel;
+            win.Owner = this;
+            if ((bool)win.ShowDialog())
+            {
+                Task postTask = api.Post("/1.1/statuses/update.json", null, new NameValueCollection
+                {
+                    { "status", mdl.Content }
+                });
+                Task onError = postTask.ContinueWith(task =>
+                {
+                    MessageBox.Show($"Could not send a mention.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }, TaskContinuationOptions.OnlyOnFaulted);
+            }
+            Effect = null;
+        }
+
+        private void Context_OnDirectMessage(object sender, RoutedEventArgs e)
+        {
+            Effect = blurry;
+            MessageWindow win = new MessageWindow(MessageWindowType.DirectMessageWindow, viewModel.SelectedItem);
+            MessageViewModel mdl = win.DataContext as MessageViewModel;
+            win.Owner = this;
+            if ((bool)win.ShowDialog())
+            {
+                Task postTask = api.Post("/1.1/direct_messages/new.json", null, new NameValueCollection
+                {
+                    { "screen_name", mdl.ScreenName },
+                    { "text", mdl.Content }
+                });
+                Task onError = postTask.ContinueWith(task =>
+                {
+                    APIException ex = task.Exception.InnerException as APIException;
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    System.Diagnostics.Debug.WriteLine(ex.Info.errors[0].message);
+                    System.Diagnostics.Debug.WriteLine(ex.StackTrace);
+                    MessageBox.Show("Could not send a direct message to specied user.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }, TaskContinuationOptions.OnlyOnFaulted);
+            }
+            Effect = null;
+        }
+
+        private void Context_OnProfile(object sender, RoutedEventArgs e)
+            => System.Diagnostics.Process.Start($"https://twitter.com/{viewModel.SelectedItem.ScreenName}");
+
+        #endregion
 
         #region Custom Window Frame Handler
 
@@ -306,6 +259,9 @@ namespace WPFWhoIsTweeting
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool GetCursorPos(out POINT lpPoint);
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
         [StructLayout(LayoutKind.Sequential)]
         public struct POINT
         {
@@ -317,138 +273,11 @@ namespace WPFWhoIsTweeting
             }
         }
 
-        #endregion
-
-        #region Main Menu Handler
-
-        private void Menu_OnQuit(object sender, RoutedEventArgs e)
-            => Application.Current.Shutdown();
-
-        private void Menu_OnAbout(object sender, RoutedEventArgs e)
-        {
-            Effect = blurry;
-            AboutWindow win = new AboutWindow();
-            win.Owner = this;
-            win.ShowDialog();
-            Effect = null;
-        }
-
-        private void Menu_OnConsumer(object sender, RoutedEventArgs e)
-        {
-            Effect = blurry;
-            ConsumerWindow win = new ConsumerWindow();
-            TokenViewModel mdl = win.DataContext as TokenViewModel;
-            win.Owner = this;
-            if ((bool)win.ShowDialog())
-                if (!(mdl.ConsumerKey == AppSettings.ConsumerKey
-                    && mdl.ConsumerSecret == AppSettings.ConsumerSecret))
-                {
-                    AppSettings.ConsumerKey = mdl.ConsumerKey;
-                    AppSettings.ConsumerSecret = mdl.ConsumerSecret;
-                    AppSettings.Save();
-                    if (listUpdateWorker.IsBusy) listUpdateWorker.CancelAsync();
-
-                    api = new API(AppSettings.ConsumerKey, AppSettings.ConsumerSecret);
-                    api.OAuthCallback = "oob";
-                    SetStatus(ApplicationStatus.LoginRequired);
-                }
-            Effect = null;
-        }
-
-        private void Menu_OnSignIn(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult cont = MessageBox.Show("If you click OK, a web browser will be opened and it will show you the PIN required for authentication.", "Sign in with Twitter", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            if (cont == MessageBoxResult.OK)
-            {
-                Effect = blurry;
-                api.Token = api.TokenSecret = "";
-                Task requestTask = api.RequestToken(url =>
-                {
-                    PinInputWindow win = new PinInputWindow();
-                    TokenViewModel mdl = win.DataContext as TokenViewModel;
-                    System.Diagnostics.Process.Start(url);
-                    win.Owner = this;
-                    win.ShowDialog();
-                    return mdl.PIN;
-                });
-                Task onSuccess = requestTask.ContinueWith(async (_) =>
-                {
-                    if (await ValidateUser())
-                    {
-                        AppSettings.Token = api.Token;
-                        AppSettings.TokenSecret = api.TokenSecret;
-                        AppSettings.Save();
-                        SetStatus(ApplicationStatus.Ready);
-                        Run();
-                    }
-                    else
-                        MessageBox.Show("Unable to retrieve user data.", "Sign in with Twitter", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                }, TaskContinuationOptions.NotOnFaulted);
-                Task onFailure = requestTask.ContinueWith((_) =>
-                {
-                    MessageBox.Show("Invalid PIN was provided. Please try again.");
-                }, TaskContinuationOptions.OnlyOnFaulted);
-                Effect = null;
-            }
-        }
-
-        #endregion
-
-        #region Context Menu Handler
-
-        private void Context_OnMention(object sender, RoutedEventArgs e)
-        {
-            Effect = blurry;
-            MessageWindow win = new MessageWindow(MessageWindowType.MentionWindow, viewModel.SelectedItem);
-            MessageViewModel mdl = win.DataContext as MessageViewModel;
-            win.Owner = this;
-            if ((bool)win.ShowDialog())
-            {
-                Task postTask = api.Post("/1.1/statuses/update.json", null, new NameValueCollection
-                {
-                    { "status", mdl.Content }
-                });
-                Task onError = postTask.ContinueWith(task =>
-                {
-                    MessageBox.Show($"Could not send a mention.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }, TaskContinuationOptions.OnlyOnFaulted);
-            }
-            Effect = null;
-        }
-
-        private void Context_OnDirectMessage(object sender, RoutedEventArgs e)
-        {
-            Effect = blurry;
-            MessageWindow win = new MessageWindow(MessageWindowType.DirectMessageWindow, viewModel.SelectedItem);
-            MessageViewModel mdl = win.DataContext as MessageViewModel;
-            win.Owner = this;
-            if ((bool)win.ShowDialog())
-            {
-                Task postTask = api.Post("/1.1/direct_messages/new.json", null, new NameValueCollection
-                {
-                    { "screen_name", mdl.ScreenName },
-                    { "text", mdl.Content }
-                });
-                Task onError = postTask.ContinueWith(task =>
-                {
-                    APIException ex = task.Exception.InnerException as APIException;
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    System.Diagnostics.Debug.WriteLine(ex.Info.errors[0].message);
-                    System.Diagnostics.Debug.WriteLine(ex.StackTrace);
-                    MessageBox.Show("Could not send a direct message to specied user.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }, TaskContinuationOptions.OnlyOnFaulted);
-            }
-            Effect = null;
-        }
-
-        private void Context_OnProfile(object sender, RoutedEventArgs e)
-            => System.Diagnostics.Process.Start($"https://twitter.com/{viewModel.SelectedItem.ScreenName}");
-
-        #endregion
-
         private void Menu_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             viewModel.HideBorder = !viewModel.HideBorder;
         }
+
+        #endregion
     }
 }

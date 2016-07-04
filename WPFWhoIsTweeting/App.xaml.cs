@@ -6,26 +6,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace WPFWhoIsTweeting
+namespace WhoIsTweeting
 {
     /// <summary>
     /// App.xaml에 대한 상호 작용 논리
     /// </summary>
     public partial class App : Application
     {
-        private void Application_Exit(object sender, ExitEventArgs e)
-        {
-            WPFWhoIsTweeting.Properties.Settings.Default.Save();
-        }
+        public MainService Service { get; private set; }
+        public MainViewModel MainViewModel { get; private set; }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (WPFWhoIsTweeting.Properties.Settings.Default.UpdateSettings)
+            if (WhoIsTweeting.Properties.Settings.Default.UpdateSettings)
             {
-                WPFWhoIsTweeting.Properties.Settings.Default.Upgrade();
-                WPFWhoIsTweeting.Properties.Settings.Default.UpdateSettings = false;
-                WPFWhoIsTweeting.Properties.Settings.Default.Save();
+                WhoIsTweeting.Properties.Settings.Default.Upgrade();
+                WhoIsTweeting.Properties.Settings.Default.UpdateSettings = false;
+                WhoIsTweeting.Properties.Settings.Default.Save();
             }
+
+            Service = new MainService();
+            MainViewModel = new MainViewModel(null); // TODO
+        }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            WhoIsTweeting.Properties.Settings.Default.Save();
         }
     }
 }

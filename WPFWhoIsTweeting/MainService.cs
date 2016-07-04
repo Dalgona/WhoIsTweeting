@@ -1,0 +1,193 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using PicoBird;
+using PicoBird.Objects;
+using System.Collections.Specialized;
+using System.Collections.ObjectModel;
+using System.Windows.Data;
+
+namespace WhoIsTweeting
+{
+    public enum ServiceState { Initial, NeedConsumerKey, LoginRequired, Ready, Running, Updating };
+
+    public class MainService : INotifyPropertyChanged
+    {
+        public ServiceState State { get; private set; } = ServiceState.Initial;
+        public User Me { get; private set; }
+        public int OnlineCount { get; private set; }
+        public int AwayCount { get; private set; }
+        public int OfflineCount { get; private set; }
+        public ObservableCollection<UserListItem> UserList { get; private set; }
+
+        private API api;
+        private HashSet<string> idSet;
+
+        private BackgroundWorker listUpdateWorker;
+
+        private object userListLock = new object();
+
+        Properties.Settings appSettings = Properties.Settings.Default;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public MainService()
+        {
+            listUpdateWorker = new BackgroundWorker();
+            listUpdateWorker.DoWork += listUpdateWorker_DoWork;
+            UserList = new ObservableCollection<UserListItem>();
+            BindingOperations.EnableCollectionSynchronization(UserList, userListLock);
+
+            api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret);
+            api.Token = appSettings.Token;
+            api.TokenSecret = appSettings.TokenSecret;
+            api.OAuthCallback = "oob";
+
+            if (api.ConsumerKey == "" || api.ConsumerSecret == "")
+            {
+                SetStatus(ServiceState.NeedConsumerKey);
+                return;
+            }
+
+            SetStatus(ServiceState.LoginRequired);
+            Task.Factory.StartNew(async () =>
+            {
+                if (await ValidateUser())
+                {
+                    CursoredIdStrings ids = await api.Get<CursoredIdStrings>("/1.1/friends/ids.json",
+                    new NameValueCollection
+                    {
+                        { "user_id", Me.id_str },
+                        { "stringify_id", "true" }
+                    });
+                    idSet = new HashSet<string>(ids.ids);
+
+                    SetStatus(ServiceState.Ready);
+                    Run();
+                }
+            });
+        }
+        private async Task<bool> ValidateUser()
+        {
+            if (api.Token == "" || api.TokenSecret == "") return false;
+            try
+            {
+                Me = await api.Get<User>("/1.1/account/verify_credentials.json");
+                return true;
+            }
+            catch (APIException e)
+            {
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine("[ValidateUser THREW AN EXCEPTION]");
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                System.Diagnostics.Debug.WriteLine(e.Info.errors[0].message);
+                System.Diagnostics.Debug.WriteLine(e.StackTrace);
+#endif
+                return false;
+            }
+        }
+
+        private void SetStatus(ServiceState newStatus)
+        {
+            ServiceState oldStatus = State;
+            switch (newStatus)
+            {
+                case ServiceState.Initial:
+                    if (oldStatus != ServiceState.Initial)
+                        throw new Exception("Invalid status change");
+                    break;
+
+                case ServiceState.NeedConsumerKey:
+                    break;
+
+                case ServiceState.LoginRequired:
+                    break;
+
+                case ServiceState.Ready:
+                    if (oldStatus == ServiceState.Initial)
+                        throw new Exception("Invalid status change");
+                    else if (listUpdateWorker.IsBusy)
+                        listUpdateWorker.CancelAsync();
+                    break;
+
+                case ServiceState.Running:
+                    if (oldStatus < ServiceState.Ready)
+                        throw new Exception("Invalid status change");
+                    break;
+
+                case ServiceState.Updating:
+                    if (oldStatus != ServiceState.Running)
+                        throw new Exception("Invalid status change");
+                    break;
+            }
+            State = newStatus;
+            OnPropertyChanged("State");
+        }
+
+        private void Run()
+        {
+            if (State >= ServiceState.Running) return;
+            SetStatus(ServiceState.Running);
+            listUpdateWorker.RunWorkerAsync();
+        }
+
+        public void UpdateUserList()
+        {
+            if (State < ServiceState.Ready) return;
+            if (State == ServiceState.Updating) return;
+            SetStatus(ServiceState.Updating);
+
+            UserListItem.lastUpdated = DateTime.Now;
+            HashSet<string> tmpSet = new HashSet<string>(idSet);
+            List<UserListItem> list = new List<UserListItem>();
+
+            do
+            {
+                HashSet<string> _ = new HashSet<string>(tmpSet.Take(100));
+                tmpSet.ExceptWith(_);
+                string data = string.Join(",", _);
+                List<User> tmp = api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
+                    {
+                        { "user_id", data },
+                        { "include_entities", "true" }
+                    }).Result;
+                foreach (var x in tmp) list.Add(new UserListItem(x.id_str, x.name, x.screen_name, x.status));
+            } while (tmpSet.Count != 0);
+
+            AwayCount = list.Count(x => x.Status == UserStatus.Away);
+            OfflineCount = list.Count(x => x.Status == UserStatus.Offline);
+            OnlineCount = idSet.Count - AwayCount - OfflineCount;
+
+            list.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
+            lock (userListLock)
+            {
+                UserList.Clear();
+                foreach (var x in list) UserList.Add(x);
+            }
+
+            SetStatus(ServiceState.Running);
+        }
+
+        private void listUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            while (true)
+            {
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                UpdateUserList();
+                Thread.Sleep(TimeSpan.FromMinutes(0.5));
+            }
+        }
+
+        public void OnPropertyChanged(string name)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+}

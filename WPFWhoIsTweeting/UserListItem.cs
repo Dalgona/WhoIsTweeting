@@ -1,7 +1,7 @@
 ﻿using PicoBird.Objects;
 using System;
 
-namespace WPFWhoIsTweeting
+namespace WhoIsTweeting
 {
     public enum UserStatus { Online, Away, Offline };
 

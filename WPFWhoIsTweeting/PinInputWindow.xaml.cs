@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace WPFWhoIsTweeting
+namespace WhoIsTweeting
 {
     /// <summary>
     /// PinInputWindow.xaml에 대한 상호 작용 논리

@@ -7,7 +7,7 @@
     <ProjectGuid>{7F8BAA58-01DC-4FB5-B1B4-04254BBAA17A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WPFWhoIsTweeting</RootNamespace>
+    <RootNamespace>WhoIsTweeting</RootNamespace>
     <AssemblyName>WhoIsTweeting</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -61,6 +61,7 @@
     <Compile Include="AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainService.cs" />
     <Compile Include="MessageViewModel.cs" />
     <Compile Include="MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>

@@ -2,17 +2,16 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
-namespace WPFWhoIsTweeting
+namespace WhoIsTweeting
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private MainService service;
         private MainWindow window;
 
-        private string userMenuText;
-        private int statOnline, statAway, statOffline;
-        private bool statUpdating;
         private bool showAway, showOffline;
         private bool transparency = false;
         private bool hideBorder = false;
@@ -23,25 +22,33 @@ namespace WPFWhoIsTweeting
 
         public MainViewModel(MainWindow win)
         {
+            service = (Application.Current as App).Service;
+            service.PropertyChanged += Service_PropertyChanged;
             window = win;
             userList = new ObservableCollection<UserListItem>();
             BindingOperations.EnableCollectionSynchronization(userList, userListLock);
+        }
+
+        private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
         }
 
         public string UserMenuText
         {
             get
             {
-                return userMenuText;
-            }
-            set
-            {
-                userMenuText = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("UserMenuText"));
+                if (service.State == ServiceState.NeedConsumerKey)
+                    return "Consumer Key Required";
+                else if (service.State == ServiceState.LoginRequired)
+                    return "Please Sign in";
+                else if (service.State >= ServiceState.Ready)
+                    return $"@{service.Me.screen_name}";
+                else return "";
             }
         }
 
-        public ObservableCollection<UserListItem> UserList { get { return userList; } }
+        public ObservableCollection<UserListItem> UserList { get { return service.UserList; } }
 
         public UserListItem SelectedItem
         {
@@ -56,57 +63,10 @@ namespace WPFWhoIsTweeting
             }
         }
 
-        public int StatOnline
-        {
-            get
-            {
-                return statOnline;
-            }
-            set
-            {
-                statOnline = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("StatOnline"));
-            }
-        }
-
-        public int StatAway
-        {
-            get
-            {
-                return statAway;
-            }
-            set
-            {
-                statAway = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("StatAway"));
-            }
-        }
-
-        public int StatOffline
-        {
-            get
-            {
-                return statOffline;
-            }
-            set
-            {
-                statOffline = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("StatOffline"));
-            }
-        }
-
-        public bool StatUpdating
-        {
-            get
-            {
-                return statUpdating;
-            }
-            set
-            {
-                statUpdating = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("StatUpdating"));
-            }
-        }
+        public int StatOnline { get { return service.OnlineCount; } }
+        public int StatAway { get { return service.AwayCount; } }
+        public int StatOffline { get { return service.OfflineCount; } }
+        public bool StatUpdating { get { return service.State == ServiceState.Updating; } }
 
         public bool ShowAway
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows.Media;
 
-namespace WPFWhoIsTweeting
+namespace WhoIsTweeting
 {
     class MessageViewModel : INotifyPropertyChanged
     {
