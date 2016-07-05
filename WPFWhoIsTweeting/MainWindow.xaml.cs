@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using PicoBird;
-using PicoBird.Objects;
-using System.ComponentModel;
-using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
@@ -32,7 +25,7 @@ namespace WhoIsTweeting
         {
             InitializeComponent();
 
-            DataContext = viewModel = new MainViewModel(this);
+            DataContext = viewModel = (Application.Current as App).MainViewModel;
 
             if (blurry == null)
             {
@@ -40,15 +33,6 @@ namespace WhoIsTweeting
                 blurry.Radius = 10.0;
                 blurry.KernelType = KernelType.Gaussian;
             }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            Dispatcher.Invoke(new Action(() =>
-            {
-                viewModel.ShowAway = appSettings.ShowAway;
-                viewModel.ShowOffline = appSettings.ShowOffline;
-            }));
         }
 
         #region Main Menu Handler
@@ -74,16 +58,7 @@ namespace WhoIsTweeting
             if ((bool)win.ShowDialog())
                 if (!(mdl.ConsumerKey == appSettings.ConsumerKey
                     && mdl.ConsumerSecret == appSettings.ConsumerSecret))
-                {
-                    appSettings.ConsumerKey = mdl.ConsumerKey;
-                    appSettings.ConsumerSecret = mdl.ConsumerSecret;
-                    appSettings.Save();
-                    //if (listUpdateWorker.IsBusy) listUpdateWorker.CancelAsync();
-
-                    api.ConsumerKey = appSettings.ConsumerKey;
-                    api.ConsumerSecret = appSettings.ConsumerSecret;
-                    SetStatus(ApplicationStatus.LoginRequired);
-                }
+                    viewModel.SetConsumerKey(mdl.ConsumerKey, mdl.ConsumerSecret);
             Effect = null;
         }
 
@@ -91,37 +66,20 @@ namespace WhoIsTweeting
         {
             MessageBoxResult cont = MessageBox.Show("If you click OK, a web browser will be opened and it will show you the PIN required for authentication.", "Sign in with Twitter", MessageBoxButton.OKCancel, MessageBoxImage.Information);
             if (cont == MessageBoxResult.OK)
-            {
-                Effect = blurry;
-                api.Token = api.TokenSecret = "";
-                Task requestTask = api.RequestToken(url =>
+                viewModel.SignIn((url) =>
                 {
+                    Effect = blurry;
                     PinInputWindow win = new PinInputWindow();
                     TokenViewModel mdl = win.DataContext as TokenViewModel;
                     System.Diagnostics.Process.Start(url);
                     win.Owner = this;
                     win.ShowDialog();
+                    Effect = null;
                     return mdl.PIN;
+                }, (ex)=>
+                {
+                    MessageBox.Show("Invalid PIN was provided. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 });
-                Task onSuccess = requestTask.ContinueWith(async (_) =>
-                {
-                    if (await ValidateUser())
-                    {
-                        appSettings.Token = api.Token;
-                        appSettings.TokenSecret = api.TokenSecret;
-                        appSettings.Save();
-                        SetStatus(ApplicationStatus.Ready);
-                        Run();
-                    }
-                    else
-                        MessageBox.Show("Unable to retrieve user data.", "Sign in with Twitter", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                }, TaskContinuationOptions.NotOnFaulted);
-                Task onFailure = requestTask.ContinueWith((_) =>
-                {
-                    MessageBox.Show("Invalid PIN was provided. Please try again.");
-                }, TaskContinuationOptions.OnlyOnFaulted);
-                Effect = null;
-            }
         }
 
         #endregion
@@ -135,16 +93,10 @@ namespace WhoIsTweeting
             MessageViewModel mdl = win.DataContext as MessageViewModel;
             win.Owner = this;
             if ((bool)win.ShowDialog())
-            {
-                Task postTask = api.Post("/1.1/statuses/update.json", null, new NameValueCollection
-                {
-                    { "status", mdl.Content }
-                });
-                Task onError = postTask.ContinueWith(task =>
+                viewModel.PostTweet(mdl.Content, (ex) =>
                 {
                     MessageBox.Show($"Could not send a mention.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }, TaskContinuationOptions.OnlyOnFaulted);
-            }
+                });
             Effect = null;
         }
 
@@ -155,21 +107,10 @@ namespace WhoIsTweeting
             MessageViewModel mdl = win.DataContext as MessageViewModel;
             win.Owner = this;
             if ((bool)win.ShowDialog())
-            {
-                Task postTask = api.Post("/1.1/direct_messages/new.json", null, new NameValueCollection
+                viewModel.SendDirectMessage(mdl.ScreenName, mdl.Content, (ex) =>
                 {
-                    { "screen_name", mdl.ScreenName },
-                    { "text", mdl.Content }
-                });
-                Task onError = postTask.ContinueWith(task =>
-                {
-                    APIException ex = task.Exception.InnerException as APIException;
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
-                    System.Diagnostics.Debug.WriteLine(ex.Info.errors[0].message);
-                    System.Diagnostics.Debug.WriteLine(ex.StackTrace);
                     MessageBox.Show("Could not send a direct message to specied user.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }, TaskContinuationOptions.OnlyOnFaulted);
-            }
+                });
             Effect = null;
         }
 

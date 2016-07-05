@@ -9,30 +9,41 @@ namespace WhoIsTweeting
 {
     public class MainViewModel : INotifyPropertyChanged
     {
+        private Properties.Settings appSettings = Properties.Settings.Default;
+
         private MainService service;
-        private MainWindow window;
 
         private bool showAway, showOffline;
         private bool transparency = false;
         private bool hideBorder = false;
-        private ObservableCollection<UserListItem> userList;
         private UserListItem selectedItem;
 
         public object userListLock = new object();
 
-        public MainViewModel(MainWindow win)
+        public MainViewModel()
         {
             service = (Application.Current as App).Service;
             service.PropertyChanged += Service_PropertyChanged;
-            window = win;
-            userList = new ObservableCollection<UserListItem>();
-            BindingOperations.EnableCollectionSynchronization(userList, userListLock);
+            showAway = appSettings.ShowAway;
+            showOffline = appSettings.ShowOffline;
         }
 
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
         }
+
+        public void SetConsumerKey(string consumerKey, string consumerSecret)
+            => service.SetConsumerKey(consumerKey, consumerSecret);
+
+        public void SignIn(Func<string, string> callback, Action<Exception> onError)
+            => service.SignIn(callback, onError);
+
+        public void PostTweet(string content, Action<Exception> onError)
+            => service.PostTweet(content, onError);
+
+        internal void SendDirectMessage(string screenName, string content, Action<Exception> onError)
+            => service.SendDirectMessage(screenName, content, onError);
 
         public string UserMenuText
         {
@@ -45,6 +56,14 @@ namespace WhoIsTweeting
                 else if (service.State >= ServiceState.Ready)
                     return $"@{service.Me.screen_name}";
                 else return "";
+            }
+        }
+
+        public bool CanSignIn
+        {
+            get
+            {
+                return service.State == ServiceState.LoginRequired;
             }
         }
 

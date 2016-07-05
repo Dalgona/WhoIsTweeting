@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WhoIsTweeting"
         xmlns:p="clr-namespace:WhoIsTweeting.Properties"
         mc:Ignorable="d"
-        Title="WhoIsTweeting" Height="600" Width="270" Icon="wit.ico" Loaded="Window_Loaded"
+        Title="WhoIsTweeting" Height="600" Width="270" Icon="wit.ico"
         Topmost="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=OneWay}"
         d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}">
     <Window.Resources>
@@ -122,7 +122,7 @@
                     <MenuItem.Header>
                         <TextBlock Text="{Binding UserMenuText, Mode=OneWay}"/>
                     </MenuItem.Header>
-                    <MenuItem x:Name="menuItemSignIn" Header="Sign _in with Twitter" Click="Menu_OnSignIn"/>
+                    <MenuItem Header="Sign _in with Twitter" Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
                     <MenuItem Header="Set _Consumer Key" Click="Menu_OnConsumer"/>
                     <Separator/>
                     <MenuItem Header="_About" Click="Menu_OnAbout"/>
