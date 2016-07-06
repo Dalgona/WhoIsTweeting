@@ -24,6 +24,7 @@ namespace WhoIsTweeting
         public int AwayCount { get; private set; }
         public int OfflineCount { get; private set; }
         public ObservableCollection<UserListItem> UserList { get; private set; }
+        public ObservableCollection<KeyValuePair<DateTime, int[]>> Graph { get; private set; }
 
         public void SetConsumerKey(string consumerKey, string consumerSecret)
         {
@@ -85,6 +86,7 @@ namespace WhoIsTweeting
         private BackgroundWorker listUpdateWorker;
 
         private object userListLock = new object();
+        private object graphLock = new object();
 
         Properties.Settings appSettings = Properties.Settings.Default;
 
@@ -94,8 +96,11 @@ namespace WhoIsTweeting
         {
             listUpdateWorker = new BackgroundWorker();
             listUpdateWorker.DoWork += listUpdateWorker_DoWork;
+
             UserList = new ObservableCollection<UserListItem>();
             BindingOperations.EnableCollectionSynchronization(UserList, userListLock);
+            Graph = new ObservableCollection<KeyValuePair<DateTime, int[]>>();
+            BindingOperations.EnableCollectionSynchronization(Graph, graphLock);
 
             api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret);
             api.Token = appSettings.Token;
@@ -189,7 +194,7 @@ namespace WhoIsTweeting
             listUpdateWorker.RunWorkerAsync();
         }
 
-        private void UpdateUserList()
+        private async Task UpdateUserList()
         {
             if (State < ServiceState.Ready) return;
             if (State == ServiceState.Updating) return;
@@ -204,11 +209,11 @@ namespace WhoIsTweeting
                 HashSet<string> _ = new HashSet<string>(tmpSet.Take(100));
                 tmpSet.ExceptWith(_);
                 string data = string.Join(",", _);
-                List<User> tmp = api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
+                List<User> tmp = await api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
                     {
                         { "user_id", data },
                         { "include_entities", "true" }
-                    }).Result;
+                    });
                 foreach (var x in tmp) list.Add(new UserListItem(x.id_str, x.name, x.screen_name, x.status));
             } while (tmpSet.Count != 0);
 
@@ -223,6 +228,9 @@ namespace WhoIsTweeting
                 foreach (var x in list) UserList.Add(x);
             }
 
+            lock (graphLock)
+                Graph.Add(new KeyValuePair<DateTime, int[]>(DateTime.Now, new int[] { OnlineCount, AwayCount, OfflineCount }));
+
             SetStatus(ServiceState.Running);
         }
 
@@ -236,7 +244,7 @@ namespace WhoIsTweeting
                     e.Cancel = true;
                     break;
                 }
-                UpdateUserList();
+                Task t = UpdateUserList();
                 Thread.Sleep(TimeSpan.FromMinutes(0.5));
             }
         }

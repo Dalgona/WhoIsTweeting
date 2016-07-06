@@ -11,7 +11,7 @@ namespace WhoIsTweeting
     {
         private Properties.Settings appSettings = Properties.Settings.Default;
 
-        private MainService service;
+        private MainService service = (Application.Current as App).Service;
 
         private bool showAway, showOffline;
         private bool transparency = false;
@@ -22,16 +22,13 @@ namespace WhoIsTweeting
 
         public MainViewModel()
         {
-            service = (Application.Current as App).Service;
             service.PropertyChanged += Service_PropertyChanged;
             showAway = appSettings.ShowAway;
             showOffline = appSettings.ShowOffline;
         }
 
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
-        }
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
 
         public void SetConsumerKey(string consumerKey, string consumerSecret)
             => service.SetConsumerKey(consumerKey, consumerSecret);

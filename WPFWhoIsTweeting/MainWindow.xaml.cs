@@ -220,5 +220,12 @@ namespace WhoIsTweeting
         }
 
         #endregion
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Window win = new GraphWindow();
+            win.Owner = this;
+            win.ShowDialog();
+        }
     }
 }

@@ -1,0 +1,120 @@
+﻿<Window x:Class="WhoIsTweeting.GraphWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WhoIsTweeting"
+        mc:Ignorable="d"
+        Title="Statistics" Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded" Icon="wit.ico">
+    <Window.Resources>
+        <Style x:Key="InfoKeyLabel" TargetType="Label">
+            <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style x:Key="InfoValueLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+    </Window.Resources>
+    <TabControl Grid.Row="1" BorderThickness="0,1,0,0" Padding="0">
+        <TabControl.Items>
+            <TabItem Header="Information">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="152"/>
+                    </Grid.RowDefinitions>
+                    <Border Margin="0,0,0,10" BorderBrush="#FF00B26E" BorderThickness="1">
+                        <Grid x:Name="graphGrid" MouseMove="MoveCursor" MouseEnter="graphGrid_MouseEnter" MouseLeave="graphGrid_MouseLeave" Background="White">
+                            <Polygon x:Name="polyAway" Fill="LightGray" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0,0" IsHitTestVisible="False">
+                                <Polygon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ScaleY="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform X="0" Y="0"/>
+                                    </TransformGroup>
+                                </Polygon.RenderTransform>
+                                <Polygon.Points>
+                                    <PointCollection/>
+                                </Polygon.Points>
+                            </Polygon>
+                            <Polygon x:Name="polyOnline" Fill="MediumSpringGreen" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0,0" IsHitTestVisible="False">
+                                <Polygon.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ScaleY="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Grid}}"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform X="0" Y="0"/>
+                                    </TransformGroup>
+                                </Polygon.RenderTransform>
+                                <Polygon.Points>
+                                    <PointCollection/>
+                                </Polygon.Points>
+                            </Polygon>
+                            <Line x:Name="cursor" Visibility="Hidden" X2="100.5" Y2="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Grid}}" Stroke="Black" X1="100.5" IsHitTestVisible="False"/>
+                        </Grid>
+                    </Border>
+                    <StackPanel Grid.Row="1">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <StackPanel Margin="0,0,20,0">
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="Data from"/>
+                                <Label Grid.Row="1" Style="{StaticResource InfoValueLabel}" Content="{Binding From, FallbackValue=0000-00-00 00:00}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="Data to"/>
+                                <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource InfoValueLabel}" Content="{Binding To, FallbackValue=0000-00-00 00:00}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <StackPanel Margin="0,0,20,0">
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="# of data"/>
+                                <Label Style="{StaticResource InfoValueLabel}" Content="{Binding DataCount, FallbackValue=0}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,20,0">
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="Min. online"/>
+                                <Label Style="{StaticResource InfoValueLabel}" Content="{Binding MinOnline, FallbackValue=0}"/>
+                            </StackPanel>
+                            <StackPanel Margin="0,0,20,0">
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="Max. online"/>
+                                <Label Style="{StaticResource InfoValueLabel}" Content="{Binding MaxOnline, FallbackValue=0}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="Avg. online"/>
+                                <Label Style="{StaticResource InfoValueLabel}" Content="{Binding AvgOnline, FallbackValue=0}" ContentStringFormat="{}{0:F2}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Table">
+                <ListView x:Name="list1" BorderThickness="0" Margin="-2,0">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Key}">
+                                <GridViewColumn.Header>
+                                    <Label Content="Date"/>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Value[0]}">
+                                <GridViewColumn.Header>
+                                    <Label Content="Online"/>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Value[1]}">
+                                <GridViewColumn.Header>
+                                    <Label Content="Away"/>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Value[2]}">
+                                <GridViewColumn.Header>
+                                    <Label Content="Offline"/>
+                                </GridViewColumn.Header>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+        </TabControl.Items>
+    </TabControl>
+</Window>

@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="WhoIsTweeting" Height="600" Width="270" Icon="wit.ico"
         Topmost="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=OneWay}"
-        d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}">
+        d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MinWidth="270" MinHeight="270">
     <Window.Resources>
         <local:StatCountConverter x:Key="StatCountConverter"/>
         <local:LastTweetConverter x:Key="LastTweetConverter"/>
@@ -134,6 +134,7 @@
                     <Separator/>
                     <MenuItem Header="A_way Users" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
                     <MenuItem Header="_Offline Users" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="Show Statistics" Click="MenuItem_Click"/>
                 </MenuItem>
             </Menu>
             <ListBox x:Name="listBox" Grid.Row="2" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
