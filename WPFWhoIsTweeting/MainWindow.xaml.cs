@@ -51,7 +51,6 @@ namespace WhoIsTweeting
 
         private void Menu_OnConsumer(object sender, RoutedEventArgs e)
         {
-            Effect = blurry;
             ConsumerWindow win = new ConsumerWindow();
             TokenViewModel mdl = win.DataContext as TokenViewModel;
             win.Owner = this;
@@ -59,7 +58,6 @@ namespace WhoIsTweeting
                 if (!(mdl.ConsumerKey == appSettings.ConsumerKey
                     && mdl.ConsumerSecret == appSettings.ConsumerSecret))
                     viewModel.SetConsumerKey(mdl.ConsumerKey, mdl.ConsumerSecret);
-            Effect = null;
         }
 
         private void Menu_OnSignIn(object sender, RoutedEventArgs e)
@@ -68,18 +66,23 @@ namespace WhoIsTweeting
             if (cont == MessageBoxResult.OK)
                 viewModel.SignIn((url) =>
                 {
-                    Effect = blurry;
                     PinInputWindow win = new PinInputWindow();
                     TokenViewModel mdl = win.DataContext as TokenViewModel;
                     System.Diagnostics.Process.Start(url);
                     win.Owner = this;
                     win.ShowDialog();
-                    Effect = null;
                     return mdl.PIN;
                 }, (ex)=>
                 {
                     MessageBox.Show("Invalid PIN was provided. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 });
+        }
+
+        private void Menu_OnStatistics(object sender, RoutedEventArgs e)
+        {
+            Window win = new GraphWindow();
+            win.Owner = this;
+            win.ShowDialog();
         }
 
         #endregion
@@ -220,12 +223,5 @@ namespace WhoIsTweeting
         }
 
         #endregion
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Window win = new GraphWindow();
-            win.Owner = this;
-            win.ShowDialog();
-        }
     }
 }

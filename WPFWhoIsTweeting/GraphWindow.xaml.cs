@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
+using System.Windows.Controls.Primitives;
 
 namespace WhoIsTweeting
 {
@@ -35,9 +36,7 @@ namespace WhoIsTweeting
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            Dispatcher.Invoke(drawGraph);
-        }
+            => Dispatcher.Invoke(drawGraph);
 
         private void drawGraph()
         {
@@ -74,15 +73,24 @@ namespace WhoIsTweeting
 
         private void MoveCursor(object sender, MouseEventArgs e)
         {
-            Debug.WriteLine(sender);
+            if (viewModel.DataCount == 0) return;
             Point pos = e.GetPosition(graphGrid);
-            cursor.X1 = cursor.X2 = pos.X - 0.5;
+            double segWidth = graphGrid.ActualWidth / viewModel.DataCount;
+            int dataIndex = (int)Math.Round(pos.X / segWidth);
+            cursor.X1 = cursor.X2 = Math.Floor(dataIndex * segWidth) - 0.5;
+            peek.DataContext = service.Graph[dataIndex == 0 ? 0 : dataIndex - 1];
         }
 
         private void graphGrid_MouseEnter(object sender, MouseEventArgs e)
-            => cursor.Visibility = Visibility.Visible;
+        { 
+            cursor.Visibility = Visibility.Visible;
+            peek.IsOpen = true;
+        }
 
         private void graphGrid_MouseLeave(object sender, MouseEventArgs e)
-            => cursor.Visibility = Visibility.Hidden;
+        { 
+            cursor.Visibility = Visibility.Hidden;
+            peek.IsOpen = false;
+        }
     }
 }

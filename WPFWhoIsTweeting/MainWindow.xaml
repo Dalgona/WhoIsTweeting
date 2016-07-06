@@ -125,6 +125,7 @@
                     <MenuItem Header="Sign _in with Twitter" Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
                     <MenuItem Header="Set _Consumer Key" Click="Menu_OnConsumer"/>
                     <Separator/>
+                    <MenuItem Header="Show _Statistics" Click="Menu_OnStatistics"/>
                     <MenuItem Header="_About" Click="Menu_OnAbout"/>
                     <MenuItem Header="_Quit" Click="Menu_OnQuit"/>
                 </MenuItem>
@@ -134,7 +135,6 @@
                     <Separator/>
                     <MenuItem Header="A_way Users" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
                     <MenuItem Header="_Offline Users" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="Show Statistics" Click="MenuItem_Click"/>
                 </MenuItem>
             </Menu>
             <ListBox x:Name="listBox" Grid.Row="2" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
