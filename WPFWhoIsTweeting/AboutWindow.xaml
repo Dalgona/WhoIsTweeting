@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
-        Title="About WhoIsTweeting" Height="425" Width="380" ResizeMode="NoResize" SizeToContent="Height" Icon="wit.ico" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        Title="About WhoIsTweeting" Height="521" Width="380" ResizeMode="NoResize" SizeToContent="Height" Icon="wit.ico" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Window.Resources>
         <Style x:Key="AboutDescStyle" TargetType="Label">
             <Setter Property="Margin" Value="25,0,0,0"/>
@@ -25,7 +25,7 @@
         </Style>
     </Window.Resources>
     <StackPanel Margin="5">
-        <Label Content="WhoIsTweeting 1.2.1" FontWeight="Bold" Foreground="#FF333333"/>
+        <Label Content="WhoIsTweeting 1.3.0" FontWeight="Bold" Foreground="#FF333333"/>
         <Label Content="Copyright © 2016 Dalgona." Style="{StaticResource AboutDescStyle}" Foreground="#FF333333"/>
         <Label Content="This program is not intended for monitoring your employees!" FontStyle="Italic" Foreground="#FF333333"/>
         <Label Content="For any issues, email me:" Foreground="#FF333333"/>
@@ -48,6 +48,16 @@
                     WhoIsTweeting, PicoBird and Newtonsoft.Json are<LineBreak/>
                     licensed under the MIT License. See enclosed LICENSE file<LineBreak/>
                     for full text of the license.
+                </TextBlock>
+            </Label.Content>
+        </Label>
+        <Label Content="Special Thanks" HorizontalAlignment="Center" FontWeight="Bold" Margin="0" Foreground="#FF333333"/>
+        <Label HorizontalAlignment="Center">
+            <Label.Content>
+                <TextBlock TextAlignment="Center" Foreground="#FF333333">
+                    I would like to give special thanks to<LineBreak/>
+                    Macchiato (@CreStudio_Plus), for this awesome idea.<LineBreak/>
+                    I'm glad to make this idea come true.
                 </TextBlock>
             </Label.Content>
         </Label>
