@@ -23,6 +23,10 @@ namespace WhoIsTweeting
         public int OnlineCount { get; private set; }
         public int AwayCount { get; private set; }
         public int OfflineCount { get; private set; }
+        public int GraphCount { get; private set; } = 0;
+        public int SumOnline { get; private set; } = 0;
+        public int MinOnline { get; private set; } = 0;
+        public int MaxOnline { get; private set; } = 0;
         public ObservableCollection<UserListItem> UserList { get; private set; }
         public ObservableCollection<KeyValuePair<DateTime, int[]>> Graph { get; private set; }
 
@@ -229,7 +233,13 @@ namespace WhoIsTweeting
             }
 
             lock (graphLock)
+            {
+                SumOnline += OnlineCount;
+                MinOnline = GraphCount == 0 ? OnlineCount : ( OnlineCount < MinOnline ? OnlineCount : MinOnline);
+                MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
                 Graph.Add(new KeyValuePair<DateTime, int[]>(DateTime.Now, new int[] { OnlineCount, AwayCount, OfflineCount }));
+                GraphCount++;
+            }
 
             SetStatus(ServiceState.Running);
         }

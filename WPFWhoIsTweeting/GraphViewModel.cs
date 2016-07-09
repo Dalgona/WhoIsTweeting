@@ -45,33 +45,12 @@ namespace WhoIsTweeting
             }
         }
 
-        public int DataCount { get { return service.Graph.Count; } }
+        public int DataCount { get { return service.GraphCount; } }
         public int FollowingsCount { get { return service.OnlineCount + service.AwayCount + service.OfflineCount; } }
 
-        public int MinOnline
-        {
-            get
-            {
-                if (service.Graph.Count == 0) return 0;
-                return (from x in service.Graph select x.Value[0]).Min();
-            }
-        }
-        public int MaxOnline
-        {
-            get
-            {
-                if (service.Graph.Count == 0) return 0;
-                return (from x in service.Graph select x.Value[0]).Max();
-            }
-        }
-        public double AvgOnline
-        {
-            get
-            {
-                if (service.Graph.Count == 0) return 0;
-                return (from x in service.Graph select x.Value[0]).Average();
-            }
-        }
+        public int MinOnline { get { return service.MinOnline; } }
+        public int MaxOnline { get { return service.MaxOnline; } }
+        public double AvgOnline { get { return service.SumOnline / (double)service.GraphCount; } }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
