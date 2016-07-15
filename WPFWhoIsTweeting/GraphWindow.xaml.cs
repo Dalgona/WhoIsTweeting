@@ -1,21 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Diagnostics;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Threading;
-using System.Windows.Controls.Primitives;
+using System.Windows.Threading;
 
 namespace WhoIsTweeting
 {
@@ -27,12 +14,25 @@ namespace WhoIsTweeting
         private GraphViewModel viewModel;
         private MainService service = (Application.Current as App).Service;
 
+        private DispatcherTimer timer;
+        private int dataIndex;
+
         public GraphWindow()
         {
             InitializeComponent();
 
             DataContext = viewModel = new GraphViewModel();
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+            timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) };
+            timer.Tick += Timer_Tick;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            timer.Stop();
+            peek.DataContext = service.Graph[dataIndex == 0 ? 0 : dataIndex - 1];
+            peek.IsOpen = true;
         }
 
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -67,30 +67,31 @@ namespace WhoIsTweeting
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             list1.ItemsSource = service.Graph;
-
             drawGraph();
         }
 
         private void MoveCursor(object sender, MouseEventArgs e)
         {
             if (viewModel.DataCount == 0) return;
+            timer.Stop();
+            peek.IsOpen = false;
             Point pos = e.GetPosition(graphGrid);
             double segWidth = graphGrid.ActualWidth / viewModel.DataCount;
-            int dataIndex = (int)Math.Round(pos.X / segWidth);
+            dataIndex = (int)Math.Round(pos.X / segWidth);
             cursor.X1 = cursor.X2 = Math.Floor(dataIndex * segWidth) - 0.5;
-            peek.DataContext = service.Graph[dataIndex == 0 ? 0 : dataIndex - 1];
+            timer.Start();
         }
 
         private void graphGrid_MouseEnter(object sender, MouseEventArgs e)
         { 
             cursor.Visibility = Visibility.Visible;
-            peek.IsOpen = true;
         }
 
         private void graphGrid_MouseLeave(object sender, MouseEventArgs e)
         { 
             cursor.Visibility = Visibility.Hidden;
             peek.IsOpen = false;
+            timer.Stop();
         }
     }
 }
