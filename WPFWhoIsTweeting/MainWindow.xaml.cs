@@ -82,7 +82,7 @@ namespace WhoIsTweeting
         {
             Window win = new GraphWindow();
             win.Owner = this;
-            win.ShowDialog();
+            win.Show();
         }
 
         #endregion
@@ -148,7 +148,8 @@ namespace WhoIsTweeting
                 return;
             }
 
-            DragMove();
+            if (e.ChangedButton == MouseButton.Left && e.ButtonState == MouseButtonState.Pressed)
+                DragMove();
         }
 
         private void DockPanel_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -187,7 +188,9 @@ namespace WhoIsTweeting
             => SystemCommands.RestoreWindow(this);
 
         private void CommandBinding_Maximized(object sender, ExecutedRoutedEventArgs e)
-            => SystemCommands.MaximizeWindow(this);
+        {
+            SystemCommands.MaximizeWindow(this);
+        }
 
         private void CommandBinding_Minimized(object sender, ExecutedRoutedEventArgs e)
             => SystemCommands.MinimizeWindow(this);

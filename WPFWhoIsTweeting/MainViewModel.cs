@@ -170,18 +170,4 @@ namespace WhoIsTweeting
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => null;
     }
-
-    public class ExpanderConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            System.Diagnostics.Debug.WriteLine($"'{values[0]}', '{values[1]}'");
-            return true;
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-    }
 }

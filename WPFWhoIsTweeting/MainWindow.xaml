@@ -13,7 +13,6 @@
         <local:StatCountConverter x:Key="StatCountConverter"/>
         <local:LastTweetConverter x:Key="LastTweetConverter"/>
         <local:TransparencyConverter x:Key="TransparencyConverter"/>
-        <local:ExpanderConverter x:Key="ExpanderConverter"/>
         <Style x:Key="CommandButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#18FFFFFF"/>
             <Setter Property="Foreground" Value="WhiteSmoke"/>

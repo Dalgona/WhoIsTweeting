@@ -17,6 +17,8 @@ namespace WhoIsTweeting
         private DispatcherTimer timer;
         private int dataIndex;
 
+        private double graphScale = 1.0;
+
         public GraphWindow()
         {
             InitializeComponent();
@@ -48,7 +50,7 @@ namespace WhoIsTweeting
             for (int i = 0; i < num; i++)
             {
                 double x = (i + 1.0) / num;
-                double y = 1 - ((service.Graph[i].Value[0] + service.Graph[i].Value[1]) / followings);
+                double y = 1 - ((service.Graph[i].Value[0] + service.Graph[i].Value[1]) / followings) * graphScale;
                 pt.Add(new Point(x, y));
             }
             pt.Add(new Point(1, 1));
@@ -58,7 +60,7 @@ namespace WhoIsTweeting
             for (int i = 0; i < num; i++)
             {
                 double x = (i + 1.0) / num;
-                double y = 1 - (service.Graph[i].Value[0] / followings);
+                double y = 1 - (service.Graph[i].Value[0] / followings) * graphScale;
                 pt.Add(new Point(x, y));
             }
             pt.Add(new Point(1, 1));
@@ -92,6 +94,13 @@ namespace WhoIsTweeting
             cursor.Visibility = Visibility.Hidden;
             peek.IsOpen = false;
             timer.Stop();
+        }
+
+        private void graphGrid_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 0 && graphScale <= 5.0) graphScale += 0.1;
+            if (e.Delta < 0 && graphScale >= 1.0) graphScale -= 0.1;
+            drawGraph();
         }
     }
 }
