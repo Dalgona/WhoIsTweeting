@@ -6,9 +6,6 @@ using System.Windows.Threading;
 
 namespace WhoIsTweeting
 {
-    /// <summary>
-    /// GraphWindow.xaml에 대한 상호 작용 논리
-    /// </summary>
     public partial class GraphWindow : Window
     {
         private GraphViewModel viewModel;
