@@ -30,6 +30,19 @@ namespace WhoIsTweeting
         public ObservableCollection<UserListItem> UserList { get; private set; }
         public ObservableCollection<KeyValuePair<DateTime, int[]>> Graph { get; private set; }
 
+        public int UpdateInterval
+        {
+            get { return updateInterval; }
+            set
+            {
+                updateInterval = value;
+                Graph.Clear();
+                GraphCount = SumOnline = MinOnline = MaxOnline = 0;
+                appSettings.UpdateInterval = UpdateInterval;
+                appSettings.Save();
+            }
+        }
+
         public void SetConsumerKey(string consumerKey, string consumerSecret)
         {
             if (listUpdateWorker.IsBusy) listUpdateWorker.CancelAsync();
@@ -88,6 +101,7 @@ namespace WhoIsTweeting
         private HashSet<string> idSet;
 
         private BackgroundWorker listUpdateWorker;
+        private int updateInterval;
 
         private object userListLock = new object();
         private object graphLock = new object();
@@ -110,6 +124,7 @@ namespace WhoIsTweeting
             api.Token = appSettings.Token;
             api.TokenSecret = appSettings.TokenSecret;
             api.OAuthCallback = "oob";
+            UpdateInterval = appSettings.UpdateInterval;
 
             if (api.ConsumerKey == "" || api.ConsumerSecret == "")
             {
@@ -127,6 +142,7 @@ namespace WhoIsTweeting
                 }
             });
         }
+
         private async Task<bool> ValidateUser()
         {
             if (api.Token == "" || api.TokenSecret == "") return false;
@@ -137,7 +153,8 @@ namespace WhoIsTweeting
                     new NameValueCollection
                     {
                         { "user_id", Me.id_str },
-                        { "stringify_id", "true" }
+                        { "stringify_id", "true" },
+                        { "count", "5000" }
                     });
                 idSet = new HashSet<string>(ids.ids);
                 return true;
@@ -255,7 +272,7 @@ namespace WhoIsTweeting
                     break;
                 }
                 Task t = UpdateUserList();
-                Thread.Sleep(TimeSpan.FromMinutes(0.5));
+                Thread.Sleep(TimeSpan.FromSeconds(UpdateInterval));
             }
         }
 

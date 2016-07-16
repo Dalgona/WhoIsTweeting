@@ -42,11 +42,9 @@ namespace WhoIsTweeting
 
         private void Menu_OnAbout(object sender, RoutedEventArgs e)
         {
-            Effect = blurry;
             AboutWindow win = new AboutWindow();
             win.Owner = this;
             win.ShowDialog();
-            Effect = null;
         }
 
         private void Menu_OnConsumer(object sender, RoutedEventArgs e)
@@ -80,9 +78,16 @@ namespace WhoIsTweeting
 
         private void Menu_OnStatistics(object sender, RoutedEventArgs e)
         {
-            Window win = new GraphWindow();
+            GraphWindow win = new GraphWindow();
             win.Owner = this;
             win.Show();
+        }
+
+        private void Menu_OnSetInterval(object sender, RoutedEventArgs e)
+        {
+            SetIntervalWindow win = new SetIntervalWindow();
+            win.Owner = this;
+            win.ShowDialog();
         }
 
         #endregion

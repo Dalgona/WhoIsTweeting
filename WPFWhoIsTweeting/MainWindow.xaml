@@ -128,6 +128,7 @@
                     <MenuItem Header="Sign _in with Twitter..." Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
                     <MenuItem Header="Set _Consumer Key..." Click="Menu_OnConsumer"/>
                     <Separator/>
+                    <MenuItem Header="Set _Update Interval..." Click="Menu_OnSetInterval"/>
                     <MenuItem Header="Show _Statistics..." Click="Menu_OnStatistics"/>
                     <Separator/>
                     <MenuItem Header="_About..." Click="Menu_OnAbout"/>
