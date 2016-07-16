@@ -30,7 +30,9 @@ namespace WhoIsTweeting
         {
             if (viewModel.ConsumerKey == "" || viewModel.ConsumerSecret == "")
             {
-                MessageBox.Show("Both the consumer key and the consumer secret cannot be left blank.", "Set Consumer Key", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show(Application.Current.FindResource("Consumer_Empty_Error").ToString(),
+                    Application.Current.FindResource("Consumer_Title").ToString(),
+                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
             DialogResult = true;

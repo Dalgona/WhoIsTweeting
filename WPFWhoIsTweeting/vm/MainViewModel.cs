@@ -47,9 +47,9 @@ namespace WhoIsTweeting
             get
             {
                 if (service.State == ServiceState.NeedConsumerKey)
-                    return "Consumer Key Required";
+                    return Application.Current.FindResource("Menu_Main_NeedConsumer").ToString();
                 else if (service.State == ServiceState.LoginRequired)
-                    return "Please Sign in";
+                    return Application.Current.FindResource("Menu_Main_NeedSignIn").ToString();
                 else if (service.State >= ServiceState.Ready)
                     return $"@{service.Me.screen_name}";
                 else return "";

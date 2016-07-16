@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
-        Title="Statistics" Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded" Icon="wit.ico" WindowStartupLocation="CenterOwner">
+        Title="{StaticResource Statistics_Title}" Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded" Icon="wit.ico" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <Style x:Key="InfoKeyLabel" TargetType="Label">
             <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>
@@ -18,7 +18,7 @@
     </Window.Resources>
     <TabControl Grid.Row="1" BorderThickness="0,1,0,0" Padding="0">
         <TabControl.Items>
-            <TabItem Header="Graph">
+            <TabItem Header="{StaticResource Statistics_Tab_Graph}">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -65,7 +65,7 @@
                                         <Setter Property="Margin" Value="15,0,0,0"/>
                                     </Style>
                                 </Popup.Resources>
-                                <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" Padding="3">
+                                <Border Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="{StaticResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" Padding="3">
                                     <StackPanel>
                                         <Label Style="{StaticResource NoPadding}" FontWeight="Bold" Content="{Binding Key, FallbackValue=Date}" ContentStringFormat="{}{0:yyyy-MM-dd hh:mm:ss}"/>
                                         <Grid>
@@ -78,9 +78,9 @@
                                                 <RowDefinition/>
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
-                                            <Label Style="{StaticResource PeekKey}" Content="Online:"/>
-                                            <Label Style="{StaticResource PeekKey}" Content="Away:" Grid.Row="1"/>
-                                            <Label Style="{StaticResource PeekKey}" Content="Offline:" Grid.Row="2"/>
+                                            <Label Style="{StaticResource PeekKey}" Content="{StaticResource Statistics_Online}" ContentStringFormat="{}{0}:"/>
+                                            <Label Style="{StaticResource PeekKey}" Content="{StaticResource Statistics_Away}" ContentStringFormat="{}{0}:" Grid.Row="1"/>
+                                            <Label Style="{StaticResource PeekKey}" Content="{StaticResource Statistics_Offline}" ContentStringFormat="{}{0}:" Grid.Row="2"/>
                                             <Label Style="{StaticResource PeekValue}" Content="{Binding Value[0], FallbackValue=0}" Grid.Column="1"/>
                                             <Label Style="{StaticResource PeekValue}" Content="{Binding Value[1], FallbackValue=0}" Grid.Column="1" Grid.Row="1"/>
                                             <Label Style="{StaticResource PeekValue}" Content="{Binding Value[2], FallbackValue=0}" Grid.Column="1" Grid.Row="2"/>
@@ -93,57 +93,57 @@
                     <StackPanel Grid.Row="1">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <StackPanel Margin="0,0,20,0">
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="Data from"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_DataFrom}"/>
                                 <Label Grid.Row="1" Style="{StaticResource InfoValueLabel}" Content="{Binding From, FallbackValue=0000-00-00 00:00}"/>
                             </StackPanel>
                             <StackPanel>
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="Data to"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_DataTo}"/>
                                 <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource InfoValueLabel}" Content="{Binding To, FallbackValue=0000-00-00 00:00}"/>
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <StackPanel Margin="0,0,20,0">
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="# of data"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_NumOfData}"/>
                                 <Label Style="{StaticResource InfoValueLabel}" Content="{Binding DataCount, FallbackValue=0}"/>
                             </StackPanel>
                             <StackPanel Margin="0,0,20,0">
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="Min. online"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_MinOnline}"/>
                                 <Label Style="{StaticResource InfoValueLabel}" Content="{Binding MinOnline, FallbackValue=0}"/>
                             </StackPanel>
                             <StackPanel Margin="0,0,20,0">
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="Max. online"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_MaxOnline}"/>
                                 <Label Style="{StaticResource InfoValueLabel}" Content="{Binding MaxOnline, FallbackValue=0}"/>
                             </StackPanel>
                             <StackPanel>
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="Avg. online"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_AvgOnline}"/>
                                 <Label Style="{StaticResource InfoValueLabel}" Content="{Binding AvgOnline, FallbackValue=0}" ContentStringFormat="{}{0:F2}"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Table">
+            <TabItem Header="{StaticResource Statistics_Tab_Table}">
                 <ListView x:Name="list1" BorderThickness="0" Margin="-2,0">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn DisplayMemberBinding="{Binding Key}">
                                 <GridViewColumn.Header>
-                                    <Label Content="Date"/>
+                                    <Label Content="{StaticResource Statistics_Date}"/>
                                 </GridViewColumn.Header>
                             </GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding Value[0]}">
                                 <GridViewColumn.Header>
-                                    <Label Content="Online"/>
+                                    <Label Content="{StaticResource Statistics_Online}"/>
                                 </GridViewColumn.Header>
                             </GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding Value[1]}">
                                 <GridViewColumn.Header>
-                                    <Label Content="Away"/>
+                                    <Label Content="{StaticResource Statistics_Away}"/>
                                 </GridViewColumn.Header>
                             </GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding Value[2]}">
                                 <GridViewColumn.Header>
-                                    <Label Content="Offline"/>
+                                    <Label Content="{StaticResource Statistics_Offline}"/>
                                 </GridViewColumn.Header>
                             </GridViewColumn>
                         </GridView>

@@ -57,7 +57,9 @@ namespace WhoIsTweeting
 
         private void Menu_OnSignIn(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult cont = MessageBox.Show("If you click OK, a web browser will be opened and it will show you the PIN required for authentication.", "Sign in with Twitter", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            MessageBoxResult cont = MessageBox.Show(Application.Current.FindResource("SignIn_Confirm").ToString(),
+                Application.Current.FindResource("SignIn_Title").ToString(),
+                MessageBoxButton.OKCancel, MessageBoxImage.Information);
             if (cont == MessageBoxResult.OK)
                 viewModel.SignIn((url) =>
                 {
@@ -69,7 +71,9 @@ namespace WhoIsTweeting
                     return mdl.PIN;
                 }, (ex)=>
                 {
-                    MessageBox.Show("Invalid PIN was provided. Please try again.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Application.Current.FindResource("SignIn_Error").ToString(),
+                        Application.Current.FindResource("Title_Error").ToString(),
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 });
         }
 
@@ -100,7 +104,9 @@ namespace WhoIsTweeting
             if ((bool)win.ShowDialog())
                 viewModel.PostTweet(mdl.Content, (ex) =>
                 {
-                    MessageBox.Show($"Could not send a mention.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Application.Current.FindResource("Message_Error_Mention").ToString(),
+                        Application.Current.FindResource("Title_Error").ToString(),
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             Effect = null;
         }
@@ -114,7 +120,9 @@ namespace WhoIsTweeting
             if ((bool)win.ShowDialog())
                 viewModel.SendDirectMessage(mdl.ScreenName, mdl.Content, (ex) =>
                 {
-                    MessageBox.Show("Could not send a direct message to specied user.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Application.Current.FindResource("Message_Error_DM").ToString(),
+                        Application.Current.FindResource("Title_Error").ToString(),
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             Effect = null;
         }

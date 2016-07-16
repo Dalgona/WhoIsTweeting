@@ -125,21 +125,21 @@
                     <MenuItem.Header>
                         <TextBlock Text="{Binding UserMenuText, Mode=OneWay}"/>
                     </MenuItem.Header>
-                    <MenuItem Header="Sign _in with Twitter..." Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
-                    <MenuItem Header="Set _Consumer Key..." Click="Menu_OnConsumer"/>
+                    <MenuItem Header="{StaticResource Menu_Main_SignIn}" Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
+                    <MenuItem Header="{StaticResource Menu_Main_Consumer}" Click="Menu_OnConsumer"/>
                     <Separator/>
-                    <MenuItem Header="Set _Update Interval..." Click="Menu_OnSetInterval"/>
-                    <MenuItem Header="Show _Statistics..." Click="Menu_OnStatistics"/>
+                    <MenuItem Header="{StaticResource Menu_Main_Interval}" Click="Menu_OnSetInterval"/>
+                    <MenuItem Header="{StaticResource Menu_Main_Statistics}" Click="Menu_OnStatistics"/>
                     <Separator/>
-                    <MenuItem Header="_About..." Click="Menu_OnAbout"/>
-                    <MenuItem Header="_Quit" Click="Menu_OnQuit"/>
+                    <MenuItem Header="{StaticResource Menu_Main_About}" Click="Menu_OnAbout"/>
+                    <MenuItem Header="{StaticResource Menu_Main_Quit}" Click="Menu_OnQuit"/>
                 </MenuItem>
-                <MenuItem Header="_View" Padding="6,2">
-                    <MenuItem Header="Always on _Top" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="Tr_ansparency" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
+                <MenuItem Header="{StaticResource Menu_View}" Padding="6,2">
+                    <MenuItem Header="{StaticResource Menu_View_Topmost}" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="{StaticResource Menu_View_Transparency}" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
                     <Separator/>
-                    <MenuItem Header="A_way Users" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="_Offline Users" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="{StaticResource Menu_View_ShowAway}" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="{StaticResource Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
                 </MenuItem>
             </Menu>
             <ListBox x:Name="listBox" Grid.Row="2" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
@@ -165,10 +165,10 @@
                             </MenuItem.Header>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="Send a _Mention" Click="Context_OnMention"/>
-                        <MenuItem Header="Send a _Direct Message" Click="Context_OnDirectMessage"/>
+                        <MenuItem Header="{StaticResource Menu_Context_Mention}" Click="Context_OnMention"/>
+                        <MenuItem Header="{StaticResource Menu_Context_DM}" Click="Context_OnDirectMessage"/>
                         <Separator/>
-                        <MenuItem Header="Open Twitter Profile" Click="Context_OnProfile"/>
+                        <MenuItem Header="{StaticResource Menu_Context_Profile}" Click="Context_OnProfile"/>
                     </ContextMenu>
                 </ListBox.ContextMenu>
                 <ListBox.ItemContainerStyle>
@@ -240,9 +240,9 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <StatusBar Grid.Row="3" Background="#FF333333">
-                <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{}{0} Online" Padding="0" Foreground="MediumSpringGreen"/>
-                <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{}{0} Away" Padding="0" Foreground="LightGray"/>
-                <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{}{0} Offline" Padding="0" Foreground="DimGray"/>
+                <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
+                <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Away}" Padding="0" Foreground="LightGray"/>
+                <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Offline}" Padding="0" Foreground="DimGray"/>
                 <Label Padding="0" Foreground="#FFFF8000">
                     <Label.Style>
                         <Style TargetType="Label">

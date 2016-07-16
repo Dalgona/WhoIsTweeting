@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Windows;
 
 namespace WhoIsTweeting
 {
@@ -19,8 +20,8 @@ namespace WhoIsTweeting
             get
             {
                 if (type == MessageWindowType.MentionWindow)
-                    return "Send a Mention to";
-                else return "Send a Direct Message to";
+                    return Application.Current.FindResource("Message_Header_Mention").ToString();
+                else return Application.Current.FindResource("Message_Header_DM").ToString();
             }
         }
 

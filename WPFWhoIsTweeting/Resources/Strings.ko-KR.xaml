@@ -1,0 +1,78 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WhoIsTweeting"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <s:String x:Key="Menu_Main_NeedConsumer">컨슈머 키 필요</s:String>
+    <s:String x:Key="Menu_Main_NeedSignIn">로그인하세요</s:String>
+    <s:String x:Key="Menu_Main_SignIn">트위터에 로그인(_I)...</s:String>
+    <s:String x:Key="Menu_Main_Consumer">컨슈머 키 설정(_C)...</s:String>
+    <s:String x:Key="Menu_Main_Interval">갱신 주기 설정(_U)...</s:String>
+    <s:String x:Key="Menu_Main_Statistics">통계 보기(_S)...</s:String>
+    <s:String x:Key="Menu_Main_About">정보(_A)...</s:String>
+    <s:String x:Key="Menu_Main_Quit">종료(_Q)</s:String>
+
+    <s:String x:Key="Menu_View">보기(_V)</s:String>
+    <s:String x:Key="Menu_View_Topmost">항상 위(_T)</s:String>
+    <s:String x:Key="Menu_View_Transparency">반투명창(_A)</s:String>
+    <s:String x:Key="Menu_View_ShowAway">자리비움(_W)</s:String>
+    <s:String x:Key="Menu_View_ShowOffline">오프라인(_O)</s:String>
+
+    <s:String x:Key="Menu_Context_Mention">멘션 보내기(_M)...</s:String>
+    <s:String x:Key="Menu_Context_DM">쪽지 보내기(_D)...</s:String>
+    <s:String x:Key="Menu_Context_Profile">트위터 프로필 열기(_P)</s:String>
+
+    <s:String x:Key="Status_Online">{0} 온라인</s:String>
+    <s:String x:Key="Status_Away">{0} 자리비움</s:String>
+    <s:String x:Key="Status_Offline">{0} 오프라인</s:String>
+
+    <s:String x:Key="Button_OK">확인</s:String>
+    <s:String x:Key="Button_Cancel">취소</s:String>
+    <s:String x:Key="Button_Send">보내기</s:String>
+    <s:String x:Key="Button_Close">닫기</s:String>
+    <s:String x:Key="Title_Error">오류</s:String>
+
+    <s:String x:Key="Message_Header_Mention">멘션 보내기</s:String>
+    <s:String x:Key="Message_Header_DM">쪽지 보내기</s:String>
+    <s:String x:Key="Message_Error_Mention">멘션을 보내지 못했습니다.</s:String>
+    <s:String x:Key="Message_Error_DM">지정한 사용자에게 쪽지를 보내지 못했습니다.</s:String>
+
+    <s:String x:Key="Consumer_Title">컨슈머 키 설정</s:String>
+    <s:String x:Key="Consumer_Message" xml:space="preserve">가지고 있는 트위터 앱의 컨슈머 키와 컨슈머 시크릿을 복사해서 붙여 넣으세요.&#13;&#10;아직 앱이 없다면 https://dev.twitter.com에서 만드실 수 있습니다.</s:String>
+    <s:String x:Key="Consumer_Header_Consumer">컨슈머 키</s:String>
+    <s:String x:Key="Consumer_Header_Secret">컨슈머 시크릿</s:String>
+    <s:String x:Key="Consumer_Empty_Error">컨슈머 키와 컨슈머 시크릿은 비워둘 수 없습니다.</s:String>
+
+    <s:String x:Key="SignIn_Title">트위터에 로그인</s:String>
+    <s:String x:Key="SignIn_Confirm">"확인"을 클릭하면 웹 브라우저 창이 열리며 인증에 필요한 PIN을 보여줄 것입니다.</s:String>
+    <s:String x:Key="SignIn_Message" xml:space="preserve">아래 상자에 PIN을 입력하여&#13;&#10;로그인 절차를 완료하세요.</s:String>
+    <s:String x:Key="SignIn_Error">잘못된 PIN이 입력되었습니다. 다시 시도해 주세요.</s:String>
+
+    <s:String x:Key="Interval_Title">갱신 주기 설정</s:String>
+    <s:String x:Key="Interval_Message" xml:space="preserve">여기서 갱신 주기를 조정할 수 있습니다. 트위터 API는&#13;&#10;일정 시간 동안 사용 횟수가 제한되어 있기 때문에&#13;&#10;여러분의 팔로잉 수에 따라 갱신 주기가 너무 짧으면&#13;&#10;프로그램이 오작동할 수 있습니다.</s:String>
+    <s:String x:Key="Interval_SecondFormat">{0}초</s:String>
+    <s:String x:Key="Interval_MaxFollowingsFormat">(팔로잉 {0}명까지 처리 가능)</s:String>
+    <s:String x:Key="Interval_Note">참고 사항:</s:String>
+    <s:String x:Key="Interval_Note_Message" xml:space="preserve">갱신 주기를 변경하면 통계 데이터가 초기화됩니다.</s:String>
+
+    <s:String x:Key="Statistics_Title">통계</s:String>
+    <s:String x:Key="Statistics_Tab_Graph">그래프</s:String>
+    <s:String x:Key="Statistics_Tab_Table">표</s:String>
+    <s:String x:Key="Statistics_Online">온라인</s:String>
+    <s:String x:Key="Statistics_Away">자리비움</s:String>
+    <s:String x:Key="Statistics_Offline">오프라인</s:String>
+    <s:String x:Key="Statistics_DataFrom">데이터 기록 시작</s:String>
+    <s:String x:Key="Statistics_DataTo">최근 데이터</s:String>
+    <s:String x:Key="Statistics_NumOfData">데이터 수</s:String>
+    <s:String x:Key="Statistics_MinOnline">최소 온라인</s:String>
+    <s:String x:Key="Statistics_MaxOnline">최대 온라인</s:String>
+    <s:String x:Key="Statistics_AvgOnline">평균 온라인</s:String>
+    <s:String x:Key="Statistics_Date">일시</s:String>
+
+    <s:String x:Key="About_Title">WhoIsTweeting에 대하여</s:String>
+    <s:String x:Key="About_Email">문의 사항이 있으시면 이메일 보내주세요:</s:String>
+    <s:String x:Key="About_Website">개발자 웹사이트:</s:String>
+    <s:String x:Key="About_PoweredBy">PicoBird 트위터 라이브러리를 사용하여 만들었습니다!</s:String>
+    <s:String x:Key="About_PoweredBy_License" xml:space="preserve">WhoIsTweeting, PicoBird 및 Newtonsoft.Json에는&#13;&#10;MIT 라이센스가 적용됩니다. 첨부된 LICENSE 파일에&#13;&#10;라이센스 전문이 수록되어 있습니다.</s:String>
+    <s:String x:Key="About_Thanks">감사의 말</s:String>
+    <s:String x:Key="About_ThanksText" xml:space="preserve">이 훌륭한 아이디어를 전해주신&#13;&#10;마끼아또(@CreStudio_Plus)님께 감사의 말씀 전합니다.</s:String>
+</ResourceDictionary>
