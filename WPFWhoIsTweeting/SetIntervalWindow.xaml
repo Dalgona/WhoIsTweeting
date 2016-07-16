@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type local:IntervalViewModel}}"
-        Title="{StaticResource Interval_Title}" Height="286" Width="320" ResizeMode="NoResize" SizeToContent="Height" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" Icon="wit.ico">
+        Title="{StaticResource Interval_Title}" Height="286" Width="340" ResizeMode="NoResize" SizeToContent="Height" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" Icon="wit.ico">
     <StackPanel Margin="5">
         <Label>
             <Label.Content>
