@@ -10,9 +10,7 @@
         Topmost="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=OneWay}"
         d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MinWidth="270" MinHeight="270">
     <Window.Resources>
-        <local:StatCountConverter x:Key="StatCountConverter"/>
         <local:LastTweetConverter x:Key="LastTweetConverter"/>
-        <local:TransparencyConverter x:Key="TransparencyConverter"/>
         <Style x:Key="CommandButtonStyle" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#18FFFFFF"/>
             <Setter Property="Foreground" Value="WhiteSmoke"/>
@@ -71,9 +69,15 @@
         <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Maximized"/>
         <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Minimized"/>
     </Window.CommandBindings>
-    <Window.Opacity>
-        <Binding Path="Transparency" Converter="{StaticResource TransparencyConverter}"/>
-    </Window.Opacity>
+    <Window.Style>
+        <Style TargetType="Window">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Transparency}" Value="True">
+                    <Setter Property="Opacity" Value="0.65"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
     <Grid Background="#FF333333">
         <Grid.Style>
             <Style TargetType="Grid">
@@ -121,11 +125,12 @@
                     <MenuItem.Header>
                         <TextBlock Text="{Binding UserMenuText, Mode=OneWay}"/>
                     </MenuItem.Header>
-                    <MenuItem Header="Sign _in with Twitter" Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
-                    <MenuItem Header="Set _Consumer Key" Click="Menu_OnConsumer"/>
+                    <MenuItem Header="Sign _in with Twitter..." Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
+                    <MenuItem Header="Set _Consumer Key..." Click="Menu_OnConsumer"/>
                     <Separator/>
-                    <MenuItem Header="Show _Statistics" Click="Menu_OnStatistics"/>
-                    <MenuItem Header="_About" Click="Menu_OnAbout"/>
+                    <MenuItem Header="Show _Statistics..." Click="Menu_OnStatistics"/>
+                    <Separator/>
+                    <MenuItem Header="_About..." Click="Menu_OnAbout"/>
                     <MenuItem Header="_Quit" Click="Menu_OnQuit"/>
                 </MenuItem>
                 <MenuItem Header="_View" Padding="6,2">
@@ -234,9 +239,9 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <StatusBar Grid.Row="3" Background="#FF333333">
-                <Label Content="{Binding StatOnline, ConverterParameter=Online, Converter={StaticResource StatCountConverter}, Mode=OneWay}" Padding="0" Foreground="MediumSpringGreen"/>
-                <Label Content="{Binding StatAway, ConverterParameter=Away, Converter={StaticResource StatCountConverter}, Mode=OneWay}" Padding="0" Foreground="LightGray"/>
-                <Label Content="{Binding StatOffline, ConverterParameter=Offline, Converter={StaticResource StatCountConverter}, Mode=OneWay}" Padding="0" Foreground="DimGray"/>
+                <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{}{0} Online" Padding="0" Foreground="MediumSpringGreen"/>
+                <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{}{0} Away" Padding="0" Foreground="LightGray"/>
+                <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{}{0} Offline" Padding="0" Foreground="DimGray"/>
                 <Label Padding="0" Foreground="#FFFF8000">
                     <Label.Style>
                         <Style TargetType="Label">

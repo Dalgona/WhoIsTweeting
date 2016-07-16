@@ -136,15 +136,6 @@ namespace WhoIsTweeting
         public event PropertyChangedEventHandler PropertyChanged;
     }
 
-    public class StatCountConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            => $"{(int)value} {parameter as string}";
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => null;
-    }
-
     public class LastTweetConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -157,15 +148,6 @@ namespace WhoIsTweeting
             else if (minutes <= 15) return $"{minutes} min";
             else return minutes <= 1440 ? item?.LastTweet.ToString("HH:mm") : item?.LastTweet.ToString("yy/MM/dd");
         }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => null;
-    }
-
-    public class TransparencyConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            => (bool)value ? 0.65 : 1.0;
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => null;

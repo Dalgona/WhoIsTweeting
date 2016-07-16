@@ -53,7 +53,7 @@
                                 </Polygon.Points>
                             </Polygon>
                             <Line x:Name="cursor" Visibility="Hidden" X2="4294967295" Y2="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Grid}}" Stroke="Black" X1="4294967295" IsHitTestVisible="False"/>
-                            <Popup x:Name="peek" IsHitTestVisible="False">
+                            <Popup x:Name="peek" IsHitTestVisible="False" AllowsTransparency="True" PopupAnimation="Fade">
                                 <Popup.Resources>
                                     <Style x:Key="NoPadding" TargetType="Label">
                                         <Setter Property="Padding" Value="0"/>

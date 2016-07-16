@@ -185,12 +185,10 @@ namespace WhoIsTweeting
             => SystemCommands.CloseWindow(this);
 
         private void CommandBinding_Restored(object sender, ExecutedRoutedEventArgs e)
-            => SystemCommands.RestoreWindow(this);
+            => SwitchWindowState();
 
         private void CommandBinding_Maximized(object sender, ExecutedRoutedEventArgs e)
-        {
-            SystemCommands.MaximizeWindow(this);
-        }
+            => SwitchWindowState();
 
         private void CommandBinding_Minimized(object sender, ExecutedRoutedEventArgs e)
             => SystemCommands.MinimizeWindow(this);
