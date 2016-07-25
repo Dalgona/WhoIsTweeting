@@ -45,6 +45,12 @@ namespace WhoIsTweeting
         public int MaxOnline { get { return service.MaxOnline; } }
         public double AvgOnline { get { return service.SumOnline / (double)service.GraphCount; } }
 
+        public void ResetStat()
+        {
+            service.UpdateInterval = service.UpdateInterval;
+            OnPropertyChanged("");
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string name)

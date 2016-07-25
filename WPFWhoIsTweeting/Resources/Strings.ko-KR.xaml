@@ -67,6 +67,15 @@
     <s:String x:Key="Statistics_MaxOnline">최대 온라인</s:String>
     <s:String x:Key="Statistics_AvgOnline">평균 온라인</s:String>
     <s:String x:Key="Statistics_Date">일시</s:String>
+    <s:String x:Key="Statistics_NumOfDataFormat">데이터 수: {0}</s:String>
+    <s:String x:Key="Statistics_Button_Export">내보내기</s:String>
+    <s:String x:Key="Statistics_Button_Reset">초기화</s:String>
+    <s:String x:Key="Statistics_Reset_Title">통계 데이터 초기화</s:String>
+    <s:String x:Key="Statistics_Reset_Message">정말로 통계 데이터를 초기화 하시겠습니까?</s:String>
+    <s:String x:Key="Statistics_Export_Title">통계 데이터 내보내기</s:String>
+    <s:String x:Key="Statistics_Export_Filter">쉼표로 구분된 값|*.csv|JSON|*.json</s:String>
+    <s:String x:Key="Statistics_Export_InvalidType">파일 형식이 잘못되어 내보낼 수 없습니다.</s:String>
+    <s:String x:Key="Statistics_Export_Exception">내보내지 못했습니다: {0}</s:String>
 
     <s:String x:Key="About_Title">WhoIsTweeting에 대하여</s:String>
     <s:String x:Key="About_Email">문의 사항이 있으시면 이메일 보내주세요:</s:String>

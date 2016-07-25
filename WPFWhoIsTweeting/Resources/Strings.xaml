@@ -67,6 +67,15 @@
     <s:String x:Key="Statistics_MaxOnline">Max. online</s:String>
     <s:String x:Key="Statistics_AvgOnline">Avg. online</s:String>
     <s:String x:Key="Statistics_Date">Date</s:String>
+    <s:String x:Key="Statistics_NumOfDataFormat">Number of data: {0}</s:String>
+    <s:String x:Key="Statistics_Button_Export">E_xport</s:String>
+    <s:String x:Key="Statistics_Button_Reset">_Reset</s:String>
+    <s:String x:Key="Statistics_Reset_Title">Reset Statistics Data</s:String>
+    <s:String x:Key="Statistics_Reset_Message">Really reset the statisitcs data?</s:String>
+    <s:String x:Key="Statistics_Export_Title">Export Statistics Data</s:String>
+    <s:String x:Key="Statistics_Export_Filter">Comma-separated Values|*.csv|JSON|*.json</s:String>
+    <s:String x:Key="Statistics_Export_InvalidType">Cannot export: Invalid file format</s:String>
+    <s:String x:Key="Statistics_Export_Exception">Could not export: {0}</s:String>
 
     <s:String x:Key="About_Title">About WhoIsTweeting</s:String>
     <s:String x:Key="About_Email">For any issues, email me:</s:String>

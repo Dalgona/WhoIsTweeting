@@ -1,8 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.ComponentModel;
 using System.Windows.Threading;
+using Microsoft.Win32;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace WhoIsTweeting
 {
@@ -98,6 +103,68 @@ namespace WhoIsTweeting
             if (e.Delta > 0 && graphScale <= 5.0) graphScale += 0.1;
             if (e.Delta < 0 && graphScale >= 1.0) graphScale -= 0.1;
             drawGraph();
+        }
+
+        private void OnResetClick(object sender, RoutedEventArgs e)
+        {
+            var res = MessageBox.Show(
+                Application.Current.FindResource("Statistics_Reset_Message").ToString(),
+                Application.Current.FindResource("Statistics_Reset_Title").ToString(),
+                MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (res == MessageBoxResult.Yes) viewModel.ResetStat();
+        }
+
+        private void OnExportClick(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Title = Application.Current.FindResource("Statistics_Export_Title").ToString();
+            dlg.Filter = Application.Current.FindResource("Statistics_Export_Filter").ToString();
+            dlg.FileOk += OnExportDlgOK;
+            dlg.ShowDialog();
+        }
+
+        private void OnExportDlgOK(object sender, CancelEventArgs e)
+        {
+            SaveFileDialog dlg = sender as SaveFileDialog;
+            string extension = dlg.FileName.Split('.').Last().ToLower();
+            if (extension != "csv" && extension != "json")
+                MessageBox.Show(
+                    Application.Current.FindResource("Statistics_Export_InvalidType").ToString(),
+                    Application.Current.FindResource("Title_Error").ToString(),
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            try
+            {
+                FileStream fs = new FileStream(dlg.FileName, FileMode.Create);
+                BufferedStream bfs = new BufferedStream(fs, 1024);
+                byte[] utfstr;
+                switch (extension)
+                {
+                    case "csv":
+                        foreach (var x in service.Graph)
+                        {
+                            var arr = x.Value;
+                            string date = x.Key.ToString("yyyy-MM-dd HH:mm:ss");
+                            utfstr = Encoding.UTF8.GetBytes($"\"{date}\",{arr[0]},{arr[1]},{arr[2]}{Environment.NewLine}");
+                            fs.Write(utfstr, 0, utfstr.Length);
+                        }
+                        break;
+                    case "json":
+                        string jsondat = JsonConvert.SerializeObject(
+                            from x in service.Graph orderby x.Key ascending select x, Formatting.Indented);
+                        utfstr = Encoding.UTF8.GetBytes(jsondat);
+                        fs.Write(utfstr, 0, utfstr.Length);
+                        break;
+                }
+                bfs.Flush();
+                bfs.Close();
+                fs.Close();
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(
+                    string.Format(Application.Current.FindResource("Statistics_Export_Exception").ToString(), ex.Message),
+                    Application.Current.FindResource("Title_Error").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
