@@ -124,6 +124,12 @@ namespace WhoIsTweeting
             });
         }
 
+        public void ResetStatistics()
+        {
+            Graph.Clear();
+            GraphCount = SumOnline = MinOnline = MaxOnline = 0;
+        }
+
         #endregion
 
         private ServiceState state = ServiceState.Initial;

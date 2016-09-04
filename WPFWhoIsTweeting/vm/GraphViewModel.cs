@@ -47,7 +47,7 @@ namespace WhoIsTweeting
 
         public void ResetStat()
         {
-            service.UpdateInterval = service.UpdateInterval;
+            service.ResetStatistics();
             OnPropertyChanged("");
         }
 
