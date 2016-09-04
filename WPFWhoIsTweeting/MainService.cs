@@ -54,10 +54,7 @@ namespace WhoIsTweeting
             get { return updateInterval; }
             set
             {
-                updateInterval = value;
-                Graph.Clear();
-                GraphCount = SumOnline = MinOnline = MaxOnline = 0;
-                appSettings.UpdateInterval = UpdateInterval;
+                appSettings.UpdateInterval = updateInterval = value;
                 appSettings.Save();
             }
         }

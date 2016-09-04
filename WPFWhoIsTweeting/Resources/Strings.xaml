@@ -52,8 +52,6 @@
     <s:String x:Key="Interval_Message" xml:space="preserve">You can customize the update interval here.&#13;&#10;Please note that Twitter API calls are rate limited and&#13;&#10;too short interval may cause the app to malfunction,&#13;&#10;depending on the number of users you are following.</s:String>
     <s:String x:Key="Interval_SecondFormat">{0} seconds</s:String>
     <s:String x:Key="Interval_MaxFollowingsFormat">(can handle up to {0} followings)</s:String>
-    <s:String x:Key="Interval_Note">Note:</s:String>
-    <s:String x:Key="Interval_Note_Message" xml:space="preserve">If you change the update interval,&#13;&#10;the statistics data will be reset.</s:String>
 
     <s:String x:Key="Statistics_Title">Statistics</s:String>
     <s:String x:Key="Statistics_Tab_Graph">Graph</s:String>

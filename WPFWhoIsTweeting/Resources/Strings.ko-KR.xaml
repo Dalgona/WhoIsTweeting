@@ -52,8 +52,6 @@
     <s:String x:Key="Interval_Message" xml:space="preserve">여기서 갱신 주기를 조정할 수 있습니다. 트위터 API는&#13;&#10;일정 시간 동안 사용 횟수가 제한되어 있기 때문에&#13;&#10;여러분의 팔로잉 수에 따라 갱신 주기가 너무 짧으면&#13;&#10;프로그램이 오작동할 수 있습니다.</s:String>
     <s:String x:Key="Interval_SecondFormat">{0}초</s:String>
     <s:String x:Key="Interval_MaxFollowingsFormat">(팔로잉 {0}명까지 처리 가능)</s:String>
-    <s:String x:Key="Interval_Note">참고 사항:</s:String>
-    <s:String x:Key="Interval_Note_Message" xml:space="preserve">갱신 주기를 변경하면 통계 데이터가 초기화됩니다.</s:String>
 
     <s:String x:Key="Statistics_Title">통계</s:String>
     <s:String x:Key="Statistics_Tab_Graph">그래프</s:String>
