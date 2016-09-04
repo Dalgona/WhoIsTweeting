@@ -29,6 +29,7 @@
     <s:String x:Key="Button_Cancel">취소</s:String>
     <s:String x:Key="Button_Send">보내기</s:String>
     <s:String x:Key="Button_Close">닫기</s:String>
+    <s:String x:Key="Button_TryAgain">다시 시도</s:String>
     <s:String x:Key="Title_Error">오류</s:String>
 
     <s:String x:Key="Message_Header_Mention">멘션 보내기</s:String>
@@ -84,4 +85,9 @@
     <s:String x:Key="About_PoweredBy_License" xml:space="preserve">WhoIsTweeting, PicoBird 및 Newtonsoft.Json에는&#13;&#10;MIT 라이센스가 적용됩니다. 첨부된 LICENSE 파일에&#13;&#10;라이센스 전문이 수록되어 있습니다.</s:String>
     <s:String x:Key="About_Thanks">감사의 말</s:String>
     <s:String x:Key="About_ThanksText" xml:space="preserve">이 훌륭한 아이디어를 전해주신&#13;&#10;마끼아또(@CreStudio_Plus)님께 감사의 말씀 전합니다.</s:String>
+
+    <s:String x:Key="Critical_APIError">트위터 API 오류</s:String>
+    <s:String x:Key="Critical_APIError_Description">잠시 후에 다시 시도해 주세요.</s:String>
+    <s:String x:Key="Critical_NetError">네트워크 오류</s:String>
+    <s:String x:Key="Critical_NetError_Description">인터넷 연결을 확인하신 후 다시 시도하세요.</s:String>
 </ResourceDictionary>

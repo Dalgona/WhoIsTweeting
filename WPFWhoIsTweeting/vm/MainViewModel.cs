@@ -42,6 +42,9 @@ namespace WhoIsTweeting
         internal void SendDirectMessage(string screenName, string content, Action<Exception> onError)
             => service.SendDirectMessage(screenName, content, onError);
 
+        public void TryResume()
+            => service.Resume();
+
         public string UserMenuText
         {
             get
@@ -52,7 +55,7 @@ namespace WhoIsTweeting
                     return Application.Current.FindResource("Menu_Main_NeedSignIn").ToString();
                 else if (service.State >= ServiceState.Ready)
                     return $"@{service.Me.screen_name}";
-                else return "";
+                else return "--";
             }
         }
 
@@ -130,6 +133,38 @@ namespace WhoIsTweeting
             {
                 hideBorder = value;
                 PropertyChanged(this, new PropertyChangedEventArgs("HideBorder"));
+            }
+        }
+
+        public string ErrorMessage
+        {
+            get
+            {
+                switch (service.State)
+                {
+                    case ServiceState.APIError:
+                        return Application.Current.FindResource("Critical_APIError").ToString();
+                    case ServiceState.NetError:
+                        return Application.Current.FindResource("Critical_NetError").ToString();
+                    default:
+                        return "";
+                }
+            }
+        }
+
+        public string ErrorDescription
+        {
+            get
+            {
+                switch (service.State)
+                {
+                    case ServiceState.APIError:
+                        return Application.Current.FindResource("Critical_APIError_Description").ToString();
+                    case ServiceState.NetError:
+                        return Application.Current.FindResource("Critical_NetError_Description").ToString();
+                    default:
+                        return "";
+                }
             }
         }
 

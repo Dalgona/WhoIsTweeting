@@ -12,13 +12,32 @@ using System.Windows.Data;
 
 namespace WhoIsTweeting
 {
-    public enum ServiceState { Initial, NeedConsumerKey, LoginRequired, Ready, Running, Updating };
+    public enum ServiceState
+    {
+        Initial,
+        NeedConsumerKey,
+        LoginRequired,
+        Ready,
+        Running,
+        Updating,
+        APIError = -1,
+        NetError = -2
+    };
 
     public class MainService : INotifyPropertyChanged
     {
         #region Publicly Exposed Items
 
-        public ServiceState State { get; private set; } = ServiceState.Initial;
+        public ServiceState State
+        {
+            get { return state; }
+            private set
+            {
+                Log("MainService::State.set", $"{state} -> {value}");
+                state = value;
+                OnPropertyChanged("State");
+            }
+        }
         public User Me { get; private set; }
         public int OnlineCount { get; private set; }
         public int AwayCount { get; private set; }
@@ -52,7 +71,8 @@ namespace WhoIsTweeting
 
             api.ConsumerKey = consumerKey;
             api.ConsumerSecret = consumerSecret;
-            SetStatus(ServiceState.LoginRequired);
+
+            State = ServiceState.LoginRequired;
         }
 
         public void SendDirectMessage(string screenName, string content, Action<Exception> onError)
@@ -85,7 +105,7 @@ namespace WhoIsTweeting
                     appSettings.Token = api.Token;
                     appSettings.TokenSecret = api.TokenSecret;
                     appSettings.Save();
-                    SetStatus(ServiceState.Ready);
+                    State = ServiceState.Ready;
                     Run();
                 }
             }, TaskContinuationOptions.NotOnFaulted);
@@ -95,8 +115,21 @@ namespace WhoIsTweeting
             }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
+        public void Resume()
+        {
+            Task.Factory.StartNew(async () =>
+            {
+                if (await ValidateUser())
+                {
+                    State = ServiceState.Ready;
+                    Run();
+                }
+            });
+        }
+
         #endregion
 
+        private ServiceState state = ServiceState.Initial;
         private API api;
         private HashSet<string> idSet;
 
@@ -113,6 +146,7 @@ namespace WhoIsTweeting
         public MainService()
         {
             listUpdateWorker = new BackgroundWorker();
+            listUpdateWorker.WorkerSupportsCancellation = true;
             listUpdateWorker.DoWork += listUpdateWorker_DoWork;
 
             UserList = new ObservableCollection<UserListItem>();
@@ -121,6 +155,7 @@ namespace WhoIsTweeting
             BindingOperations.EnableCollectionSynchronization(Graph, graphLock);
 
             api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret);
+            api.HttpTimeout = 10;
             api.Token = appSettings.Token;
             api.TokenSecret = appSettings.TokenSecret;
             api.OAuthCallback = "oob";
@@ -128,19 +163,12 @@ namespace WhoIsTweeting
 
             if (api.ConsumerKey == "" || api.ConsumerSecret == "")
             {
-                SetStatus(ServiceState.NeedConsumerKey);
+                State = ServiceState.NeedConsumerKey;
                 return;
             }
 
-            SetStatus(ServiceState.LoginRequired);
-            Task.Factory.StartNew(async () =>
-            {
-                if (await ValidateUser())
-                {
-                    SetStatus(ServiceState.Ready);
-                    Run();
-                }
-            });
+            State = ServiceState.LoginRequired;
+            Resume();
         }
 
         private async Task<bool> ValidateUser()
@@ -161,57 +189,28 @@ namespace WhoIsTweeting
             }
             catch (APIException e)
             {
-#if DEBUG
-                System.Diagnostics.Debug.WriteLine("[ValidateUser THREW AN EXCEPTION]");
-                System.Diagnostics.Debug.WriteLine(e.Message);
-                System.Diagnostics.Debug.WriteLine(e.Info.errors[0].message);
-                System.Diagnostics.Debug.WriteLine(e.StackTrace);
-#endif
+                Log("MainService::ValidateUser", $"Caught APIException: {e.Message}\n{e.StackTrace}");
+                State = ServiceState.APIError;
                 return false;
             }
-        }
-
-        private void SetStatus(ServiceState newStatus)
-        {
-            ServiceState oldStatus = State;
-            switch (newStatus)
+            catch (System.Net.Http.HttpRequestException e)
             {
-                case ServiceState.Initial:
-                    if (oldStatus != ServiceState.Initial)
-                        throw new Exception("Invalid status change");
-                    break;
-
-                case ServiceState.NeedConsumerKey:
-                    break;
-
-                case ServiceState.LoginRequired:
-                    break;
-
-                case ServiceState.Ready:
-                    if (oldStatus == ServiceState.Initial)
-                        throw new Exception("Invalid status change");
-                    else if (listUpdateWorker.IsBusy)
-                        listUpdateWorker.CancelAsync();
-                    break;
-
-                case ServiceState.Running:
-                    if (oldStatus < ServiceState.Ready)
-                        throw new Exception("Invalid status change");
-                    break;
-
-                case ServiceState.Updating:
-                    if (oldStatus != ServiceState.Running)
-                        throw new Exception("Invalid status change");
-                    break;
+                Log("MainService::ValidateUser", $"Caught HttpRequestException: {e.Message}\n{e.StackTrace}");
+                State = ServiceState.NetError;
+                return false;
             }
-            State = newStatus;
-            OnPropertyChanged("State");
+            catch (TaskCanceledException e)
+            {
+                Log("MainService::ValidateUser", $"Caught TaskCanceledException: {e.Message}\n{e.StackTrace}");
+                State = ServiceState.NetError;
+                return false;
+            }
         }
 
         private void Run()
         {
             if (State >= ServiceState.Running) return;
-            SetStatus(ServiceState.Running);
+            State = ServiceState.Running;
             listUpdateWorker.RunWorkerAsync();
         }
 
@@ -219,55 +218,82 @@ namespace WhoIsTweeting
         {
             if (State < ServiceState.Ready) return;
             if (State == ServiceState.Updating) return;
-            SetStatus(ServiceState.Updating);
+            State = ServiceState.Updating;
 
             UserListItem.lastUpdated = DateTime.Now;
             HashSet<string> tmpSet = new HashSet<string>(idSet);
             List<UserListItem> list = new List<UserListItem>();
 
-            do
+            try
             {
-                HashSet<string> _ = new HashSet<string>(tmpSet.Take(100));
-                tmpSet.ExceptWith(_);
-                string data = string.Join(",", _);
-                List<User> tmp = await api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
+                Log("MainService::UpdateUserList", "Fetching users list");
+                do
+                {
+                    Log("MainService::UpdateUserList", "loop");
+                    HashSet<string> _ = new HashSet<string>(tmpSet.Take(100));
+                    tmpSet.ExceptWith(_);
+                    string data = string.Join(",", _);
+                    List<User> tmp = await api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
                     {
                         { "user_id", data },
                         { "include_entities", "true" }
                     });
-                foreach (var x in tmp) list.Add(new UserListItem(x.id_str, x.name, x.screen_name, x.status));
-            } while (tmpSet.Count != 0);
+                    foreach (var x in tmp) list.Add(new UserListItem(x.id_str, x.name, x.screen_name, x.status));
+                } while (tmpSet.Count != 0);
+                Log("MainService::UpdateUserList", "Fetched users list");
 
-            AwayCount = list.Count(x => x.Status == UserStatus.Away);
-            OfflineCount = list.Count(x => x.Status == UserStatus.Offline);
-            OnlineCount = idSet.Count - AwayCount - OfflineCount;
+                AwayCount = list.Count(x => x.Status == UserStatus.Away);
+                OfflineCount = list.Count(x => x.Status == UserStatus.Offline);
+                OnlineCount = idSet.Count - AwayCount - OfflineCount;
 
-            list.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
-            lock (userListLock)
-            {
-                UserList.Clear();
-                foreach (var x in list) UserList.Add(x);
+                list.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
+                lock (userListLock)
+                {
+                    UserList.Clear();
+                    foreach (var x in list) UserList.Add(x);
+                }
+
+                lock (graphLock)
+                {
+                    SumOnline += OnlineCount;
+                    MinOnline = GraphCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
+                    MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
+                    Graph.Add(new KeyValuePair<DateTime, int[]>(DateTime.Now, new int[] { OnlineCount, AwayCount, OfflineCount }));
+                    GraphCount++;
+                }
+
+                State = ServiceState.Running;
             }
-
-            lock (graphLock)
+            catch (APIException e)
             {
-                SumOnline += OnlineCount;
-                MinOnline = GraphCount == 0 ? OnlineCount : ( OnlineCount < MinOnline ? OnlineCount : MinOnline);
-                MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
-                Graph.Add(new KeyValuePair<DateTime, int[]>(DateTime.Now, new int[] { OnlineCount, AwayCount, OfflineCount }));
-                GraphCount++;
+                Log("MainService::UpdateUserList", $"Caught APIException: {e.Message}\n{e.StackTrace}");
+                listUpdateWorker.CancelAsync();
+                State = ServiceState.APIError;
             }
-
-            SetStatus(ServiceState.Running);
+            catch (System.Net.Http.HttpRequestException e)
+            {
+                Log("MainService::UpdateUserList", $"Caught HttpRequestException: {e.Message}\n{e.StackTrace}");
+                listUpdateWorker.CancelAsync();
+                State = ServiceState.NetError;
+            }
+            catch (TaskCanceledException e)
+            {
+                Log("MainService::UpdateUserList", $"Caught TaskCanceledException: {e.Message}\n{e.StackTrace}");
+                listUpdateWorker.CancelAsync();
+                State = ServiceState.NetError;
+            }
         }
 
         private void listUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            Log("MainService::listUpdateWorker_DoWork", "called");
             BackgroundWorker worker = sender as BackgroundWorker;
             while (true)
             {
+                Log("MainService::listUpdateWorker_DoWork", "Executing interval job");
                 if (worker.CancellationPending)
                 {
+                    Log("MainService::listUpdateWorker_DoWork", "Worker cancellation was requested");
                     e.Cancel = true;
                     break;
                 }
@@ -278,5 +304,11 @@ namespace WhoIsTweeting
 
         public void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        private void Log(string from, string message)
+        {
+            //string now = DateTime.Now.ToString("hh:mm:ss.ffff");
+            //System.Diagnostics.Debug.WriteLine($"[{now}][{from}] {message}");
+        }
     }
 }

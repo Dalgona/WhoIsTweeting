@@ -234,5 +234,8 @@ namespace WhoIsTweeting
         }
 
         #endregion
+
+        private void OnTryAgainClicked(object sender, RoutedEventArgs e)
+            => viewModel.TryResume();
     }
 }

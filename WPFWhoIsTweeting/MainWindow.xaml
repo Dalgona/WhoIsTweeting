@@ -110,6 +110,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
@@ -142,7 +143,25 @@
                     <MenuItem Header="{StaticResource Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
                 </MenuItem>
             </Menu>
-            <ListBox x:Name="listBox" Grid.Row="2" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
+            <StackPanel Grid.Row="2" Background="#FFFF4000">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ErrorMessage}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <Label Content="{Binding ErrorMessage}" FontWeight="Bold" Foreground="White" Margin="2,0" Padding="5,5,5,2"/>
+                <Label Foreground="White" Margin="2,0" Padding="5,2,5,5">
+                    <Label.Content>
+                        <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ErrorDescription}"/>
+                    </Label.Content>
+                </Label>
+                <Button Content="{StaticResource Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
+            </StackPanel>
+            <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <ContextMenu.Style>
@@ -239,7 +258,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <StatusBar Grid.Row="3" Background="#FF333333">
+            <StatusBar Grid.Row="4" Background="#FF333333">
                 <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
                 <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Away}" Padding="0" Foreground="LightGray"/>
                 <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Offline}" Padding="0" Foreground="DimGray"/>
