@@ -29,7 +29,7 @@
     <s:String x:Key="Button_Cancel">Cancel</s:String>
     <s:String x:Key="Button_Send">Send</s:String>
     <s:String x:Key="Button_Close">Close</s:String>
-    <s:String x:Key="Button_TryAgain">Try Again</s:String>
+    <s:String x:Key="Button_TryAgain">Retry Now</s:String>
     <s:String x:Key="Title_Error">Error</s:String>
 
     <s:String x:Key="Message_Header_Mention">Send a Mention to</s:String>

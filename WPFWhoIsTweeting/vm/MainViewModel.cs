@@ -43,7 +43,7 @@ namespace WhoIsTweeting
                 if (worker.CancellationPending)
                 {
                     e.Cancel = true;
-                    return;
+                    break;
                 }
                 ErrorDescription = string.Format(Application.Current.FindResource("Critical_AutoRetry_Message").ToString(), i);
                 OnPropertyChanged("ErrorDescription");
@@ -54,6 +54,7 @@ namespace WhoIsTweeting
 
         private void Service_ErrorOccurred(object sender, MainService.ErrorOccurredEventArgs e)
         {
+            while (autoRetryWorker.IsBusy) Thread.Sleep(50); // spin-wait
             autoRetryWorker.RunWorkerAsync();
         }
 
@@ -82,7 +83,6 @@ namespace WhoIsTweeting
         public void TryResume()
         {
             if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
-            if (service.State < 0) service.Resume();
         }
 
         public string UserMenuText

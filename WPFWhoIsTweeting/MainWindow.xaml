@@ -159,7 +159,7 @@
                         <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ErrorDescription}"/>
                     </Label.Content>
                 </Label>
-                <!--<Button Content="{StaticResource Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>-->
+                <Button Content="{StaticResource Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
             </StackPanel>
             <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
                 <ListBox.ContextMenu>
