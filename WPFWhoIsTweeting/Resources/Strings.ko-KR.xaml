@@ -85,7 +85,8 @@
     <s:String x:Key="About_ThanksText" xml:space="preserve">이 훌륭한 아이디어를 전해주신&#13;&#10;마끼아또(@CreStudio_Plus)님께 감사의 말씀 전합니다.</s:String>
 
     <s:String x:Key="Critical_APIError">트위터 API 오류</s:String>
-    <s:String x:Key="Critical_APIError_Description">잠시 후에 다시 시도해 주세요.</s:String>
+    <!-- deprecated --><s:String x:Key="Critical_APIError_Description">잠시 후에 다시 시도해 주세요.</s:String>
     <s:String x:Key="Critical_NetError">네트워크 오류</s:String>
-    <s:String x:Key="Critical_NetError_Description">인터넷 연결을 확인하신 후 다시 시도하세요.</s:String>
+    <!-- deprecated --><s:String x:Key="Critical_NetError_Description">인터넷 연결을 확인하신 후 다시 시도하세요.</s:String>
+    <s:String x:Key="Critical_AutoRetry_Message">{0}초 후에 다시 갱신을 시도합니다.</s:String>
 </ResourceDictionary>

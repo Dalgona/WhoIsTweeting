@@ -85,7 +85,8 @@
     <s:String x:Key="About_ThanksText" xml:space="preserve">I would like to give special thanks to&#13;&#10;Macchiato (@CreStudio_Plus), for this awesome idea.</s:String>
 
     <s:String x:Key="Critical_APIError">Twitter API Error</s:String>
-    <s:String x:Key="Critical_APIError_Description">Please try again after a short time.</s:String>
+    <!-- deprecated --><s:String x:Key="Critical_APIError_Description">Please try again after a short time.</s:String>
     <s:String x:Key="Critical_NetError">Network Error</s:String>
-    <s:String x:Key="Critical_NetError_Description">Please check your internet connection and try again.</s:String>
+    <!-- deprecated --><s:String x:Key="Critical_NetError_Description">Please check your internet connection and try again.</s:String>
+    <s:String x:Key="Critical_AutoRetry_Message">WhoIsTweeting will retry updating in {0} seconds.</s:String>
 </ResourceDictionary>

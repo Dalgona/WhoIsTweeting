@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -17,18 +19,38 @@ namespace WhoIsTweeting
         private bool transparency = false;
         private bool hideBorder = false;
         private UserListItem selectedItem;
+        private Task autoRetryTask;
+
+        private CancellationTokenSource ctSrc = new CancellationTokenSource();
+        private CancellationToken ct;
 
         public object userListLock = new object();
 
         public MainViewModel()
         {
             service.PropertyChanged += Service_PropertyChanged;
+            service.ErrorOccurred += Service_ErrorOccurred;
             showAway = appSettings.ShowAway;
             showOffline = appSettings.ShowOffline;
         }
 
+        private void Service_ErrorOccurred(object sender, MainService.ErrorOccurredEventArgs e)
+        {
+            ct = ctSrc.Token;
+            autoRetryTask = Task.Factory.StartNew(() =>
+            {
+                for (int i = service.UpdateInterval; i > 0; i--)
+                {
+                    ErrorDescription = string.Format(Application.Current.FindResource("Critical_AutoRetry_Message").ToString(), i);
+                    OnPropertyChanged("ErrorDescription");
+                    Thread.Sleep(1000);
+                }
+                service.Resume();
+            }, ct);
+        }
+
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
+            => OnPropertyChanged("");
 
         public void SetConsumerKey(string consumerKey, string consumerSecret)
             => service.SetConsumerKey(consumerKey, consumerSecret);
@@ -43,7 +65,11 @@ namespace WhoIsTweeting
             => service.SendDirectMessage(screenName, content, onError);
 
         public void TryResume()
-            => service.Resume();
+        {
+            if (autoRetryTask != null && !autoRetryTask.IsCompleted)
+                ctSrc.Cancel();
+            service.Resume();
+        }
 
         public string UserMenuText
         {
@@ -78,7 +104,7 @@ namespace WhoIsTweeting
             set
             {
                 selectedItem = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("SelectedItem"));
+                OnPropertyChanged("SelectedItem");
             }
         }
 
@@ -96,7 +122,7 @@ namespace WhoIsTweeting
             set
             {
                 Properties.Settings.Default.ShowAway = showAway = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("ShowAway"));
+                OnPropertyChanged("ShowAway");
             }
         }
 
@@ -109,7 +135,7 @@ namespace WhoIsTweeting
             set
             {
                 Properties.Settings.Default.ShowOffline = showOffline = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("ShowOffline"));
+                OnPropertyChanged("ShowOffline");
             }
         }
 
@@ -122,7 +148,7 @@ namespace WhoIsTweeting
             set
             {
                 transparency = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("Transparency"));
+                OnPropertyChanged("Transparency");
             }
         }
 
@@ -132,7 +158,7 @@ namespace WhoIsTweeting
             set
             {
                 hideBorder = value;
-                PropertyChanged(this, new PropertyChangedEventArgs("HideBorder"));
+                OnPropertyChanged("HideBorder");
             }
         }
 
@@ -152,23 +178,12 @@ namespace WhoIsTweeting
             }
         }
 
-        public string ErrorDescription
-        {
-            get
-            {
-                switch (service.State)
-                {
-                    case ServiceState.APIError:
-                        return Application.Current.FindResource("Critical_APIError_Description").ToString();
-                    case ServiceState.NetError:
-                        return Application.Current.FindResource("Critical_NetError_Description").ToString();
-                    default:
-                        return "";
-                }
-            }
-        }
+        public string ErrorDescription { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
     public class LastTweetConverter : IValueConverter

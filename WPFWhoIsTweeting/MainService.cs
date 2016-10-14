@@ -38,6 +38,7 @@ namespace WhoIsTweeting
                 OnPropertyChanged("State");
             }
         }
+
         public User Me { get; private set; }
         public int OnlineCount { get; private set; }
         public int AwayCount { get; private set; }
@@ -144,7 +145,9 @@ namespace WhoIsTweeting
 
         Properties.Settings appSettings = Properties.Settings.Default;
 
+        public delegate void ErrorOccurredEventHandler(object sender, ErrorOccurredEventArgs e);
         public event PropertyChangedEventHandler PropertyChanged;
+        public event ErrorOccurredEventHandler ErrorOccurred;
 
         public MainService()
         {
@@ -194,18 +197,21 @@ namespace WhoIsTweeting
             {
                 Log("MainService::ValidateUser", $"Caught APIException: {e.Message}\n{e.StackTrace}");
                 State = ServiceState.APIError;
+                OnErrorOccurred("API Error", e.Message);
                 return false;
             }
             catch (System.Net.Http.HttpRequestException e)
             {
                 Log("MainService::ValidateUser", $"Caught HttpRequestException: {e.Message}\n{e.StackTrace}");
                 State = ServiceState.NetError;
+                OnErrorOccurred("Network Error", e.Message);
                 return false;
             }
             catch (TaskCanceledException e)
             {
                 Log("MainService::ValidateUser", $"Caught TaskCanceledException: {e.Message}\n{e.StackTrace}");
                 State = ServiceState.NetError;
+                OnErrorOccurred("Network Error", e.Message);
                 return false;
             }
         }
@@ -272,18 +278,21 @@ namespace WhoIsTweeting
                 Log("MainService::UpdateUserList", $"Caught APIException: {e.Message}\n{e.StackTrace}");
                 listUpdateWorker.CancelAsync();
                 State = ServiceState.APIError;
+                OnErrorOccurred("API Error", e.Message);
             }
             catch (System.Net.Http.HttpRequestException e)
             {
                 Log("MainService::UpdateUserList", $"Caught HttpRequestException: {e.Message}\n{e.StackTrace}");
                 listUpdateWorker.CancelAsync();
                 State = ServiceState.NetError;
+                OnErrorOccurred("Network Error", e.Message);
             }
             catch (TaskCanceledException e)
             {
                 Log("MainService::UpdateUserList", $"Caught TaskCanceledException: {e.Message}\n{e.StackTrace}");
                 listUpdateWorker.CancelAsync();
                 State = ServiceState.NetError;
+                OnErrorOccurred("Network Error", e.Message);
             }
         }
 
@@ -305,13 +314,28 @@ namespace WhoIsTweeting
             }
         }
 
-        public void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
         private void Log(string from, string message)
         {
             //string now = DateTime.Now.ToString("hh:mm:ss.ffff");
             //System.Diagnostics.Debug.WriteLine($"[{now}][{from}] {message}");
+        }
+
+        public void OnPropertyChanged(string name)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        public void OnErrorOccurred(string what, string message)
+            => ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(what, message));
+
+        public class ErrorOccurredEventArgs : EventArgs
+        {
+            public string What { get; private set; }
+            public string Message { get; private set; }
+
+            public ErrorOccurredEventArgs(string what, string message) : base()
+            {
+                What = what;
+                Message = message;
+            }
         }
     }
 }
