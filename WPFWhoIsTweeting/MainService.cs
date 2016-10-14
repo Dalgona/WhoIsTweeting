@@ -56,6 +56,7 @@ namespace WhoIsTweeting
             set
             {
                 appSettings.UpdateInterval = updateInterval = value;
+                api.HttpTimeout = (int)(value * 0.9);
                 appSettings.Save();
             }
         }

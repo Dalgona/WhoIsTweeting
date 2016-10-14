@@ -67,8 +67,10 @@ namespace WhoIsTweeting
         public void TryResume()
         {
             if (autoRetryTask != null && !autoRetryTask.IsCompleted)
+            {
                 ctSrc.Cancel();
-            service.Resume();
+                service.Resume();
+            }
         }
 
         public string UserMenuText
