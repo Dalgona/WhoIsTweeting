@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WhoIsTweeting"
         xmlns:p="clr-namespace:WhoIsTweeting.Properties"
         mc:Ignorable="d"
-        Title="WhoIsTweeting" Height="600" Width="270" Icon="wit.ico"
+        Title="WhoIsTweeting" Height="600" Width="270" Icon="../wit.ico"
         Topmost="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=OneWay}"
         d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MinWidth="270" MinHeight="270">
     <Window.Resources>

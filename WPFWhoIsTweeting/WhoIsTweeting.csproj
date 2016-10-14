@@ -59,44 +59,44 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AboutWindow.xaml.cs">
+    <Compile Include="layouts\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SetIntervalWindow.xaml.cs">
+    <Compile Include="layouts\SetIntervalWindow.xaml.cs">
       <DependentUpon>SetIntervalWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="vm\GraphViewModel.cs" />
-    <Compile Include="GraphWindow.xaml.cs">
+    <Compile Include="layouts\GraphWindow.xaml.cs">
       <DependentUpon>GraphWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainService.cs" />
     <Compile Include="vm\IntervalViewModel.cs" />
     <Compile Include="vm\MessageViewModel.cs" />
-    <Compile Include="MessageWindow.xaml.cs">
+    <Compile Include="layouts\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PinInputWindow.xaml.cs">
+    <Compile Include="layouts\PinInputWindow.xaml.cs">
       <DependentUpon>PinInputWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="vm\TokenViewModel.cs" />
-    <Compile Include="ConsumerWindow.xaml.cs">
+    <Compile Include="layouts\ConsumerWindow.xaml.cs">
       <DependentUpon>ConsumerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="vm\MainViewModel.cs" />
     <Compile Include="UserListItem.cs" />
-    <Page Include="AboutWindow.xaml">
+    <Page Include="layouts\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConsumerWindow.xaml">
+    <Page Include="layouts\ConsumerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GraphWindow.xaml">
+    <Page Include="layouts\GraphWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="layouts\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -104,15 +104,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="layouts\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MessageWindow.xaml">
+    <Page Include="layouts\MessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PinInputWindow.xaml">
+    <Page Include="layouts\PinInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -120,7 +120,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SetIntervalWindow.xaml">
+    <Page Include="layouts\SetIntervalWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

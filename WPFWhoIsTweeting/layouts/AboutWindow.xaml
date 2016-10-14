@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
-        Title="About WhoIsTweeting" Height="521" Width="380" ResizeMode="NoResize" SizeToContent="Height" Icon="wit.ico" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+        Title="About WhoIsTweeting" Height="521" Width="380" ResizeMode="NoResize" SizeToContent="Height" Icon="../wit.ico" WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <Window.Resources>
         <Style x:Key="AboutDescStyle" TargetType="Label">
             <Setter Property="Margin" Value="25,0,0,0"/>
@@ -33,7 +33,7 @@
         <Label Content="{StaticResource About_Website}" Foreground="#FF333333"/>
         <Label Content="http://dalgona.github.io" Style="{StaticResource AboutLinkStyle}" MouseUp="OnWebsiteClicked"/>
         <Label Content="{StaticResource About_PoweredBy}" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10,0,0" Foreground="#FF333333"/>
-        <Image x:Name="image" Height="60" Source="picobird.png" HorizontalAlignment="Center" Width="150" MouseUp="OnPicoBirdLogoClicked"/>
+        <Image x:Name="image" Height="60" Source="../picobird.png" HorizontalAlignment="Center" Width="150" MouseUp="OnPicoBirdLogoClicked"/>
         <Label HorizontalAlignment="Center">
             <Label.Content>
                 <TextBlock TextAlignment="Center" Foreground="#FF333333">

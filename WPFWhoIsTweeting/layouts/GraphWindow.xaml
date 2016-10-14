@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
-        Title="{StaticResource Statistics_Title}" Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded" Icon="wit.ico" WindowStartupLocation="CenterOwner">
+        Title="{StaticResource Statistics_Title}" Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded" Icon="../wit.ico" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <Style x:Key="InfoKeyLabel" TargetType="Label">
             <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>

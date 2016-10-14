@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
-        Title="{StaticResource SignIn_Title}" Height="300" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" Icon="wit.ico" ShowInTaskbar="False">
+        Title="{StaticResource SignIn_Title}" Height="300" Width="300" SizeToContent="Height" WindowStartupLocation="CenterOwner" Icon="../wit.ico" ShowInTaskbar="False">
     <StackPanel Margin="5">
         <Label HorizontalAlignment="Center">
             <TextBlock TextAlignment="Center" Text="{StaticResource SignIn_Message}"/>
