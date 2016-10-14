@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -18,11 +17,9 @@ namespace WhoIsTweeting
         private bool showAway, showOffline;
         private bool transparency = false;
         private bool hideBorder = false;
-        private UserListItem selectedItem;
-        private Task autoRetryTask;
 
-        private CancellationTokenSource ctSrc = new CancellationTokenSource();
-        private CancellationToken ct;
+        private UserListItem selectedItem;
+        private BackgroundWorker autoRetryWorker = new BackgroundWorker();
 
         public object userListLock = new object();
 
@@ -30,27 +27,45 @@ namespace WhoIsTweeting
         {
             service.PropertyChanged += Service_PropertyChanged;
             service.ErrorOccurred += Service_ErrorOccurred;
+
+            autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
+            autoRetryWorker.WorkerSupportsCancellation = true;
+
             showAway = appSettings.ShowAway;
             showOffline = appSettings.ShowOffline;
         }
 
+        private void AutoRetryWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var worker = sender as BackgroundWorker;
+            for (int i = service.UpdateInterval; i > 0; i--)
+            {
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                ErrorDescription = string.Format(Application.Current.FindResource("Critical_AutoRetry_Message").ToString(), i);
+                OnPropertyChanged("ErrorDescription");
+                Thread.Sleep(1000);
+            }
+            service.Resume();
+        }
+
         private void Service_ErrorOccurred(object sender, MainService.ErrorOccurredEventArgs e)
         {
-            ct = ctSrc.Token;
-            autoRetryTask = Task.Factory.StartNew(() =>
-            {
-                for (int i = service.UpdateInterval; i > 0; i--)
-                {
-                    ErrorDescription = string.Format(Application.Current.FindResource("Critical_AutoRetry_Message").ToString(), i);
-                    OnPropertyChanged("ErrorDescription");
-                    Thread.Sleep(1000);
-                }
-                service.Resume();
-            }, ct);
+            autoRetryWorker.RunWorkerAsync();
         }
 
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            => OnPropertyChanged("");
+        {
+            MainService svc = sender as MainService;
+
+            if (e.PropertyName == "State" && svc.State >= 0)
+                if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
+
+            OnPropertyChanged("");
+        }
 
         public void SetConsumerKey(string consumerKey, string consumerSecret)
             => service.SetConsumerKey(consumerKey, consumerSecret);
@@ -66,11 +81,8 @@ namespace WhoIsTweeting
 
         public void TryResume()
         {
-            if (autoRetryTask != null && !autoRetryTask.IsCompleted)
-            {
-                ctSrc.Cancel();
-                service.Resume();
-            }
+            if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
+            if (service.State < 0) service.Resume();
         }
 
         public string UserMenuText
