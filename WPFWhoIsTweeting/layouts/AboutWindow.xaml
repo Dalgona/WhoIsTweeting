@@ -25,13 +25,13 @@
         </Style>
     </Window.Resources>
     <StackPanel Margin="5">
-        <Label Content="WhoIsTweeting 1.6.1" FontWeight="Bold" Foreground="#FF333333"/>
-        <Label Content="Copyright © 2016 Dalgona." Style="{StaticResource AboutDescStyle}" Foreground="#FF333333"/>
+        <Label Content="WhoIsTweeting 1.7.0" FontWeight="Bold" Foreground="#FF333333"/>
+        <Label Content="Copyright © 2016~2017 Dalgona." Style="{StaticResource AboutDescStyle}" Foreground="#FF333333"/>
         <Label Content="This program is not intended for monitoring your employees!" FontStyle="Italic" Foreground="#FF333333"/>
         <Label Content="{StaticResource About_Email}" Foreground="#FF333333"/>
         <Label Content="dalgona@hontou.moe" Style="{StaticResource AboutLinkStyle}" MouseUp="OnEmailClicked"/>
         <Label Content="{StaticResource About_Website}" Foreground="#FF333333"/>
-        <Label Content="http://dalgona.github.io" Style="{StaticResource AboutLinkStyle}" MouseUp="OnWebsiteClicked"/>
+        <Label Content="http://dalgona.hontou.moe" Style="{StaticResource AboutLinkStyle}" MouseUp="OnWebsiteClicked"/>
         <Label Content="{StaticResource About_PoweredBy}" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10,0,0" Foreground="#FF333333"/>
         <Image x:Name="image" Height="60" Source="../picobird.png" HorizontalAlignment="Center" Width="150" MouseUp="OnPicoBirdLogoClicked"/>
         <Label HorizontalAlignment="Center">
