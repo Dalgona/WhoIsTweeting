@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Text;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace WhoIsTweeting
 {
@@ -124,37 +125,36 @@ namespace WhoIsTweeting
         private void OnExportDlgOK(object sender, CancelEventArgs e)
         {
             SaveFileDialog dlg = sender as SaveFileDialog;
-            string extension = dlg.FileName.Split('.').Last().ToLower();
+            string extension = dlg.FileName.Split('.').Last().ToLower(CultureInfo.InvariantCulture);
             if (extension != "csv" && extension != "json")
                 MessageBox.Show(
                     Strings.Stat_Export_InvalidType, Strings.Title_Error,
                     MessageBoxButton.OK, MessageBoxImage.Error);
             try
             {
-                FileStream fs = new FileStream(dlg.FileName, FileMode.Create);
-                BufferedStream bfs = new BufferedStream(fs, 1024);
-                byte[] utfstr;
-                switch (extension)
+                using (FileStream fs = new FileStream(dlg.FileName, FileMode.Create))
+                using (BufferedStream bfs = new BufferedStream(fs, 1024))
                 {
-                    case "csv":
-                        foreach (var x in service.Graph)
-                        {
-                            var arr = x.Value;
-                            string date = x.Key.ToString("yyyy-MM-dd HH:mm:ss");
-                            utfstr = Encoding.UTF8.GetBytes($"\"{date}\",{arr[0]},{arr[1]},{arr[2]}{Environment.NewLine}");
+                    byte[] utfstr;
+                    switch (extension)
+                    {
+                        case "csv":
+                            foreach (var x in service.Graph)
+                            {
+                                var arr = x.Value;
+                                string date = x.Key.ToString("yyyy-MM-dd HH:mm:ss");
+                                utfstr = Encoding.UTF8.GetBytes($"\"{date}\",{arr[0]},{arr[1]},{arr[2]}{Environment.NewLine}");
+                                fs.Write(utfstr, 0, utfstr.Length);
+                            }
+                            break;
+                        case "json":
+                            string jsondat = JsonConvert.SerializeObject(
+                                from x in service.Graph orderby x.Key ascending select x, Formatting.Indented);
+                            utfstr = Encoding.UTF8.GetBytes(jsondat);
                             fs.Write(utfstr, 0, utfstr.Length);
-                        }
-                        break;
-                    case "json":
-                        string jsondat = JsonConvert.SerializeObject(
-                            from x in service.Graph orderby x.Key ascending select x, Formatting.Indented);
-                        utfstr = Encoding.UTF8.GetBytes(jsondat);
-                        fs.Write(utfstr, 0, utfstr.Length);
-                        break;
+                            break;
+                    }
                 }
-                bfs.Flush();
-                bfs.Close();
-                fs.Close();
             }
             catch (IOException ex)
             {

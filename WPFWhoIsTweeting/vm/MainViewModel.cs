@@ -56,7 +56,7 @@ namespace WhoIsTweeting
             service.Resume();
         }
 
-        private void Service_ErrorOccurred(object sender, MainService.ErrorOccurredEventArgs e)
+        private void Service_ErrorOccurred(object sender, ErrorOccurredEventArgs e)
         {
             while (autoRetryWorker.IsBusy) Thread.Sleep(50); // spin-wait
             if (retryCount >= maxRetryCount)
@@ -109,7 +109,7 @@ namespace WhoIsTweeting
             {
                 if (service.State == ServiceState.NeedConsumerKey)
                     return Strings.Menu_Main_NeedConsumer;
-                else if (service.State == ServiceState.LoginRequired)
+                else if (service.State == ServiceState.SignInRequired)
                     return Strings.Menu_Main_NeedSignIn;
                 else if (service.State >= ServiceState.Ready)
                     return $"@{service.Me.screen_name}";
@@ -121,7 +121,7 @@ namespace WhoIsTweeting
         {
             get
             {
-                return service.State >= ServiceState.LoginRequired
+                return service.State >= ServiceState.SignInRequired
                     || service.State == ServiceState.ApiError;
             }
         }

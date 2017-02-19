@@ -16,7 +16,7 @@ namespace WhoIsTweeting
     {
         Initial,
         NeedConsumerKey,
-        LoginRequired,
+        SignInRequired,
         Ready,
         Running,
         Updating,
@@ -71,7 +71,7 @@ namespace WhoIsTweeting
             api.ConsumerKey = consumerKey;
             api.ConsumerSecret = consumerSecret;
 
-            State = ServiceState.LoginRequired;
+            State = ServiceState.SignInRequired;
         }
 
         public void SendDirectMessage(string screenName, string content, Action<Exception> onError)
@@ -144,9 +144,8 @@ namespace WhoIsTweeting
 
         Properties.Settings appSettings = Properties.Settings.Default;
 
-        public delegate void ErrorOccurredEventHandler(object sender, ErrorOccurredEventArgs e);
         public event PropertyChangedEventHandler PropertyChanged;
-        public event ErrorOccurredEventHandler ErrorOccurred;
+        public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
 
         public MainService()
         {
@@ -173,7 +172,7 @@ namespace WhoIsTweeting
                 return;
             }
 
-            State = ServiceState.LoginRequired;
+            State = ServiceState.SignInRequired;
             Resume();
         }
 
@@ -309,12 +308,12 @@ namespace WhoIsTweeting
                     e.Cancel = true;
                     break;
                 }
-                Task t = UpdateUserList();
+                Task.Factory.StartNew(async () => await UpdateUserList());
                 Thread.Sleep(TimeSpan.FromSeconds(UpdateInterval));
             }
         }
 
-        private void Log(string from, string message)
+        private static void Log(string from, string message)
         {
 #if DEBUG
             string now = DateTime.Now.ToString("hh:mm:ss.ffff");
@@ -327,18 +326,6 @@ namespace WhoIsTweeting
 
         public void OnErrorOccurred(string what, string message)
             => ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(what, message));
-
-        public class ErrorOccurredEventArgs : EventArgs
-        {
-            public string What { get; private set; }
-            public string Message { get; private set; }
-
-            public ErrorOccurredEventArgs(string what, string message) : base()
-            {
-                What = what;
-                Message = message;
-            }
-        }
 
         #region IDisposable Support
         private bool disposedValue = false;
@@ -361,5 +348,17 @@ namespace WhoIsTweeting
             GC.SuppressFinalize(this);
         }
         #endregion
+    }
+
+    public class ErrorOccurredEventArgs : EventArgs
+    {
+        public string What { get; private set; }
+        public string Message { get; private set; }
+
+        public ErrorOccurredEventArgs(string what, string message) : base()
+        {
+            What = what;
+            Message = message;
+        }
     }
 }

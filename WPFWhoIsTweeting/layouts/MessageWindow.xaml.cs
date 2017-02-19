@@ -16,7 +16,7 @@ namespace WhoIsTweeting
 
             DataContext = viewModel = new MessageViewModel(type, sendTo);
             if (type == MessageWindowType.MentionWindow)
-                viewModel.Content = $"@{sendTo.ScreenName} ";
+                viewModel.Content = $"@{sendTo?.ScreenName} ";
         }
 
         private void OnCancelClicked(object sender, RoutedEventArgs e)
