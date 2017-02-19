@@ -47,7 +47,7 @@ namespace WhoIsTweeting
                     e.Cancel = true;
                     return;
                 }
-                ErrorDescription = string.Format(Application.Current.FindResource("Critical_AutoRetry_Message").ToString(), i);
+                ErrorDescription = string.Format(Strings.Critical_AutoRetry_Message, i);
                 OnPropertyChanged("ErrorDescription");
                 Thread.Sleep(1000);
             }
@@ -61,7 +61,7 @@ namespace WhoIsTweeting
             while (autoRetryWorker.IsBusy) Thread.Sleep(50); // spin-wait
             if (retryCount >= maxRetryCount)
             {
-                ErrorDescription = string.Format(Application.Current.FindResource("Critical_AutyRetry_Failed").ToString(), maxRetryCount);
+                ErrorDescription = string.Format(Strings.Critical_AutoRetry_Failed, maxRetryCount);
             }
             else
             {
@@ -108,9 +108,9 @@ namespace WhoIsTweeting
             get
             {
                 if (service.State == ServiceState.NeedConsumerKey)
-                    return Application.Current.FindResource("Menu_Main_NeedConsumer").ToString();
+                    return Strings.Menu_Main_NeedConsumer;
                 else if (service.State == ServiceState.LoginRequired)
-                    return Application.Current.FindResource("Menu_Main_NeedSignIn").ToString();
+                    return Strings.Menu_Main_NeedSignIn;
                 else if (service.State >= ServiceState.Ready)
                     return $"@{service.Me.screen_name}";
                 else return "--";
@@ -202,9 +202,9 @@ namespace WhoIsTweeting
                 switch (service.State)
                 {
                     case ServiceState.ApiError:
-                        return Application.Current.FindResource("Critical_APIError").ToString();
+                        return Strings.Critical_ApiError;
                     case ServiceState.NetError:
-                        return Application.Current.FindResource("Critical_NetError").ToString();
+                        return Strings.Critical_NetError;
                     default:
                         return "";
                 }

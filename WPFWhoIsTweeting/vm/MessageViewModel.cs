@@ -20,8 +20,8 @@ namespace WhoIsTweeting
             get
             {
                 if (type == MessageWindowType.MentionWindow)
-                    return Application.Current.FindResource("Message_Header_Mention").ToString();
-                else return Application.Current.FindResource("Message_Header_DM").ToString();
+                    return Strings.Message_Header_Mention;
+                else return Strings.Message_Header_DM;
             }
         }
 

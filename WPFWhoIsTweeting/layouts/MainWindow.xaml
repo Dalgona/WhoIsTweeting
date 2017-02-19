@@ -126,22 +126,22 @@
                     <MenuItem.Header>
                         <TextBlock Text="{Binding UserMenuText, Mode=OneWay}"/>
                     </MenuItem.Header>
-                    <MenuItem Header="{StaticResource Menu_Main_SignIn}" Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
-                    <MenuItem Header="{StaticResource Menu_Main_Consumer}" Click="Menu_OnConsumer"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Main_SignIn}" Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Main_Consumer}" Click="Menu_OnConsumer"/>
                     <Separator/>
-                    <MenuItem Header="{StaticResource Menu_Main_Interval}" Click="Menu_OnSetInterval"/>
-                    <MenuItem Header="{StaticResource Menu_Main_Statistics}" Click="Menu_OnStatistics"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Main_Interval}" Click="Menu_OnSetInterval"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Main_Statistics}" Click="Menu_OnStatistics"/>
                     <Separator/>
-                    <MenuItem Header="{StaticResource Menu_Main_About}" Click="Menu_OnAbout"/>
-                    <MenuItem Header="{StaticResource Menu_Main_Quit}" Click="Menu_OnQuit"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Main_About}" Click="Menu_OnAbout"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Main_Quit}" Click="Menu_OnQuit"/>
                 </MenuItem>
-                <MenuItem Header="{StaticResource Menu_View}" Padding="6,2">
-                    <MenuItem Header="{StaticResource Menu_View_Topmost}" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="{StaticResource Menu_View_Transparency}" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="{StaticResource Menu_View_HideBorder}" IsChecked="{Binding HideBorder, Mode=TwoWay}" IsCheckable="True"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_View}" Padding="6,2">
+                    <MenuItem Header="{x:Static local:Strings.Menu_View_Topmost}" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_View_Transparency}" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_View_HideBorder}" IsChecked="{Binding HideBorder, Mode=TwoWay}" IsCheckable="True"/>
                     <Separator/>
-                    <MenuItem Header="{StaticResource Menu_View_ShowAway}" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="{StaticResource Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_View_ShowAway}" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
                 </MenuItem>
             </Menu>
             <StackPanel Grid.Row="2" Background="#FFFF4000">
@@ -160,7 +160,7 @@
                         <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ErrorDescription}"/>
                     </Label.Content>
                 </Label>
-                <Button Content="{StaticResource Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
+                <Button Content="{x:Static local:Strings.Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
             </StackPanel>
             <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
                 <ListBox.ContextMenu>
@@ -185,10 +185,10 @@
                             </MenuItem.Header>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="{StaticResource Menu_Context_Mention}" Click="Context_OnMention"/>
-                        <MenuItem Header="{StaticResource Menu_Context_DM}" Click="Context_OnDirectMessage"/>
+                        <MenuItem Header="{x:Static local:Strings.Menu_Context_Mention}" Click="Context_OnMention"/>
+                        <MenuItem Header="{x:Static local:Strings.Menu_Context_DM}" Click="Context_OnDirectMessage"/>
                         <Separator/>
-                        <MenuItem Header="{StaticResource Menu_Context_Profile}" Click="Context_OnProfile"/>
+                        <MenuItem Header="{x:Static local:Strings.Menu_Context_Profile}" Click="Context_OnProfile"/>
                     </ContextMenu>
                 </ListBox.ContextMenu>
                 <ListBox.ItemContainerStyle>
@@ -260,9 +260,9 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <StatusBar Grid.Row="4" Background="#FF333333">
-                <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
-                <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Away}" Padding="0" Foreground="LightGray"/>
-                <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{StaticResource Status_Offline}" Padding="0" Foreground="DimGray"/>
+                <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
+                <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Away}" Padding="0" Foreground="LightGray"/>
+                <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Offline}" Padding="0" Foreground="DimGray"/>
                 <Label Padding="0" Foreground="#FFFF8000">
                     <Label.Style>
                         <Style TargetType="Label">

@@ -28,11 +28,11 @@
         <Label Content="WhoIsTweeting 1.7.0" FontWeight="Bold" Foreground="#FF333333"/>
         <Label Content="Copyright © 2016~2017 Dalgona." Style="{StaticResource AboutDescStyle}" Foreground="#FF333333"/>
         <Label Content="This program is not intended for monitoring your employees!" FontStyle="Italic" Foreground="#FF333333"/>
-        <Label Content="{StaticResource About_Email}" Foreground="#FF333333"/>
+        <Label Content="{x:Static local:Strings.About_Email}" Foreground="#FF333333"/>
         <Label Content="dalgona@hontou.moe" Style="{StaticResource AboutLinkStyle}" MouseUp="OnEmailClicked"/>
-        <Label Content="{StaticResource About_Website}" Foreground="#FF333333"/>
+        <Label Content="{x:Static local:Strings.About_Website}" Foreground="#FF333333"/>
         <Label Content="http://dalgona.hontou.moe" Style="{StaticResource AboutLinkStyle}" MouseUp="OnWebsiteClicked"/>
-        <Label Content="{StaticResource About_PoweredBy}" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10,0,0" Foreground="#FF333333"/>
+        <Label Content="{x:Static local:Strings.About_PoweredBy}" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10,0,0" Foreground="#FF333333"/>
         <Image x:Name="image" Height="60" Source="../picobird.png" HorizontalAlignment="Center" Width="150" MouseUp="OnPicoBirdLogoClicked"/>
         <Label HorizontalAlignment="Center">
             <Label.Content>
@@ -43,12 +43,12 @@
             </Label.Content>
         </Label>
         <Label HorizontalAlignment="Center">
-            <TextBlock TextAlignment="Center" Foreground="#FF333333" Text="{StaticResource About_PoweredBy_License}"/>
+            <TextBlock TextAlignment="Center" Foreground="#FF333333" Text="{x:Static local:Strings.About_PoweredBy_License}"/>
         </Label>
-        <Label Content="{StaticResource About_Thanks}" HorizontalAlignment="Center" FontWeight="Bold" Margin="0" Foreground="#FF333333"/>
+        <Label Content="{x:Static local:Strings.About_Thanks}" HorizontalAlignment="Center" FontWeight="Bold" Margin="0" Foreground="#FF333333"/>
         <Label HorizontalAlignment="Center">
-            <TextBlock TextAlignment="Center" Foreground="#FF333333" Text="{StaticResource About_ThanksText}"/>
+            <TextBlock TextAlignment="Center" Foreground="#FF333333" Text="{x:Static local:Strings.About_ThanksText}"/>
         </Label>
-        <Button x:Name="button" Content="{StaticResource Button_Close}" HorizontalAlignment="Center" Padding="15,3" Margin="0,10,0,3" Click="OnCloseButtonClicked"/>
+        <Button x:Name="button" Content="{x:Static local:Strings.Button_Close}" HorizontalAlignment="Center" Padding="15,3" Margin="0,10,0,3" Click="OnCloseButtonClicked"/>
     </StackPanel>
 </Window>

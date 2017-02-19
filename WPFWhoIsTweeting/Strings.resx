@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About_Email" xml:space="preserve">
+    <value>For any issues, email me:</value>
+  </data>
+  <data name="About_PoweredBy" xml:space="preserve">
+    <value>Powered by PicoBird Twitter Library!</value>
+  </data>
+  <data name="About_PoweredBy_License" xml:space="preserve">
+    <value>WhoIsTweeting, PicoBird and Newtonsoft.Json are
+licensed under the MIT License. See enclosed LICENSE file
+for full text of the license.</value>
+  </data>
+  <data name="About_Thanks" xml:space="preserve">
+    <value>Special Thanks</value>
+  </data>
+  <data name="About_ThanksText" xml:space="preserve">
+    <value>I would like to give special thanks to
+Macchiato (@CreStudio_Plus), for this awesome idea.</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>About WhoIsTweeting</value>
+  </data>
+  <data name="About_Website" xml:space="preserve">
+    <value>Developer Website:</value>
+  </data>
+  <data name="Button_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Button_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Button_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Button_Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Button_TryAgain" xml:space="preserve">
+    <value>Retry Now</value>
+  </data>
+  <data name="Consumer_Empty_Error" xml:space="preserve">
+    <value>Both the consumer key and the consumer secret cannot be left blank.</value>
+  </data>
+  <data name="Consumer_Header_Consumer" xml:space="preserve">
+    <value>Consumer Key</value>
+  </data>
+  <data name="Consumer_Header_Secret" xml:space="preserve">
+    <value>Consumer Secret</value>
+  </data>
+  <data name="Consumer_Message" xml:space="preserve">
+    <value>Please copy and paste the consumer key and the consumer secret of
+your Twitter application. If you do not have an app, you can create one at
+https://dev.twitter.com.</value>
+  </data>
+  <data name="Consumer_Title" xml:space="preserve">
+    <value>Set Consumer Key</value>
+  </data>
+  <data name="Critical_ApiError" xml:space="preserve">
+    <value>Twitter API Error</value>
+  </data>
+  <data name="Critical_AutoRetry_Failed" xml:space="preserve">
+    <value>Could not recover from errors after {0} retries. Please retry manually.</value>
+  </data>
+  <data name="Critical_AutoRetry_Message" xml:space="preserve">
+    <value>WhoIsTweeting will retry updating in {0} seconds.</value>
+  </data>
+  <data name="Critical_NetError" xml:space="preserve">
+    <value>Network Error</value>
+  </data>
+  <data name="Interval_MaxFollowingsFormat" xml:space="preserve">
+    <value>(can handle up to {0} followings)</value>
+  </data>
+  <data name="Interval_Message" xml:space="preserve">
+    <value>You can customize the update interval here.
+Please note that Twitter API calls are rate limited and
+too short interval may cause the app to malfunction,
+depending on the number of users you are following.</value>
+  </data>
+  <data name="Interval_SecondFormat" xml:space="preserve">
+    <value>{0} seconds</value>
+  </data>
+  <data name="Interval_Title" xml:space="preserve">
+    <value>Set Update Interval</value>
+  </data>
+  <data name="Menu_Context_DM" xml:space="preserve">
+    <value>Send a _Direct Message...</value>
+  </data>
+  <data name="Menu_Context_Mention" xml:space="preserve">
+    <value>Send a _Mention...</value>
+  </data>
+  <data name="Menu_Context_Profile" xml:space="preserve">
+    <value>Open Twitter _Profile...</value>
+  </data>
+  <data name="Menu_Main_About" xml:space="preserve">
+    <value>_About...</value>
+  </data>
+  <data name="Menu_Main_Consumer" xml:space="preserve">
+    <value>Set _Consumer Key...</value>
+  </data>
+  <data name="Menu_Main_Interval" xml:space="preserve">
+    <value>Set _Update Interval...</value>
+  </data>
+  <data name="Menu_Main_NeedConsumer" xml:space="preserve">
+    <value>Consumer Key Required</value>
+  </data>
+  <data name="Menu_Main_NeedSignIn" xml:space="preserve">
+    <value>Please Sign in</value>
+  </data>
+  <data name="Menu_Main_Quit" xml:space="preserve">
+    <value>_Quit</value>
+  </data>
+  <data name="Menu_Main_SignIn" xml:space="preserve">
+    <value>Sign _in/Switch User...</value>
+  </data>
+  <data name="Menu_Main_Statistics" xml:space="preserve">
+    <value>Show _Statistics...</value>
+  </data>
+  <data name="Menu_View" xml:space="preserve">
+    <value>_View</value>
+  </data>
+  <data name="Menu_View_HideBorder" xml:space="preserve">
+    <value>_Hide Window Border</value>
+  </data>
+  <data name="Menu_View_ShowAway" xml:space="preserve">
+    <value>A_way Users</value>
+  </data>
+  <data name="Menu_View_ShowOffline" xml:space="preserve">
+    <value>_Offline Users</value>
+  </data>
+  <data name="Menu_View_Topmost" xml:space="preserve">
+    <value>Always on _Top</value>
+  </data>
+  <data name="Menu_View_Transparency" xml:space="preserve">
+    <value>Tr_ansparency</value>
+  </data>
+  <data name="Message_Error_DM" xml:space="preserve">
+    <value>Could not send a direct message to specified user.</value>
+  </data>
+  <data name="Message_Error_Mention" xml:space="preserve">
+    <value>Could not send a mention.</value>
+  </data>
+  <data name="Message_Header_DM" xml:space="preserve">
+    <value>Send a Direct Message to</value>
+  </data>
+  <data name="Message_Header_Mention" xml:space="preserve">
+    <value>Send a Mention to</value>
+  </data>
+  <data name="SignIn_Confirm" xml:space="preserve">
+    <value>If you click OK, a web browser will be opened and it will show you the PIN required for authentication.</value>
+  </data>
+  <data name="SignIn_Error" xml:space="preserve">
+    <value>Invalid PIN was provided. Please try again.</value>
+  </data>
+  <data name="SignIn_Message" xml:space="preserve">
+    <value>Please input PIN in the text box below
+to complete the sign-in process.</value>
+  </data>
+  <data name="SignIn_Title" xml:space="preserve">
+    <value>Sign in with Twitter</value>
+  </data>
+  <data name="Status_Away" xml:space="preserve">
+    <value>{0} Away</value>
+  </data>
+  <data name="Status_Offline" xml:space="preserve">
+    <value>{0} Offline</value>
+  </data>
+  <data name="Status_Online" xml:space="preserve">
+    <value>{0} Online</value>
+  </data>
+  <data name="Stat_AvgOnline" xml:space="preserve">
+    <value>Avg. online</value>
+  </data>
+  <data name="Stat_Away" xml:space="preserve">
+    <value>Away</value>
+  </data>
+  <data name="Stat_Button_Export" xml:space="preserve">
+    <value>E_xport</value>
+  </data>
+  <data name="Stat_Button_Reset" xml:space="preserve">
+    <value>_Reset</value>
+  </data>
+  <data name="Stat_DataFrom" xml:space="preserve">
+    <value>Data from</value>
+  </data>
+  <data name="Stat_DataTo" xml:space="preserve">
+    <value>Data to</value>
+  </data>
+  <data name="Stat_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Stat_Export_Exception" xml:space="preserve">
+    <value>Could not export: {0}</value>
+  </data>
+  <data name="Stat_Export_Filter" xml:space="preserve">
+    <value>Comma-separated Values|*.csv|JSON|*.json</value>
+  </data>
+  <data name="Stat_Export_InvalidType" xml:space="preserve">
+    <value>Cannot export: Invalid file format</value>
+  </data>
+  <data name="Stat_Export_Title" xml:space="preserve">
+    <value>Export Statistics Data</value>
+  </data>
+  <data name="Stat_MaxOnline" xml:space="preserve">
+    <value>Max. online</value>
+  </data>
+  <data name="Stat_MinOnline" xml:space="preserve">
+    <value>Min. online</value>
+  </data>
+  <data name="Stat_NumOfData" xml:space="preserve">
+    <value># of data</value>
+  </data>
+  <data name="Stat_NumOfDataFormat" xml:space="preserve">
+    <value>Number of data: {0}</value>
+  </data>
+  <data name="Stat_Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="Stat_Online" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="Stat_Reset_Message" xml:space="preserve">
+    <value>Really reset the statistics data?</value>
+  </data>
+  <data name="Stat_Reset_Title" xml:space="preserve">
+    <value>Reset Statistics Data</value>
+  </data>
+  <data name="Stat_Tab_Graph" xml:space="preserve">
+    <value>Graph</value>
+  </data>
+  <data name="Stat_Tab_Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="Stat_Title" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="Title_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+</root>

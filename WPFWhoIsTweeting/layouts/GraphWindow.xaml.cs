@@ -107,9 +107,7 @@ namespace WhoIsTweeting
 
         private void OnResetClick(object sender, RoutedEventArgs e)
         {
-            var res = MessageBox.Show(
-                Application.Current.FindResource("Statistics_Reset_Message").ToString(),
-                Application.Current.FindResource("Statistics_Reset_Title").ToString(),
+            var res = MessageBox.Show(Strings.Stat_Reset_Message, Strings.Stat_Reset_Title,
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (res == MessageBoxResult.Yes) viewModel.ResetStat();
         }
@@ -117,8 +115,8 @@ namespace WhoIsTweeting
         private void OnExportClick(object sender, RoutedEventArgs e)
         {
             SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Title = Application.Current.FindResource("Statistics_Export_Title").ToString();
-            dlg.Filter = Application.Current.FindResource("Statistics_Export_Filter").ToString();
+            dlg.Title = Strings.Stat_Export_Title;
+            dlg.Filter = Strings.Stat_Export_Filter;
             dlg.FileOk += OnExportDlgOK;
             dlg.ShowDialog();
         }
@@ -129,8 +127,7 @@ namespace WhoIsTweeting
             string extension = dlg.FileName.Split('.').Last().ToLower();
             if (extension != "csv" && extension != "json")
                 MessageBox.Show(
-                    Application.Current.FindResource("Statistics_Export_InvalidType").ToString(),
-                    Application.Current.FindResource("Title_Error").ToString(),
+                    Strings.Stat_Export_InvalidType, Strings.Title_Error,
                     MessageBoxButton.OK, MessageBoxImage.Error);
             try
             {
@@ -162,8 +159,8 @@ namespace WhoIsTweeting
             catch (IOException ex)
             {
                 MessageBox.Show(
-                    string.Format(Application.Current.FindResource("Statistics_Export_Exception").ToString(), ex.Message),
-                    Application.Current.FindResource("Title_Error").ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                    string.Format(Strings.Stat_Export_Exception, ex.Message),
+                    Strings.Title_Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

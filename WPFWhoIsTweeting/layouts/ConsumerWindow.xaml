@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
-        Title="{StaticResource Consumer_Title}" Height="200" Width="480" ResizeMode="NoResize" SizeToContent="Height" Icon="../wit.ico" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" ShowInTaskbar="False">
+        Title="{x:Static local:Strings.Consumer_Title}" Height="200" Width="480" ResizeMode="NoResize" SizeToContent="Height" Icon="../wit.ico" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" ShowInTaskbar="False">
     <StackPanel Margin="5">
         <Label>
             <Label.Content>
-                <TextBlock Text="{StaticResource Consumer_Message}"/>
+                <TextBlock Text="{x:Static local:Strings.Consumer_Message}"/>
             </Label.Content>
         </Label>
         <Grid>
@@ -21,14 +21,14 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Content="{StaticResource Consumer_Header_Consumer}" HorizontalAlignment="Right" Margin="0" VerticalContentAlignment="Center" FontWeight="Bold"/>
-            <Label Grid.Row="1" Content="{StaticResource Consumer_Header_Secret}" HorizontalAlignment="Right" VerticalContentAlignment="Center" FontWeight="Bold"/>
+            <Label Content="{x:Static local:Strings.Consumer_Header_Consumer}" HorizontalAlignment="Right" Margin="0" VerticalContentAlignment="Center" FontWeight="Bold"/>
+            <Label Grid.Row="1" Content="{x:Static local:Strings.Consumer_Header_Secret}" HorizontalAlignment="Right" VerticalContentAlignment="Center" FontWeight="Bold"/>
             <TextBox x:Name="consumerKey" Text="{Binding ConsumerKey, Mode=TwoWay}" Grid.Column="1" Margin="5,0,5,5" VerticalAlignment="Center" Padding="0,2" TabIndex="0"/>
             <TextBox Text="{Binding ConsumerSecret, Mode=TwoWay}" Grid.Row="1" Grid.Column="1" Margin="5,0" VerticalAlignment="Center" Padding="0,2" TabIndex="1"/>
         </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0">
-            <Button Content="{StaticResource Button_OK}" HorizontalAlignment="Left" Margin="0,5,7,5" Padding="15,3" Click="OnOKClicked" TabIndex="2"/>
-            <Button Content="{StaticResource Button_Cancel}" HorizontalAlignment="Left" Margin="0,5,5,5" Padding="15,3" Click="OnCancelClicked" TabIndex="3"/>
+            <Button Content="{x:Static local:Strings.Button_OK}" HorizontalAlignment="Left" Margin="0,5,7,5" Padding="15,3" Click="OnOKClicked" TabIndex="2"/>
+            <Button Content="{x:Static local:Strings.Button_Cancel}" HorizontalAlignment="Left" Margin="0,5,5,5" Padding="15,3" Click="OnCancelClicked" TabIndex="3"/>
         </StackPanel>
     </StackPanel>
 </Window>

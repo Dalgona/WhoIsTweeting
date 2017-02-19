@@ -55,8 +55,7 @@ namespace WhoIsTweeting
 
         private void Menu_OnSignIn(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult cont = MessageBox.Show(Application.Current.FindResource("SignIn_Confirm").ToString(),
-                Application.Current.FindResource("SignIn_Title").ToString(),
+            MessageBoxResult cont = MessageBox.Show(Strings.SignIn_Confirm, Strings.SignIn_Title,
                 MessageBoxButton.OKCancel, MessageBoxImage.Information);
             if (cont == MessageBoxResult.OK)
                 viewModel.SignIn((url) =>
@@ -69,9 +68,7 @@ namespace WhoIsTweeting
                     return mdl.Pin;
                 }, (ex)=>
                 {
-                    MessageBox.Show(Application.Current.FindResource("SignIn_Error").ToString(),
-                        Application.Current.FindResource("Title_Error").ToString(),
-                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Strings.SignIn_Error, Strings.Title_Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 });
         }
 
@@ -102,8 +99,7 @@ namespace WhoIsTweeting
             if ((bool)win.ShowDialog())
                 viewModel.PostTweet(mdl.Content, (ex) =>
                 {
-                    MessageBox.Show(Application.Current.FindResource("Message_Error_Mention").ToString(),
-                        Application.Current.FindResource("Title_Error").ToString(),
+                    MessageBox.Show(Strings.Message_Error_Mention, Strings.Title_Error,
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             Effect = null;
@@ -118,8 +114,7 @@ namespace WhoIsTweeting
             if ((bool)win.ShowDialog())
                 viewModel.SendDirectMessage(mdl.ScreenName, mdl.Content, (ex) =>
                 {
-                    MessageBox.Show(Application.Current.FindResource("Message_Error_DM").ToString(),
-                        Application.Current.FindResource("Title_Error").ToString(),
+                    MessageBox.Show(Strings.Message_Error_DM, Strings.Title_Error,
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 });
             Effect = null;

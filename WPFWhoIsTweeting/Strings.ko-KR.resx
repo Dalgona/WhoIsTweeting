@@ -1,0 +1,356 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About_Email" xml:space="preserve">
+    <value>문의 사항이 있으시면 이메일 보내주세요:</value>
+  </data>
+  <data name="About_PoweredBy" xml:space="preserve">
+    <value>PicoBird 트위터 라이브러리를 사용하여 만들었습니다!</value>
+  </data>
+  <data name="About_PoweredBy_License" xml:space="preserve">
+    <value>WhoIsTweeting, PicoBird 및 Newtonsoft.Json에는
+MIT 라이센스가 적용됩니다. 첨부된 LICENSE 파일에
+라이센스 전문이 수록되어 있습니다.</value>
+  </data>
+  <data name="About_Thanks" xml:space="preserve">
+    <value>감사의 말</value>
+  </data>
+  <data name="About_ThanksText" xml:space="preserve">
+    <value>이 훌륭한 아이디어를 전해주신
+마끼아또(@CreStudio_Plus)님께 감사의 말씀 전합니다.</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>WhoIsTweeting에 대하여</value>
+  </data>
+  <data name="About_Website" xml:space="preserve">
+    <value>개발자 웹사이트:</value>
+  </data>
+  <data name="Button_Cancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="Button_Close" xml:space="preserve">
+    <value>닫기</value>
+  </data>
+  <data name="Button_OK" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="Button_Send" xml:space="preserve">
+    <value>보내기</value>
+  </data>
+  <data name="Button_TryAgain" xml:space="preserve">
+    <value>지금 다시 시도</value>
+  </data>
+  <data name="Consumer_Empty_Error" xml:space="preserve">
+    <value>컨슈머 키와 컨슈머 시크릿은 비워둘 수 없습니다.</value>
+  </data>
+  <data name="Consumer_Header_Consumer" xml:space="preserve">
+    <value>컨슈머 키</value>
+  </data>
+  <data name="Consumer_Header_Secret" xml:space="preserve">
+    <value>컨슈머 시크릿</value>
+  </data>
+  <data name="Consumer_Message" xml:space="preserve">
+    <value>가지고 있는 트위터 앱의 컨슈머 키와 컨슈머 시크릿을 복사해서 붙여 넣으세요.
+아직 앱이 없다면 https://dev.twitter.com에서 만드실 수 있습니다.</value>
+  </data>
+  <data name="Consumer_Title" xml:space="preserve">
+    <value>컨슈머 키 설정</value>
+  </data>
+  <data name="Critical_ApiError" xml:space="preserve">
+    <value>트위터 API 오류</value>
+  </data>
+  <data name="Critical_AutoRetry_Failed" xml:space="preserve">
+    <value>{0}번의 재시도 후에도 오류에서 복구되지 못했습니다. 수동으로 재시도하세요.</value>
+  </data>
+  <data name="Critical_AutoRetry_Message" xml:space="preserve">
+    <value>{0}초 후에 다시 갱신을 시도합니다.</value>
+  </data>
+  <data name="Critical_NetError" xml:space="preserve">
+    <value>네트워크 오류</value>
+  </data>
+  <data name="Interval_MaxFollowingsFormat" xml:space="preserve">
+    <value>(팔로잉 {0}명까지 처리 가능)</value>
+  </data>
+  <data name="Interval_Message" xml:space="preserve">
+    <value>여기서 갱신 주기를 조정할 수 있습니다. 트위터 API는
+일정 시간 동안 사용 횟수가 제한되어 있기 때문에
+여러분의 팔로잉 수에 따라 갱신 주기가 너무 짧으면
+프로그램이 오작동할 수 있습니다.</value>
+  </data>
+  <data name="Interval_SecondFormat" xml:space="preserve">
+    <value>{0}초</value>
+  </data>
+  <data name="Interval_Title" xml:space="preserve">
+    <value>갱신 주기 설정</value>
+  </data>
+  <data name="Menu_Context_DM" xml:space="preserve">
+    <value>쪽지 보내기(_D)...</value>
+  </data>
+  <data name="Menu_Context_Mention" xml:space="preserve">
+    <value>멘션 보내기(_M)...</value>
+  </data>
+  <data name="Menu_Context_Profile" xml:space="preserve">
+    <value>트위터 프로필 열기(_P)...</value>
+  </data>
+  <data name="Menu_Main_About" xml:space="preserve">
+    <value>정보(_A)...</value>
+  </data>
+  <data name="Menu_Main_Consumer" xml:space="preserve">
+    <value>컨슈머 키 설정(_C)...</value>
+  </data>
+  <data name="Menu_Main_Interval" xml:space="preserve">
+    <value>갱신 주기 설정(_U)...</value>
+  </data>
+  <data name="Menu_Main_NeedConsumer" xml:space="preserve">
+    <value>컨슈머 키 필요</value>
+  </data>
+  <data name="Menu_Main_NeedSignIn" xml:space="preserve">
+    <value>로그인하세요</value>
+  </data>
+  <data name="Menu_Main_Quit" xml:space="preserve">
+    <value>종료(_Q)</value>
+  </data>
+  <data name="Menu_Main_SignIn" xml:space="preserve">
+    <value>로그인/사용자 변경(_I)...</value>
+  </data>
+  <data name="Menu_Main_Statistics" xml:space="preserve">
+    <value>통계 보기(_S)...</value>
+  </data>
+  <data name="Menu_View" xml:space="preserve">
+    <value>보기(_V)</value>
+  </data>
+  <data name="Menu_View_HideBorder" xml:space="preserve">
+    <value>창 테두리 숨기기(_H)</value>
+  </data>
+  <data name="Menu_View_ShowAway" xml:space="preserve">
+    <value>자리비움(_W)</value>
+  </data>
+  <data name="Menu_View_ShowOffline" xml:space="preserve">
+    <value>오프라인(_O)</value>
+  </data>
+  <data name="Menu_View_Topmost" xml:space="preserve">
+    <value>항상 위(_T)</value>
+  </data>
+  <data name="Menu_View_Transparency" xml:space="preserve">
+    <value>반투명창(_A)</value>
+  </data>
+  <data name="Message_Error_DM" xml:space="preserve">
+    <value>지정한 사용자에게 쪽지를 보내지 못했습니다.</value>
+  </data>
+  <data name="Message_Error_Mention" xml:space="preserve">
+    <value>멘션을 보내지 못했습니다.</value>
+  </data>
+  <data name="Message_Header_DM" xml:space="preserve">
+    <value>쪽지 보내기</value>
+  </data>
+  <data name="Message_Header_Mention" xml:space="preserve">
+    <value>멘션 보내기</value>
+  </data>
+  <data name="SignIn_Confirm" xml:space="preserve">
+    <value>"확인"을 클릭하면 웹 브라우저 창이 열리며 인증에 필요한 PIN을 보여줄 것입니다.</value>
+  </data>
+  <data name="SignIn_Error" xml:space="preserve">
+    <value>잘못된 PIN이 입력되었습니다. 다시 시도해 주세요.</value>
+  </data>
+  <data name="SignIn_Message" xml:space="preserve">
+    <value>아래 상자에 PIN을 입력하여
+로그인 절차를 완료하세요.</value>
+  </data>
+  <data name="SignIn_Title" xml:space="preserve">
+    <value>트위터에 로그인</value>
+  </data>
+  <data name="Status_Away" xml:space="preserve">
+    <value>{0} 자리비움</value>
+  </data>
+  <data name="Status_Offline" xml:space="preserve">
+    <value>{0} 오프라인</value>
+  </data>
+  <data name="Status_Online" xml:space="preserve">
+    <value>{0} 온라인</value>
+  </data>
+  <data name="Stat_AvgOnline" xml:space="preserve">
+    <value>평균 온라인</value>
+  </data>
+  <data name="Stat_Away" xml:space="preserve">
+    <value>자리비움</value>
+  </data>
+  <data name="Stat_Button_Export" xml:space="preserve">
+    <value>내보내기</value>
+  </data>
+  <data name="Stat_Button_Reset" xml:space="preserve">
+    <value>초기화</value>
+  </data>
+  <data name="Stat_DataFrom" xml:space="preserve">
+    <value>데이터 기록 시작</value>
+  </data>
+  <data name="Stat_DataTo" xml:space="preserve">
+    <value>최근 데이터</value>
+  </data>
+  <data name="Stat_Date" xml:space="preserve">
+    <value>일시</value>
+  </data>
+  <data name="Stat_Export_Exception" xml:space="preserve">
+    <value>내보내지 못했습니다: {0}</value>
+  </data>
+  <data name="Stat_Export_Filter" xml:space="preserve">
+    <value>쉼표로 구분된 값|*.csv|JSON|*.json</value>
+  </data>
+  <data name="Stat_Export_InvalidType" xml:space="preserve">
+    <value>파일 형식이 잘못되어 내보낼 수 없습니다.</value>
+  </data>
+  <data name="Stat_Export_Title" xml:space="preserve">
+    <value>통계 데이터 내보내기</value>
+  </data>
+  <data name="Stat_MaxOnline" xml:space="preserve">
+    <value>최대 온라인</value>
+  </data>
+  <data name="Stat_MinOnline" xml:space="preserve">
+    <value>최소 온라인</value>
+  </data>
+  <data name="Stat_NumOfData" xml:space="preserve">
+    <value>데이터 수</value>
+  </data>
+  <data name="Stat_NumOfDataFormat" xml:space="preserve">
+    <value>데이터 수: {0}</value>
+  </data>
+  <data name="Stat_Offline" xml:space="preserve">
+    <value>오프라인</value>
+  </data>
+  <data name="Stat_Online" xml:space="preserve">
+    <value>온라인</value>
+  </data>
+  <data name="Stat_Reset_Message" xml:space="preserve">
+    <value>정말로 통계 데이터를 초기화 하시겠습니까?</value>
+  </data>
+  <data name="Stat_Reset_Title" xml:space="preserve">
+    <value>통계 데이터 초기화</value>
+  </data>
+  <data name="Stat_Tab_Graph" xml:space="preserve">
+    <value>그래프</value>
+  </data>
+  <data name="Stat_Tab_Table" xml:space="preserve">
+    <value>표</value>
+  </data>
+  <data name="Stat_Title" xml:space="preserve">
+    <value>통계</value>
+  </data>
+  <data name="Title_Error" xml:space="preserve">
+    <value>오류</value>
+  </data>
+</root>

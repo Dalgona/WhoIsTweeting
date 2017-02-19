@@ -21,7 +21,7 @@
             </StackPanel>
             <TextBox x:Name="content" Text="{Binding Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="{Binding MaxChars, Mode=OneWay}" BorderThickness="0" Padding="3" Height="80" TabIndex="0" AcceptsReturn="True" TextWrapping="Wrap"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                <Button Content="{StaticResource Button_Send}" Padding="15,3" Click="OnOKClicked" TabIndex="1">
+                <Button Content="{x:Static local:Strings.Button_Send}" Padding="15,3" Click="OnOKClicked" TabIndex="1">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Style.Triggers>
@@ -32,7 +32,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button Content="{StaticResource Button_Cancel}" Margin="5,0,0,0" Padding="15,3" Click="OnCancelClicked" TabIndex="2"/>
+                <Button Content="{x:Static local:Strings.Button_Cancel}" Margin="5,0,0,0" Padding="15,3" Click="OnCancelClicked" TabIndex="2"/>
             </StackPanel>
         </StackPanel>
     </Border>

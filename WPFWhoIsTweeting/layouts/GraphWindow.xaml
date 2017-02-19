@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
-        Title="{StaticResource Statistics_Title}" Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded" Icon="../wit.ico" WindowStartupLocation="CenterOwner">
+        Title="{x:Static local:Strings.Stat_Title}" Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded" Icon="../wit.ico" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <Style x:Key="InfoKeyLabel" TargetType="Label">
             <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>
@@ -18,7 +18,7 @@
     </Window.Resources>
     <TabControl Grid.Row="1" BorderThickness="0,1,0,0" Padding="0">
         <TabControl.Items>
-            <TabItem Header="{StaticResource Statistics_Tab_Graph}">
+            <TabItem Header="{x:Static local:Strings.Stat_Tab_Graph}">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -78,9 +78,9 @@
                                                 <RowDefinition/>
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
-                                            <Label Style="{StaticResource PeekKey}" Content="{StaticResource Statistics_Online}" ContentStringFormat="{}{0}:"/>
-                                            <Label Style="{StaticResource PeekKey}" Content="{StaticResource Statistics_Away}" ContentStringFormat="{}{0}:" Grid.Row="1"/>
-                                            <Label Style="{StaticResource PeekKey}" Content="{StaticResource Statistics_Offline}" ContentStringFormat="{}{0}:" Grid.Row="2"/>
+                                            <Label Style="{StaticResource PeekKey}" Content="{x:Static local:Strings.Stat_Online}" ContentStringFormat="{}{0}:"/>
+                                            <Label Style="{StaticResource PeekKey}" Content="{x:Static local:Strings.Stat_Away}" ContentStringFormat="{}{0}:" Grid.Row="1"/>
+                                            <Label Style="{StaticResource PeekKey}" Content="{x:Static local:Strings.Stat_Offline}" ContentStringFormat="{}{0}:" Grid.Row="2"/>
                                             <Label Style="{StaticResource PeekValue}" Content="{Binding Value[0], FallbackValue=0}" Grid.Column="1"/>
                                             <Label Style="{StaticResource PeekValue}" Content="{Binding Value[1], FallbackValue=0}" Grid.Column="1" Grid.Row="1"/>
                                             <Label Style="{StaticResource PeekValue}" Content="{Binding Value[2], FallbackValue=0}" Grid.Column="1" Grid.Row="2"/>
@@ -93,36 +93,36 @@
                     <StackPanel Grid.Row="1">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <StackPanel Margin="0,0,20,0">
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_DataFrom}"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{x:Static local:Strings.Stat_DataFrom}"/>
                                 <Label Grid.Row="1" Style="{StaticResource InfoValueLabel}" Content="{Binding From, FallbackValue=0000-00-00 00:00}"/>
                             </StackPanel>
                             <StackPanel>
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_DataTo}"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{x:Static local:Strings.Stat_DataTo}"/>
                                 <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource InfoValueLabel}" Content="{Binding To, FallbackValue=0000-00-00 00:00}"/>
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <StackPanel Margin="0,0,20,0">
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_NumOfData}"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{x:Static local:Strings.Stat_NumOfData}"/>
                                 <Label Style="{StaticResource InfoValueLabel}" Content="{Binding DataCount, FallbackValue=0}"/>
                             </StackPanel>
                             <StackPanel Margin="0,0,20,0">
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_MinOnline}"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{x:Static local:Strings.Stat_MinOnline}"/>
                                 <Label Style="{StaticResource InfoValueLabel}" Content="{Binding MinOnline, FallbackValue=0}"/>
                             </StackPanel>
                             <StackPanel Margin="0,0,20,0">
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_MaxOnline}"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{x:Static local:Strings.Stat_MaxOnline}"/>
                                 <Label Style="{StaticResource InfoValueLabel}" Content="{Binding MaxOnline, FallbackValue=0}"/>
                             </StackPanel>
                             <StackPanel>
-                                <Label Style="{StaticResource InfoKeyLabel}" Content="{StaticResource Statistics_AvgOnline}"/>
+                                <Label Style="{StaticResource InfoKeyLabel}" Content="{x:Static local:Strings.Stat_AvgOnline}"/>
                                 <Label Style="{StaticResource InfoValueLabel}" Content="{Binding AvgOnline, FallbackValue=0}" ContentStringFormat="{}{0:F2}"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="{StaticResource Statistics_Tab_Table}">
+            <TabItem Header="{x:Static local:Strings.Stat_Tab_Table}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
@@ -133,15 +133,15 @@
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <Label Content="{Binding DataCount, FallbackValue=0}" ContentStringFormat="{StaticResource Statistics_NumOfDataFormat}" VerticalAlignment="Center"/>
+                        <Label Content="{Binding DataCount, FallbackValue=0}" ContentStringFormat="{x:Static local:Strings.Stat_NumOfDataFormat}" VerticalAlignment="Center"/>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                             <StackPanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Padding" Value="15,3"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <Button Content="{StaticResource Statistics_Button_Export}" Margin="5" Click="OnExportClick"/>
-                            <Button Content="{StaticResource Statistics_Button_Reset}" Margin="5" Click="OnResetClick"/>
+                            <Button Content="{x:Static local:Strings.Stat_Button_Export}" Margin="5" Click="OnExportClick"/>
+                            <Button Content="{x:Static local:Strings.Stat_Button_Reset}" Margin="5" Click="OnResetClick"/>
                         </StackPanel>
                     </Grid>
                     <ListView Grid.Row="1" x:Name="list1" BorderThickness="0" Margin="-2,0">
@@ -149,22 +149,22 @@
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Key}">
                                     <GridViewColumn.Header>
-                                        <Label Content="{StaticResource Statistics_Date}"/>
+                                        <Label Content="{x:Static local:Strings.Stat_Date}"/>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn DisplayMemberBinding="{Binding Value[0]}">
                                     <GridViewColumn.Header>
-                                        <Label Content="{StaticResource Statistics_Online}"/>
+                                        <Label Content="{x:Static local:Strings.Stat_Online}"/>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn DisplayMemberBinding="{Binding Value[1]}">
                                     <GridViewColumn.Header>
-                                        <Label Content="{StaticResource Statistics_Away}"/>
+                                        <Label Content="{x:Static local:Strings.Stat_Away}"/>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
                                 <GridViewColumn DisplayMemberBinding="{Binding Value[2]}">
                                     <GridViewColumn.Header>
-                                        <Label Content="{StaticResource Statistics_Offline}"/>
+                                        <Label Content="{x:Static local:Strings.Stat_Offline}"/>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
                             </GridView>

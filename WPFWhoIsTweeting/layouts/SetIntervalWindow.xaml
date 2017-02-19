@@ -6,20 +6,20 @@
         xmlns:local="clr-namespace:WhoIsTweeting"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance {x:Type local:IntervalViewModel}}"
-        Title="{StaticResource Interval_Title}" Height="246" Width="340" ResizeMode="NoResize" SizeToContent="Height" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" Icon="../wit.ico">
+        Title="{x:Static local:Strings.Interval_Title}" Height="246" Width="340" ResizeMode="NoResize" SizeToContent="Height" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" Icon="../wit.ico">
     <StackPanel Margin="5">
         <Label>
             <Label.Content>
                 <TextBlock>
                     <InlineUIContainer>
-                		<TextBlock Text="{StaticResource Interval_Message}"/>
+                		<TextBlock Text="{x:Static local:Strings.Interval_Message}"/>
                 	</InlineUIContainer>
                 </TextBlock>
             </Label.Content>
         </Label>
         <StackPanel HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Label Content="{Binding Interval}" ContentStringFormat="{StaticResource Interval_SecondFormat}" FontSize="16"/>
+                <Label Content="{Binding Interval}" ContentStringFormat="{x:Static local:Strings.Interval_SecondFormat}" FontSize="16"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel.Resources>
@@ -32,7 +32,7 @@
                 <Button Content="&#xe0e5;" BorderThickness="1,1,0,1" Click="OnDownClicked"/>
                 <Button Content="&#xe0e4;" Click="OnUpClicked"/>
             </StackPanel>
-            <Label HorizontalAlignment="Center" Content="{Binding MaxFollowings}" ContentStringFormat="{StaticResource Interval_MaxFollowingsFormat}"/>
+            <Label HorizontalAlignment="Center" Content="{Binding MaxFollowings}" ContentStringFormat="{x:Static local:Strings.Interval_MaxFollowingsFormat}"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel.Resources>
@@ -41,8 +41,8 @@
                     <Setter Property="Margin" Value="5"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Content="{StaticResource Button_OK}" Click="OnOKClicked"/>
-            <Button Content="{StaticResource Button_Cancel}" Click="OnCancelClicked"/>
+            <Button Content="{x:Static local:Strings.Button_OK}" Click="OnOKClicked"/>
+            <Button Content="{x:Static local:Strings.Button_Cancel}" Click="OnCancelClicked"/>
         </StackPanel>
     </StackPanel>
 </Window>

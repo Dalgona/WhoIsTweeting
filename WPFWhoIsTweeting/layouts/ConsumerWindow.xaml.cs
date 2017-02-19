@@ -31,9 +31,7 @@ namespace WhoIsTweeting
             if (string.IsNullOrEmpty(viewModel.ConsumerKey)
                 || string.IsNullOrEmpty(viewModel.ConsumerSecret))
             {
-                MessageBox.Show(Application.Current.FindResource("Consumer_Empty_Error").ToString(),
-                    Application.Current.FindResource("Consumer_Title").ToString(),
-                    MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show(Strings.Consumer_Empty_Error, Strings.Consumer_Title, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
             DialogResult = true;
