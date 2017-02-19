@@ -66,7 +66,7 @@ namespace WhoIsTweeting
                     System.Diagnostics.Process.Start(url);
                     win.Owner = this;
                     win.ShowDialog();
-                    return mdl.PIN;
+                    return mdl.Pin;
                 }, (ex)=>
                 {
                     MessageBox.Show(Application.Current.FindResource("SignIn_Error").ToString(),
@@ -176,8 +176,8 @@ namespace WhoIsTweeting
 
                 WindowState = WindowState.Normal;
 
-                POINT mousePosition;
-                GetCursorPos(out mousePosition);
+                NativeMethods.Point mousePosition;
+                NativeMethods.GetCursorPos(out mousePosition);
 
                 Left = mousePosition.X - targetHorizontal;
                 Top = mousePosition.Y - targetVertical;
@@ -205,30 +205,33 @@ namespace WhoIsTweeting
         {
             int wParam = int.Parse((sender as Grid).Name.Split('_')[1]);
             HwndSource hwndSource = PresentationSource.FromVisual((Visual)sender) as HwndSource;
-            SendMessage(hwndSource.Handle, 0x112, (IntPtr)wParam, IntPtr.Zero);
-        }
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetCursorPos(out POINT lpPoint);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            public int X, Y;
-            public POINT(int x, int y)
-            {
-                X = x;
-                Y = y;
-            }
+            NativeMethods.SendMessage(hwndSource.Handle, 0x112, (IntPtr)wParam, IntPtr.Zero);
         }
 
         #endregion
 
         private void OnTryAgainClicked(object sender, RoutedEventArgs e)
             => viewModel.TryResume();
+    }
+
+    internal static class NativeMethods
+    {
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool GetCursorPos(out Point lpPoint);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        internal static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Point
+        {
+            public int X, Y;
+            public Point(int x, int y)
+            {
+                X = x;
+                Y = y;
+            }
+        }
     }
 }

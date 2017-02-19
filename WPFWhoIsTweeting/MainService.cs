@@ -20,11 +20,11 @@ namespace WhoIsTweeting
         Ready,
         Running,
         Updating,
-        APIError = -1,
+        ApiError = -1,
         NetError = -2
     };
 
-    public class MainService : INotifyPropertyChanged
+    public class MainService : INotifyPropertyChanged, IDisposable
     {
         #region Publicly Exposed Items
 
@@ -81,23 +81,21 @@ namespace WhoIsTweeting
                     { "screen_name", screenName },
                     { "text", content }
                 });
-            Task errTask = postTask.ContinueWith(task => { onError(task.Exception); },
-                TaskContinuationOptions.OnlyOnFaulted);
+            postTask.ContinueWith(task => { onError(task.Exception); }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
         public void PostTweet(string content, Action<Exception> onError)
         {
             Task postTask = api.Post("/1.1/statuses/update.json", null, new NameValueCollection
                 { { "status", content } });
-            Task errTask = postTask.ContinueWith(task => { onError(task.Exception); },
-                TaskContinuationOptions.OnlyOnFaulted);
+            postTask.ContinueWith(task => { onError(task.Exception); }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
         public void SignIn(Func<string, string> callback, Action<Exception> onError)
         {
             api.Token = api.TokenSecret = "";
             Task requestTask = api.RequestToken(url => callback(url));
-            Task onSuccess = requestTask.ContinueWith(async (_) =>
+            requestTask.ContinueWith(async (_) =>
             {
                 if (await ValidateUser())
                 {
@@ -108,7 +106,7 @@ namespace WhoIsTweeting
                     Run();
                 }
             }, TaskContinuationOptions.NotOnFaulted);
-            Task onFailure = requestTask.ContinueWith((task) =>
+            requestTask.ContinueWith((task) =>
             {
                 onError(task.Exception);
             }, TaskContinuationOptions.OnlyOnFaulted);
@@ -168,7 +166,8 @@ namespace WhoIsTweeting
             api.OAuthCallback = "oob";
             UpdateInterval = appSettings.UpdateInterval;
 
-            if (api.ConsumerKey == "" || api.ConsumerSecret == "")
+            if (string.IsNullOrEmpty(api.ConsumerKey)
+                || string.IsNullOrEmpty(api.ConsumerSecret))
             {
                 State = ServiceState.NeedConsumerKey;
                 return;
@@ -197,7 +196,7 @@ namespace WhoIsTweeting
             catch (APIException e)
             {
                 Log("MainService::ValidateUser", $"Caught APIException: {e.Message}\n{e.StackTrace}");
-                State = ServiceState.APIError;
+                State = ServiceState.ApiError;
                 OnErrorOccurred("API Error", e.Message);
                 return false;
             }
@@ -278,7 +277,7 @@ namespace WhoIsTweeting
             {
                 Log("MainService::UpdateUserList", $"Caught APIException: {e.Message}\n{e.StackTrace}");
                 listUpdateWorker.CancelAsync();
-                State = ServiceState.APIError;
+                State = ServiceState.ApiError;
                 OnErrorOccurred("API Error", e.Message);
             }
             catch (System.Net.Http.HttpRequestException e)
@@ -340,5 +339,27 @@ namespace WhoIsTweeting
                 Message = message;
             }
         }
+
+        #region IDisposable Support
+        private bool disposedValue = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    listUpdateWorker.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

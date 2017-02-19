@@ -28,7 +28,8 @@ namespace WhoIsTweeting
 
         private void OnOKClicked(object sender, RoutedEventArgs e)
         {
-            if (viewModel.ConsumerKey == "" || viewModel.ConsumerSecret == "")
+            if (string.IsNullOrEmpty(viewModel.ConsumerKey)
+                || string.IsNullOrEmpty(viewModel.ConsumerSecret))
             {
                 MessageBox.Show(Application.Current.FindResource("Consumer_Empty_Error").ToString(),
                     Application.Current.FindResource("Consumer_Title").ToString(),

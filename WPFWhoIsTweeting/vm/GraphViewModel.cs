@@ -6,7 +6,7 @@ namespace WhoIsTweeting
 {
     class GraphViewModel : INotifyPropertyChanged
     {
-        private static readonly string dateformat = "yyyy-MM-dd HH:mm";
+        private const string dateformat = "yyyy-MM-dd HH:mm";
         private MainService service = (Application.Current as App).Service;
 
         public GraphViewModel()

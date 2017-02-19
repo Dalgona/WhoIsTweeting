@@ -15,7 +15,7 @@ namespace WhoIsTweeting
 
         private void OnOKClicked(object sender, RoutedEventArgs e)
         {
-            if (viewModel.PIN == "") return;
+            if (string.IsNullOrEmpty(viewModel.Pin)) return;
             DialogResult = true;
             Close();
         }

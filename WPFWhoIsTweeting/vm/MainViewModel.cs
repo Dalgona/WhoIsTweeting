@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace WhoIsTweeting
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
         private Properties.Settings appSettings = Properties.Settings.Default;
 
@@ -24,8 +24,6 @@ namespace WhoIsTweeting
 
         private UserListItem selectedItem;
         private BackgroundWorker autoRetryWorker = new BackgroundWorker();
-
-        public object userListLock = new object();
 
         public MainViewModel()
         {
@@ -124,7 +122,7 @@ namespace WhoIsTweeting
             get
             {
                 return service.State >= ServiceState.LoginRequired
-                    || service.State == ServiceState.APIError;
+                    || service.State == ServiceState.ApiError;
             }
         }
 
@@ -203,7 +201,7 @@ namespace WhoIsTweeting
             {
                 switch (service.State)
                 {
-                    case ServiceState.APIError:
+                    case ServiceState.ApiError:
                         return Application.Current.FindResource("Critical_APIError").ToString();
                     case ServiceState.NetError:
                         return Application.Current.FindResource("Critical_NetError").ToString();
@@ -219,6 +217,28 @@ namespace WhoIsTweeting
 
         public void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+        #region IDisposable Support
+        private bool disposedValue = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    autoRetryWorker.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 
     public class LastTweetConverter : IValueConverter

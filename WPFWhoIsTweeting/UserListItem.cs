@@ -9,7 +9,7 @@ namespace WhoIsTweeting
     {
         public static DateTime lastUpdated;
 
-        public string ID { get; private set; }
+        public string Id { get; private set; }
         public string Name { get; private set; }
         public string ScreenName { get; private set; }
         public DateTime LastTweet { get; private set; }
@@ -31,9 +31,9 @@ namespace WhoIsTweeting
             }
         }
 
-        public UserListItem(string id_str, string name, string screenName, Tweet lastTweet)
+        public UserListItem(string idStr, string name, string screenName, Tweet lastTweet)
         {
-            ID = id_str;
+            Id = idStr;
             Name = name;
             ScreenName = screenName;
             if (lastTweet == null) LastTweet = DateTime.FromBinary(0);

@@ -35,7 +35,7 @@ namespace WhoIsTweeting
             }
         }
 
-        public string PIN
+        public string Pin
         {
             get
             {
@@ -44,7 +44,7 @@ namespace WhoIsTweeting
             set
             {
                 pin = value;
-                OnPropertyChanged("PIN");
+                OnPropertyChanged("Pin");
             }
         }
 
