@@ -121,7 +121,7 @@
                 <Button DockPanel.Dock="right" Content="1" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MaximizeWindowCommand}" Style="{StaticResource MaximizeButtonStyle}"/>
                 <Button DockPanel.Dock="right" Content="0" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
             </DockPanel>
-            <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top" MouseDoubleClick="Menu_MouseDoubleClick">
+            <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top">
                 <MenuItem Padding="6,2">
                     <MenuItem.Header>
                         <TextBlock Text="{Binding UserMenuText, Mode=OneWay}"/>
@@ -138,6 +138,7 @@
                 <MenuItem Header="{StaticResource Menu_View}" Padding="6,2">
                     <MenuItem Header="{StaticResource Menu_View_Topmost}" IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
                     <MenuItem Header="{StaticResource Menu_View_Transparency}" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
+                    <MenuItem Header="{StaticResource Menu_View_HideBorder}" IsChecked="{Binding HideBorder, Mode=TwoWay}" IsCheckable="True"/>
                     <Separator/>
                     <MenuItem Header="{StaticResource Menu_View_ShowAway}" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
                     <MenuItem Header="{StaticResource Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>

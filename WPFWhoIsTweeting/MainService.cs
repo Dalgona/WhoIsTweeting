@@ -317,8 +317,10 @@ namespace WhoIsTweeting
 
         private void Log(string from, string message)
         {
-            //string now = DateTime.Now.ToString("hh:mm:ss.ffff");
-            //System.Diagnostics.Debug.WriteLine($"[{now}][{from}] {message}");
+#if DEBUG
+            string now = DateTime.Now.ToString("hh:mm:ss.ffff");
+            System.Diagnostics.Debug.WriteLine($"[{now}][{from}] {message}");
+#endif
         }
 
         public void OnPropertyChanged(string name)

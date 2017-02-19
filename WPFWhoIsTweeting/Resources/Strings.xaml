@@ -4,7 +4,7 @@
                     xmlns:s="clr-namespace:System;assembly=mscorlib">
     <s:String x:Key="Menu_Main_NeedConsumer">Consumer Key Required</s:String>
     <s:String x:Key="Menu_Main_NeedSignIn">Please Sign in</s:String>
-    <s:String x:Key="Menu_Main_SignIn">Sign _in with Twitter...</s:String>
+    <s:String x:Key="Menu_Main_SignIn">Sign _in/Switch User...</s:String>
     <s:String x:Key="Menu_Main_Consumer">Set _Consumer Key...</s:String>
     <s:String x:Key="Menu_Main_Interval">Set _Update Interval...</s:String>
     <s:String x:Key="Menu_Main_Statistics">Show _Statistics...</s:String>
@@ -14,6 +14,7 @@
     <s:String x:Key="Menu_View">_View</s:String>
     <s:String x:Key="Menu_View_Topmost">Always on _Top</s:String>
     <s:String x:Key="Menu_View_Transparency">Tr_ansparency</s:String>
+    <s:String x:Key="Menu_View_HideBorder">_Hide Window Border</s:String>
     <s:String x:Key="Menu_View_ShowAway">A_way Users</s:String>
     <s:String x:Key="Menu_View_ShowOffline">_Offline Users</s:String>
 
@@ -85,8 +86,7 @@
     <s:String x:Key="About_ThanksText" xml:space="preserve">I would like to give special thanks to&#13;&#10;Macchiato (@CreStudio_Plus), for this awesome idea.</s:String>
 
     <s:String x:Key="Critical_APIError">Twitter API Error</s:String>
-    <!-- deprecated --><s:String x:Key="Critical_APIError_Description">Please try again after a short time.</s:String>
     <s:String x:Key="Critical_NetError">Network Error</s:String>
-    <!-- deprecated --><s:String x:Key="Critical_NetError_Description">Please check your internet connection and try again.</s:String>
     <s:String x:Key="Critical_AutoRetry_Message">WhoIsTweeting will retry updating in {0} seconds.</s:String>
+    <s:String x:Key="Critical_AutyRetry_Failed">Could not recover from errors after {0} retries. Please retry manually.</s:String>
 </ResourceDictionary>

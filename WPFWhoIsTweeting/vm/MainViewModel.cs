@@ -18,6 +18,10 @@ namespace WhoIsTweeting
         private bool transparency = false;
         private bool hideBorder = false;
 
+        private const int maxRetryCount = 5;
+        private int retryCount = 0;
+        private double retryTimeMultiplier = 1.0;
+
         private UserListItem selectedItem;
         private BackgroundWorker autoRetryWorker = new BackgroundWorker();
 
@@ -38,24 +42,33 @@ namespace WhoIsTweeting
         private void AutoRetryWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
-            for (int i = service.UpdateInterval; i > 0; i--)
+            for (int i = (int)(service.UpdateInterval * retryTimeMultiplier); i > 0; i--)
             {
                 if (worker.CancellationPending)
                 {
                     e.Cancel = true;
-                    break;
+                    return;
                 }
                 ErrorDescription = string.Format(Application.Current.FindResource("Critical_AutoRetry_Message").ToString(), i);
                 OnPropertyChanged("ErrorDescription");
                 Thread.Sleep(1000);
             }
+            retryCount += 1;
+            retryTimeMultiplier *= 1.5;
             service.Resume();
         }
 
         private void Service_ErrorOccurred(object sender, MainService.ErrorOccurredEventArgs e)
         {
             while (autoRetryWorker.IsBusy) Thread.Sleep(50); // spin-wait
-            autoRetryWorker.RunWorkerAsync();
+            if (retryCount >= maxRetryCount)
+            {
+                ErrorDescription = string.Format(Application.Current.FindResource("Critical_AutyRetry_Failed").ToString(), maxRetryCount);
+            }
+            else
+            {
+                autoRetryWorker.RunWorkerAsync();
+            }
         }
 
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -63,7 +76,11 @@ namespace WhoIsTweeting
             MainService svc = sender as MainService;
 
             if (e.PropertyName == "State" && svc.State >= 0)
+            {
                 if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
+                retryCount = 0;
+                retryTimeMultiplier = 1.0;
+            }
 
             OnPropertyChanged("");
         }
@@ -83,6 +100,9 @@ namespace WhoIsTweeting
         public void TryResume()
         {
             if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
+            retryCount = 0;
+            retryTimeMultiplier = 1.0;
+            service.Resume();
         }
 
         public string UserMenuText
@@ -103,7 +123,8 @@ namespace WhoIsTweeting
         {
             get
             {
-                return service.State == ServiceState.LoginRequired;
+                return service.State >= ServiceState.LoginRequired
+                    || service.State == ServiceState.APIError;
             }
         }
 

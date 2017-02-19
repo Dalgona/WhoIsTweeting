@@ -9,8 +9,6 @@ using System.Windows.Media.Effects;
 
 namespace WhoIsTweeting
 {
-    enum ApplicationStatus { Initial, NeedConsumerKey, LoginRequired, Ready, Running, Updating };
-
     public partial class MainWindow : Window
     {
         private static BlurEffect blurry = null;
@@ -226,11 +224,6 @@ namespace WhoIsTweeting
                 X = x;
                 Y = y;
             }
-        }
-
-        private void Menu_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            viewModel.HideBorder = !viewModel.HideBorder;
         }
 
         #endregion
