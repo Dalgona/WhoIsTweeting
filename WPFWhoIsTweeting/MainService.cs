@@ -219,6 +219,7 @@ namespace WhoIsTweeting
         {
             if (State >= ServiceState.Running) return;
             State = ServiceState.Running;
+            while (listUpdateWorker.IsBusy) Thread.Sleep(50); // spin-wait
             listUpdateWorker.RunWorkerAsync();
         }
 
@@ -299,17 +300,23 @@ namespace WhoIsTweeting
         {
             Log("MainService::listUpdateWorker_DoWork", "called");
             BackgroundWorker worker = sender as BackgroundWorker;
+            int timer = 0;
             while (true)
             {
-                Log("MainService::listUpdateWorker_DoWork", "Executing interval job");
                 if (worker.CancellationPending)
                 {
                     Log("MainService::listUpdateWorker_DoWork", "Worker cancellation was requested");
                     e.Cancel = true;
                     break;
                 }
-                Task.Factory.StartNew(async () => await UpdateUserList());
-                Thread.Sleep(TimeSpan.FromSeconds(UpdateInterval));
+                if (timer % UpdateInterval == 0)
+                {
+                    Log("MainService::listUpdateWorker_DoWork", "Executing interval job");
+                    timer = 0;
+                    Task.Factory.StartNew(async () => await UpdateUserList());
+                }
+                Thread.Sleep(TimeSpan.FromSeconds(0.999));
+                timer++;
             }
         }
 

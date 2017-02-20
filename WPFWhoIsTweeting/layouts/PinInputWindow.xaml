@@ -10,7 +10,7 @@
         <Label HorizontalAlignment="Center">
             <TextBlock TextAlignment="Center" Text="{x:Static local:Strings.SignIn_Message}"/>
         </Label>
-        <TextBox Text="{Binding PIN, Mode=TwoWay}" Margin="10,5" Padding="0,2" TextAlignment="Center" FontSize="16"/>
+        <TextBox Text="{Binding Pin, Mode=TwoWay}" Margin="10,5" Padding="0,2" TextAlignment="Center" FontSize="16"/>
         <Button Content="{x:Static local:Strings.Button_OK}" HorizontalAlignment="Center" Margin="0,5" Padding="15,3" Click="OnOKClicked"/>
     </StackPanel>
 </Window>
