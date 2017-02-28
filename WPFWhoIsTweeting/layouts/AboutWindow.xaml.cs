@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 
 namespace WhoIsTweeting
@@ -8,6 +9,8 @@ namespace WhoIsTweeting
         public AboutWindow()
         {
             InitializeComponent();
+            var appVer = Assembly.GetEntryAssembly().GetName().Version;
+            lblAppVersion.Content = $"WhoIsTweeting {appVer.Major}.{appVer.Minor}.{appVer.Build}";
         }
 
         private void OnCloseButtonClicked(object sender, RoutedEventArgs e)
