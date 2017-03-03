@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
@@ -36,6 +37,8 @@ namespace WhoIsTweeting
             showAway = appSettings.ShowAway;
             showOffline = appSettings.ShowOffline;
         }
+
+        #region Event Handlers
 
         private void AutoRetryWorker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -83,6 +86,8 @@ namespace WhoIsTweeting
             OnPropertyChanged("");
         }
 
+        #endregion
+
         public void SetConsumerKey(string consumerKey, string consumerSecret)
             => service.SetConsumerKey(consumerKey, consumerSecret);
 
@@ -126,14 +131,22 @@ namespace WhoIsTweeting
             }
         }
 
-        public ObservableCollection<UserListItem> UserList { get { return service.UserList; } }
-
-        public UserListItem SelectedItem
+        public IEnumerable<UserListItem> UserList
         {
             get
             {
-                return selectedItem;
+                IEnumerable<UserListItem> list = service.UserList;
+                if (!showAway)
+                    list = list.Where(e => e.Status != UserStatus.Away);
+                if (!showOffline)
+                    list = list.Where(e => e.Status != UserStatus.Offline);
+                return list;
             }
+        }
+
+        public UserListItem SelectedItem
+        {
+            get { return selectedItem; }
             set
             {
                 selectedItem = value;
@@ -148,36 +161,27 @@ namespace WhoIsTweeting
 
         public bool ShowAway
         {
-            get
-            {
-                return showAway;
-            }
+            get { return showAway; }
             set
             {
                 Properties.Settings.Default.ShowAway = showAway = value;
-                OnPropertyChanged("ShowAway");
+                OnPropertyChanged("UserList");
             }
         }
 
         public bool ShowOffline
         {
-            get
-            {
-                return showOffline;
-            }
+            get { return showOffline; }
             set
             {
                 Properties.Settings.Default.ShowOffline = showOffline = value;
-                OnPropertyChanged("ShowOffline");
+                OnPropertyChanged("UserList");
             }
         }
 
         public bool Transparency
         {
-            get
-            {
-                return transparency;
-            }
+            get { return transparency; }
             set
             {
                 transparency = value;
