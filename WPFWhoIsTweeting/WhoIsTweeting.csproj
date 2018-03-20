@@ -200,10 +200,6 @@
       <Project>{e611194b-22fb-44fd-863d-7bb756069c5b}</Project>
       <Name>libpb</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PicoBird\newtonsoft.json\Src\Newtonsoft.Json\Newtonsoft.Json.csproj">
-      <Project>{eeea67f9-9089-481d-a4dc-0966dec9fd7d}</Project>
-      <Name>Newtonsoft.Json</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="picobird.png" />
