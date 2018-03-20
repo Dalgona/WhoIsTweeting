@@ -309,7 +309,7 @@ MIT 라이센스가 적용됩니다. 첨부된 LICENSE 파일에
     <value>내보내지 못했습니다: {0}</value>
   </data>
   <data name="Stat_Export_Filter" xml:space="preserve">
-    <value>쉼표로 구분된 값|*.csv|JSON|*.json</value>
+    <value>쉼표로 구분된 값|*.csv</value>
   </data>
   <data name="Stat_Export_InvalidType" xml:space="preserve">
     <value>파일 형식이 잘못되어 내보낼 수 없습니다.</value>

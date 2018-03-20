@@ -310,7 +310,7 @@ to complete the sign-in process.</value>
     <value>Could not export: {0}</value>
   </data>
   <data name="Stat_Export_Filter" xml:space="preserve">
-    <value>Comma-separated Values|*.csv|JSON|*.json</value>
+    <value>Comma-separated Values|*.csv</value>
   </data>
   <data name="Stat_Export_InvalidType" xml:space="preserve">
     <value>Cannot export: Invalid file format</value>

@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Text;
-using Newtonsoft.Json;
 using System.Globalization;
 
 namespace WhoIsTweeting
@@ -115,9 +114,11 @@ namespace WhoIsTweeting
 
         private void OnExportClick(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Title = Strings.Stat_Export_Title;
-            dlg.Filter = Strings.Stat_Export_Filter;
+            SaveFileDialog dlg = new SaveFileDialog
+            {
+                Title = Strings.Stat_Export_Title,
+                Filter = Strings.Stat_Export_Filter
+            };
             dlg.FileOk += OnExportDlgOK;
             dlg.ShowDialog();
         }
@@ -126,7 +127,7 @@ namespace WhoIsTweeting
         {
             SaveFileDialog dlg = sender as SaveFileDialog;
             string extension = dlg.FileName.Split('.').Last().ToLower(CultureInfo.InvariantCulture);
-            if (extension != "csv" && extension != "json")
+            if (extension != "csv")
                 MessageBox.Show(
                     Strings.Stat_Export_InvalidType, Strings.Title_Error,
                     MessageBoxButton.OK, MessageBoxImage.Error);
@@ -136,23 +137,13 @@ namespace WhoIsTweeting
                 using (BufferedStream bfs = new BufferedStream(fs, 1024))
                 {
                     byte[] utfstr;
-                    switch (extension)
+
+                    foreach (var x in service.Graph)
                     {
-                        case "csv":
-                            foreach (var x in service.Graph)
-                            {
-                                var arr = x.Value;
-                                string date = x.Key.ToString("yyyy-MM-dd HH:mm:ss");
-                                utfstr = Encoding.UTF8.GetBytes($"\"{date}\",{arr[0]},{arr[1]},{arr[2]}{Environment.NewLine}");
-                                fs.Write(utfstr, 0, utfstr.Length);
-                            }
-                            break;
-                        case "json":
-                            string jsondat = JsonConvert.SerializeObject(
-                                from x in service.Graph orderby x.Key ascending select x, Formatting.Indented);
-                            utfstr = Encoding.UTF8.GetBytes(jsondat);
-                            fs.Write(utfstr, 0, utfstr.Length);
-                            break;
+                        var arr = x.Value;
+                        string date = x.Key.ToString("yyyy-MM-dd HH:mm:ss");
+                        utfstr = Encoding.UTF8.GetBytes($"\"{date}\",{arr[0]},{arr[1]},{arr[2]}{Environment.NewLine}");
+                        fs.Write(utfstr, 0, utfstr.Length);
                     }
                 }
             }
