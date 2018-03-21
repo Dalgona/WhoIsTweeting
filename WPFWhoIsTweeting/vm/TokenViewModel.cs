@@ -7,14 +7,9 @@ namespace WhoIsTweeting
         private string consumerKey, consumerSecret;
         private string pin;
 
-        public TokenViewModel() { }
-
         public string ConsumerKey
         {
-            get
-            {
-                return consumerKey;
-            }
+            get => consumerKey;
             set
             {
                 consumerKey = value;
@@ -24,10 +19,7 @@ namespace WhoIsTweeting
 
         public string ConsumerSecret
         {
-            get
-            {
-                return consumerSecret;
-            }
+            get => consumerSecret;
             set
             {
                 consumerSecret = value;
@@ -37,10 +29,7 @@ namespace WhoIsTweeting
 
         public string Pin
         {
-            get
-            {
-                return pin;
-            }
+            get => pin;
             set
             {
                 pin = value;

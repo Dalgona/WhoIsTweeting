@@ -7,7 +7,7 @@ namespace WhoIsTweeting
     {
         public int Interval
         {
-            get { return interval; }
+            get => interval;
             set
             {
                 if (value <= 10) interval = 10;
@@ -17,7 +17,7 @@ namespace WhoIsTweeting
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MaxFollowings"));
             }
         }
-        public int MaxFollowings { get { return Interval * 20; } }
+        public int MaxFollowings => Interval * 20;
 
         private MainService service;
         private int interval;
@@ -30,7 +30,6 @@ namespace WhoIsTweeting
             Interval = service.UpdateInterval;
         }
 
-        public void CommitInterval()
-            => service.UpdateInterval = interval;
+        public void CommitInterval() => service.UpdateInterval = interval;
     }
 }

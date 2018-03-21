@@ -8,7 +8,6 @@ using PicoBird;
 using PicoBird.Objects;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-using System.Windows.Data;
 using System.Windows.Threading;
 
 namespace WhoIsTweeting
@@ -33,7 +32,7 @@ namespace WhoIsTweeting
 
         public ServiceState State
         {
-            get { return state; }
+            get => state;
             private set
             {
                 Log("MainService::State.set", $"{state} -> {value}");
@@ -55,7 +54,7 @@ namespace WhoIsTweeting
 
         public int UpdateInterval
         {
-            get { return updateInterval; }
+            get => updateInterval;
             set
             {
                 appSettings.UpdateInterval = updateInterval = value;

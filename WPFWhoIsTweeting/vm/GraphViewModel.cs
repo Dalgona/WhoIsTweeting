@@ -38,12 +38,12 @@ namespace WhoIsTweeting
             }
         }
 
-        public int DataCount { get { return service.GraphCount; } }
-        public int FollowingsCount { get { return service.OnlineCount + service.AwayCount + service.OfflineCount; } }
+        public int DataCount => service.GraphCount;
+        public int FollowingsCount => service.OnlineCount + service.AwayCount + service.OfflineCount;
 
-        public int MinOnline { get { return service.MinOnline; } }
-        public int MaxOnline { get { return service.MaxOnline; } }
-        public double AvgOnline { get { return service.SumOnline / (double)service.GraphCount; } }
+        public int MinOnline => service.MinOnline;
+        public int MaxOnline => service.MaxOnline;
+        public double AvgOnline => service.SumOnline / (double)service.GraphCount;
 
         public void ResetStat()
         {

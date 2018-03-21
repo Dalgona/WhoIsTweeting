@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
@@ -34,12 +32,15 @@ namespace WhoIsTweeting
             autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
             autoRetryWorker.WorkerSupportsCancellation = true;
 
-            UserListView = new ListCollectionView(service.UserList);
+            UserListView = new ListCollectionView(service.UserList)
+            {
+                IsLiveFiltering = true,
+                Filter = UserListFilter
+            };
+            
             UserListView.SortDescriptions.Add(new SortDescription("MinutesFromLastTweet", ListSortDirection.Ascending));
             UserListView.GroupDescriptions.Add(new PropertyGroupDescription("Status"));
-            UserListView.IsLiveFiltering = true;
             UserListView.LiveFilteringProperties.Add("Status");
-            UserListView.Filter = UserListFilter;
 
             showAway = appSettings.ShowAway;
             showOffline = appSettings.ShowOffline;
@@ -130,19 +131,13 @@ namespace WhoIsTweeting
         }
 
         public bool CanSignIn
-        {
-            get
-            {
-                return service.State >= ServiceState.SignInRequired
-                    || service.State == ServiceState.ApiError;
-            }
-        }
+            => service.State >= ServiceState.SignInRequired || service.State == ServiceState.ApiError;
 
         public ListCollectionView UserListView { get; private set; }
 
         public UserListItem SelectedItem
         {
-            get { return selectedItem; }
+            get => selectedItem;
             set
             {
                 selectedItem = value;
@@ -150,14 +145,14 @@ namespace WhoIsTweeting
             }
         }
 
-        public int StatOnline { get { return service.OnlineCount; } }
-        public int StatAway { get { return service.AwayCount; } }
-        public int StatOffline { get { return service.OfflineCount; } }
-        public bool StatUpdating { get { return service.State == ServiceState.Updating; } }
+        public int StatOnline => service.OnlineCount;
+        public int StatAway => service.AwayCount;
+        public int StatOffline => service.OfflineCount;
+        public bool StatUpdating => service.State == ServiceState.Updating;
 
         public bool ShowAway
         {
-            get { return showAway; }
+            get => showAway;
             set
             {
                 Properties.Settings.Default.ShowAway = showAway = value;
@@ -167,7 +162,7 @@ namespace WhoIsTweeting
 
         public bool ShowOffline
         {
-            get { return showOffline; }
+            get => showOffline;
             set
             {
                 Properties.Settings.Default.ShowOffline = showOffline = value;
@@ -177,7 +172,7 @@ namespace WhoIsTweeting
 
         public bool Transparency
         {
-            get { return transparency; }
+            get => transparency;
             set
             {
                 transparency = value;
@@ -187,7 +182,7 @@ namespace WhoIsTweeting
 
         public bool HideBorder
         {
-            get { return hideBorder; }
+            get => hideBorder;
             set
             {
                 hideBorder = value;

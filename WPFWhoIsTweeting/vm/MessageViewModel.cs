@@ -34,23 +34,15 @@ namespace WhoIsTweeting
             }
         }
 
-        public string ScreenName { get { return user.ScreenName; } }
+        public string ScreenName => user.ScreenName;
 
         public string ScreenNameColor
-        {
-            get
-            {
-                return user.Status == UserStatus.Online ? "MediumSpringGreen"
-                    : (user.Status == UserStatus.Away ? "LightGray" : "Gray");
-            }
-        }
+            => user.Status == UserStatus.Online ? "MediumSpringGreen"
+                : (user.Status == UserStatus.Away ? "LightGray" : "Gray");
 
         public string Content
         {
-            get
-            {
-                return content;
-            }
+            get => content;
             set
             {
                 content = value;
