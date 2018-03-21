@@ -8,7 +8,6 @@ namespace WhoIsTweeting
     public partial class App : Application
     {
         public MainService Service { get; private set; }
-        public MainViewModel MainViewModel { get; private set; }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -20,7 +19,6 @@ namespace WhoIsTweeting
             }
 
             Service = new MainService();
-            MainViewModel = new MainViewModel();
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)

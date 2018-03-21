@@ -149,8 +149,7 @@ namespace WhoIsTweeting
 
         public MainService()
         {
-            listUpdateWorker = new BackgroundWorker();
-            listUpdateWorker.WorkerSupportsCancellation = true;
+            listUpdateWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
             listUpdateWorker.DoWork += listUpdateWorker_DoWork;
 
             UserList = new ObservableCollection<UserListItem>();
@@ -158,11 +157,13 @@ namespace WhoIsTweeting
             Graph = new ObservableCollection<KeyValuePair<DateTime, int[]>>();
             BindingOperations.EnableCollectionSynchronization(Graph, graphLock);
 
-            api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret);
-            api.HttpTimeout = 10;
-            api.Token = appSettings.Token;
-            api.TokenSecret = appSettings.TokenSecret;
-            api.OAuthCallback = "oob";
+            api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret)
+            {
+                HttpTimeout = 10,
+                Token = appSettings.Token,
+                TokenSecret = appSettings.TokenSecret,
+                OAuthCallback = "oob"
+            };
             UpdateInterval = appSettings.UpdateInterval;
 
             if (string.IsNullOrEmpty(api.ConsumerKey)

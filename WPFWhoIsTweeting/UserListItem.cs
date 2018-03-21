@@ -14,22 +14,11 @@ namespace WhoIsTweeting
         public string ScreenName { get; private set; }
         public DateTime LastTweet { get; private set; }
 
-        public int MinutesFromLastTweet
-        {
-            get
-            {
-                return (int)(lastUpdated - LastTweet).TotalMinutes;
-            }
-        }
+        public int MinutesFromLastTweet => (int)(lastUpdated - LastTweet).TotalMinutes;
 
         public UserStatus Status
-        {
-            get
-            {
-                return MinutesFromLastTweet <= 5 ? UserStatus.Online :
-                    MinutesFromLastTweet <= 15 ? UserStatus.Away : UserStatus.Offline;
-            }
-        }
+            => MinutesFromLastTweet <= 5 ? UserStatus.Online
+                : MinutesFromLastTweet <= 15 ? UserStatus.Away : UserStatus.Offline;
 
         public UserListItem(string idStr, string name, string screenName, Tweet lastTweet)
         {

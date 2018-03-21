@@ -20,13 +20,15 @@ namespace WhoIsTweeting
         {
             InitializeComponent();
 
-            DataContext = viewModel = (Application.Current as App).MainViewModel;
+            DataContext = viewModel = new MainViewModel();
 
             if (blurry == null)
             {
-                blurry = new BlurEffect();
-                blurry.Radius = 10.0;
-                blurry.KernelType = KernelType.Gaussian;
+                blurry = new BlurEffect
+                {
+                    Radius = 10.0,
+                    KernelType = KernelType.Gaussian
+                };
             }
         }
 
@@ -37,8 +39,7 @@ namespace WhoIsTweeting
 
         private void Menu_OnAbout(object sender, RoutedEventArgs e)
         {
-            AboutWindow win = new AboutWindow();
-            win.Owner = this;
+            AboutWindow win = new AboutWindow { Owner = this };
             win.ShowDialog();
         }
 
@@ -74,15 +75,13 @@ namespace WhoIsTweeting
 
         private void Menu_OnStatistics(object sender, RoutedEventArgs e)
         {
-            GraphWindow win = new GraphWindow();
-            win.Owner = this;
+            GraphWindow win = new GraphWindow { Owner = this };
             win.Show();
         }
 
         private void Menu_OnSetInterval(object sender, RoutedEventArgs e)
         {
-            SetIntervalWindow win = new SetIntervalWindow();
-            win.Owner = this;
+            SetIntervalWindow win = new SetIntervalWindow { Owner = this };
             win.ShowDialog();
         }
 
@@ -171,8 +170,7 @@ namespace WhoIsTweeting
 
                 WindowState = WindowState.Normal;
 
-                NativeMethods.Point mousePosition;
-                NativeMethods.GetCursorPos(out mousePosition);
+                NativeMethods.GetCursorPos(out NativeMethods.Point mousePosition);
 
                 Left = mousePosition.X - targetHorizontal;
                 Top = mousePosition.Y - targetVertical;
