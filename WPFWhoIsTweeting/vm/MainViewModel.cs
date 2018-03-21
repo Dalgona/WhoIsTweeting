@@ -34,6 +34,13 @@ namespace WhoIsTweeting
             autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
             autoRetryWorker.WorkerSupportsCancellation = true;
 
+            UserListView = new ListCollectionView(service.UserList);
+            UserListView.SortDescriptions.Add(new SortDescription("MinutesFromLastTweet", ListSortDirection.Ascending));
+            UserListView.GroupDescriptions.Add(new PropertyGroupDescription("Status"));
+            UserListView.IsLiveFiltering = true;
+            UserListView.LiveFilteringProperties.Add("Status");
+            UserListView.Filter = UserListFilter;
+
             showAway = appSettings.ShowAway;
             showOffline = appSettings.ShowOffline;
         }
@@ -131,18 +138,7 @@ namespace WhoIsTweeting
             }
         }
 
-        public IEnumerable<UserListItem> UserList
-        {
-            get
-            {
-                IEnumerable<UserListItem> list = service.UserList;
-                if (!showAway)
-                    list = list.Where(e => e.Status != UserStatus.Away);
-                if (!showOffline)
-                    list = list.Where(e => e.Status != UserStatus.Offline);
-                return list;
-            }
-        }
+        public ListCollectionView UserListView { get; private set; }
 
         public UserListItem SelectedItem
         {
@@ -165,7 +161,7 @@ namespace WhoIsTweeting
             set
             {
                 Properties.Settings.Default.ShowAway = showAway = value;
-                OnPropertyChanged("UserList");
+                UserListView.Refresh();
             }
         }
 
@@ -175,7 +171,7 @@ namespace WhoIsTweeting
             set
             {
                 Properties.Settings.Default.ShowOffline = showOffline = value;
-                OnPropertyChanged("UserList");
+                UserListView.Refresh();
             }
         }
 
@@ -216,6 +212,12 @@ namespace WhoIsTweeting
         }
 
         public string ErrorDescription { get; private set; }
+
+        private bool UserListFilter(object _item)
+        {
+            UserListItem item = _item as UserListItem;
+            return (showAway || item.Status != UserStatus.Away) && (ShowOffline || item.Status != UserStatus.Offline);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

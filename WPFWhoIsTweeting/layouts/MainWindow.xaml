@@ -162,7 +162,7 @@
                 </Label>
                 <Button Content="{x:Static local:Strings.Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
             </StackPanel>
-            <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding UserList}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
+            <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding UserListView}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <ContextMenu.Style>
@@ -191,6 +191,18 @@
                         <MenuItem Header="{x:Static local:Strings.Menu_Context_Profile}" Click="Context_OnProfile"/>
                     </ContextMenu>
                 </ListBox.ContextMenu>
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Name}" Foreground="Gray" FontSize="16" />
+                                    <Label Content="{Binding ItemCount}" Foreground="Gray" FontSize="16" ContentStringFormat="({0})"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

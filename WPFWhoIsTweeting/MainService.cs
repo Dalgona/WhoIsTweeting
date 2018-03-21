@@ -9,6 +9,7 @@ using PicoBird.Objects;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
+using System.Windows.Threading;
 
 namespace WhoIsTweeting
 {
@@ -27,6 +28,8 @@ namespace WhoIsTweeting
     public class MainService : INotifyPropertyChanged, IDisposable
     {
         #region Publicly Exposed Items
+
+        public Dispatcher Dispatcher { get; private set; } = Dispatcher.CurrentDispatcher;
 
         public ServiceState State
         {
@@ -153,9 +156,7 @@ namespace WhoIsTweeting
             listUpdateWorker.DoWork += listUpdateWorker_DoWork;
 
             UserList = new ObservableCollection<UserListItem>();
-            BindingOperations.EnableCollectionSynchronization(UserList, userListLock);
             Graph = new ObservableCollection<KeyValuePair<DateTime, int[]>>();
-            BindingOperations.EnableCollectionSynchronization(Graph, graphLock);
 
             api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret)
             {
@@ -256,21 +257,20 @@ namespace WhoIsTweeting
                 OfflineCount = list.Count(x => x.Status == UserStatus.Offline);
                 OnlineCount = idSet.Count - AwayCount - OfflineCount;
 
-                list.Sort((x, y) => x.MinutesFromLastTweet - y.MinutesFromLastTweet);
-                lock (userListLock)
+                Dispatcher.Invoke(() =>
                 {
                     UserList.Clear();
                     foreach (var x in list) UserList.Add(x);
-                }
+                }, DispatcherPriority.Normal);
 
-                lock (graphLock)
+                Dispatcher.Invoke(() =>
                 {
                     SumOnline += OnlineCount;
                     MinOnline = GraphCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
                     MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
                     Graph.Add(new KeyValuePair<DateTime, int[]>(DateTime.Now, new int[] { OnlineCount, AwayCount, OfflineCount }));
                     GraphCount++;
-                }
+                }, DispatcherPriority.Normal);
 
                 State = ServiceState.Running;
             }
