@@ -10,7 +10,7 @@ namespace Wit.VM
     {
         private Properties.Settings appSettings = Properties.Settings.Default;
 
-        private MainService service = MainService.Instance;
+        public MainService Service { get; } = MainService.Instance;
 
         private bool showAway, showOffline;
         private bool transparency = false;
@@ -25,13 +25,13 @@ namespace Wit.VM
 
         public MainViewModel()
         {
-            service.PropertyChanged += Service_PropertyChanged;
-            service.ErrorOccurred += Service_ErrorOccurred;
+            Service.PropertyChanged += Service_PropertyChanged;
+            Service.ErrorOccurred += Service_ErrorOccurred;
 
             autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
             autoRetryWorker.WorkerSupportsCancellation = true;
 
-            UserListView = new ListCollectionView(service.UserList)
+            UserListView = new ListCollectionView(Service.UserList)
             {
                 IsLiveFiltering = true,
                 Filter = UserListFilter
@@ -50,7 +50,7 @@ namespace Wit.VM
         private void AutoRetryWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
-            for (int i = (int)(service.UpdateInterval * retryTimeMultiplier); i > 0; i--)
+            for (int i = (int)(Service.UpdateInterval * retryTimeMultiplier); i > 0; i--)
             {
                 if (worker.CancellationPending)
                 {
@@ -63,7 +63,7 @@ namespace Wit.VM
             }
             retryCount += 1;
             retryTimeMultiplier *= 1.5;
-            service.Resume();
+            Service.Resume();
         }
 
         private void Service_ErrorOccurred(object sender, ErrorOccurredEventArgs e)
@@ -96,41 +96,27 @@ namespace Wit.VM
         #endregion
 
         public void SetConsumerKey(string consumerKey, string consumerSecret)
-            => service.SetConsumerKey(consumerKey, consumerSecret);
+            => Service.SetConsumerKey(consumerKey, consumerSecret);
 
         public void SignIn(Func<string, string> callback, Action<Exception> onError)
-            => service.SignIn(callback, onError);
+            => Service.SignIn(callback, onError);
 
         public void PostTweet(string content, Action<Exception> onError)
-            => service.PostTweet(content, onError);
+            => Service.PostTweet(content, onError);
 
         internal void SendDirectMessage(string screenName, string content, Action<Exception> onError)
-            => service.SendDirectMessage(screenName, content, onError);
+            => Service.SendDirectMessage(screenName, content, onError);
 
         public void TryResume()
         {
             if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
             retryCount = 0;
             retryTimeMultiplier = 1.0;
-            service.Resume();
-        }
-
-        public string UserMenuText
-        {
-            get
-            {
-                if (service.State == ServiceState.NeedConsumerKey)
-                    return Strings.Menu_Main_NeedConsumer;
-                else if (service.State == ServiceState.SignInRequired)
-                    return Strings.Menu_Main_NeedSignIn;
-                else if (service.State >= ServiceState.Ready)
-                    return $"@{service.Me.screen_name}";
-                else return "--";
-            }
+            Service.Resume();
         }
 
         public bool CanSignIn
-            => service.State >= ServiceState.SignInRequired || service.State == ServiceState.ApiError;
+            => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError;
 
         public ListCollectionView UserListView { get; private set; }
 
@@ -144,10 +130,10 @@ namespace Wit.VM
             }
         }
 
-        public int StatOnline => service.OnlineCount;
-        public int StatAway => service.AwayCount;
-        public int StatOffline => service.OfflineCount;
-        public bool StatUpdating => service.State == ServiceState.Updating;
+        public int StatOnline => Service.OnlineCount;
+        public int StatAway => Service.AwayCount;
+        public int StatOffline => Service.OfflineCount;
+        public bool StatUpdating => Service.State == ServiceState.Updating;
 
         public bool ShowAway
         {
@@ -186,22 +172,6 @@ namespace Wit.VM
             {
                 hideBorder = value;
                 OnPropertyChanged(nameof(HideBorder));
-            }
-        }
-
-        public string ErrorMessage
-        {
-            get
-            {
-                switch (service.State)
-                {
-                    case ServiceState.ApiError:
-                        return Strings.Critical_ApiError;
-                    case ServiceState.NetError:
-                        return Strings.Critical_NetError;
-                    default:
-                        return "";
-                }
             }
         }
 

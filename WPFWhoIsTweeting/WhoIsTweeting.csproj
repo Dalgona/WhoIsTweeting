@@ -86,6 +86,7 @@
     <Compile Include="layouts\SetIntervalWindow.xaml.cs">
       <DependentUpon>SetIntervalWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ServiceStateConverter.cs" />
     <Compile Include="Strings.ko-KR.Designer.cs">
       <DependentUpon>Strings.ko-KR.resx</DependentUpon>
       <AutoGen>True</AutoGen>
