@@ -8,7 +8,6 @@ using PicoBird;
 using PicoBird.Objects;
 using System.Collections.Specialized;
 using System.Collections.ObjectModel;
-// using System.Windows.Threading;
 
 namespace Wit.Core
 {
@@ -34,10 +33,6 @@ namespace Wit.Core
 
         #endregion
 
-        #region Publicly Exposed Items
-
-        // public Dispatcher Dispatcher { get; private set; } = Dispatcher.CurrentDispatcher;
-
         public ServiceState State
         {
             get => state;
@@ -59,6 +54,8 @@ namespace Wit.Core
         public int MaxOnline { get; private set; } = 0;
         public ObservableCollection<UserListItem> UserList { get; private set; }
         public ObservableCollection<KeyValuePair<DateTime, int[]>> Graph { get; private set; }
+        public object UserListLock { get; } = new object();
+        public object GraphLock { get; } = new object();
 
         public int UpdateInterval
         {
@@ -140,17 +137,12 @@ namespace Wit.Core
             GraphCount = SumOnline = MinOnline = MaxOnline = 0;
         }
 
-        #endregion
-
         private ServiceState state = ServiceState.Initial;
         private API api;
         private HashSet<string> idSet;
 
         private BackgroundWorker listUpdateWorker;
         private int updateInterval;
-
-        private object userListLock = new object();
-        private object graphLock = new object();
 
         Properties.Settings appSettings = Properties.Settings.Default;
 
@@ -274,20 +266,20 @@ namespace Wit.Core
                 OfflineCount = list.Count(x => x.Status == UserStatus.Offline);
                 OnlineCount = idSet.Count - AwayCount - OfflineCount;
 
-                //Dispatcher.Invoke(() =>
-                //{
+                lock (UserListLock)
+                {
                     UserList.Clear();
                     foreach (var x in list) UserList.Add(x);
-                //}, DispatcherPriority.Normal);
+                }
 
-                //Dispatcher.Invoke(() =>
-                //{
+                lock (GraphLock)
+                {
                     SumOnline += OnlineCount;
                     MinOnline = GraphCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
                     MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
                     Graph.Add(new KeyValuePair<DateTime, int[]>(DateTime.Now, new int[] { OnlineCount, AwayCount, OfflineCount }));
                     GraphCount++;
-                //}, DispatcherPriority.Normal);
+                }
 
                 State = ServiceState.Running;
             }
