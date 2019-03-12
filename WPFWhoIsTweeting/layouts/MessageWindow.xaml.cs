@@ -2,11 +2,10 @@
 using System.Windows;
 using System.Windows.Input;
 using Wit.Core;
+using Wit.VM;
 
 namespace WhoIsTweeting
 {
-    public enum MessageWindowType { MentionWindow, DirectMessageWindow };
-
     public partial class MessageWindow : Window
     {
         private MessageViewModel viewModel;

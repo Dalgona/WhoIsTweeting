@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Windows;
 using Wit.Core;
 
 namespace Wit.VM
@@ -8,31 +7,22 @@ namespace Wit.VM
 
     public class MessageViewModel : INotifyPropertyChanged
     {
-        private MessageWindowType type;
         private UserListItem user;
         private string content;
 
+        public MessageWindowType Type { get; }
+
         public MessageViewModel(MessageWindowType type, UserListItem user)
         {
-            this.type = type;
+            Type = type;
             this.user = user;
-        }
-
-        public string WindowHeader
-        {
-            get
-            {
-                if (type == MessageWindowType.MentionWindow)
-                    return Strings.Message_Header_Mention;
-                else return Strings.Message_Header_DM;
-            }
         }
 
         public int MaxChars
         {
             get
             {
-                if (type == MessageWindowType.MentionWindow) return 140;
+                if (Type == MessageWindowType.MentionWindow) return 140;
                 else return 10000;
             }
         }
