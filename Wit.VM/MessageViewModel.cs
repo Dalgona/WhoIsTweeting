@@ -2,9 +2,11 @@
 using System.Windows;
 using Wit.Core;
 
-namespace WhoIsTweeting
+namespace Wit.VM
 {
-    class MessageViewModel : INotifyPropertyChanged
+    public enum MessageWindowType { MentionWindow, DirectMessageWindow };
+
+    public class MessageViewModel : INotifyPropertyChanged
     {
         private MessageWindowType type;
         private UserListItem user;

@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using Wit.Core;
 
-namespace WhoIsTweeting
+namespace Wit.VM
 {
-    class GraphViewModel : INotifyPropertyChanged
+    public class GraphViewModel : INotifyPropertyChanged
     {
         private const string dateformat = "yyyy-MM-dd HH:mm";
         private MainService service = MainService.Instance;

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Wit.Core;
 
-namespace WhoIsTweeting
+namespace Wit.VM
 {
     public class IntervalViewModel : INotifyPropertyChanged
     {

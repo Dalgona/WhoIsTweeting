@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Data;
 using Wit.Core;
 
-namespace WhoIsTweeting
+namespace Wit.VM
 {
     public class MainViewModel : INotifyPropertyChanged, IDisposable
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace WhoIsTweeting
+namespace Wit.VM
 {
     public class TokenViewModel : INotifyPropertyChanged
     {

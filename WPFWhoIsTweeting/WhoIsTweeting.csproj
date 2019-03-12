@@ -96,23 +96,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="vm\GraphViewModel.cs" />
     <Compile Include="layouts\GraphWindow.xaml.cs">
       <DependentUpon>GraphWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="vm\IntervalViewModel.cs" />
-    <Compile Include="vm\MessageViewModel.cs" />
     <Compile Include="layouts\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="layouts\PinInputWindow.xaml.cs">
       <DependentUpon>PinInputWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="vm\TokenViewModel.cs" />
     <Compile Include="layouts\ConsumerWindow.xaml.cs">
       <DependentUpon>ConsumerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="vm\MainViewModel.cs" />
     <Page Include="layouts\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -202,6 +197,10 @@
     <ProjectReference Include="..\Wit.Core\Wit.Core.csproj">
       <Project>{0b682b25-2490-4136-ba5d-2cc9ccd91dd6}</Project>
       <Name>Wit.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Wit.VM\Wit.VM.csproj">
+      <Project>{2ffeb3e1-befd-45e7-b96b-7e07ccffdf85}</Project>
+      <Name>Wit.VM</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
