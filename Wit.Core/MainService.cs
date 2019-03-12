@@ -157,6 +157,16 @@ namespace Wit.Core
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
 
+        static MainService()
+        {
+            if (Properties.Settings.Default.UpgradeSettings)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpgradeSettings = false;
+                Properties.Settings.Default.Save();
+            }
+        }
+
         private MainService()
         {
             listUpdateWorker = new BackgroundWorker { WorkerSupportsCancellation = true };

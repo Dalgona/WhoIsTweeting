@@ -17,6 +17,7 @@ namespace WhoIsTweeting
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             WhoIsTweeting.Properties.Settings.Default.Save();
+            Wit.Core.Properties.Settings.Default.Save();
         }
     }
 }
