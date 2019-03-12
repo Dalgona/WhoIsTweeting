@@ -26,6 +26,14 @@ namespace Wit.Core
 
     public class MainService : INotifyPropertyChanged, IDisposable
     {
+        #region Singleton
+
+        private static readonly Lazy<MainService> instance = new Lazy<MainService>(() => new MainService());
+
+        public static MainService Instance => instance.Value;
+
+        #endregion
+
         #region Publicly Exposed Items
 
         // public Dispatcher Dispatcher { get; private set; } = Dispatcher.CurrentDispatcher;
@@ -149,7 +157,7 @@ namespace Wit.Core
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
 
-        public MainService()
+        private MainService()
         {
             listUpdateWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
             listUpdateWorker.DoWork += listUpdateWorker_DoWork;

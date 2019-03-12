@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.ComponentModel;
-using System.Windows;
 using Wit.Core;
 
 namespace WhoIsTweeting
@@ -8,7 +7,7 @@ namespace WhoIsTweeting
     class GraphViewModel : INotifyPropertyChanged
     {
         private const string dateformat = "yyyy-MM-dd HH:mm";
-        private MainService service = (Application.Current as App).Service;
+        private MainService service = MainService.Instance;
 
         public GraphViewModel()
         {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
-using System.Windows;
 using System.Windows.Data;
 using Wit.Core;
 
@@ -11,7 +10,7 @@ namespace WhoIsTweeting
     {
         private Properties.Settings appSettings = Properties.Settings.Default;
 
-        private MainService service = (Application.Current as App).Service;
+        private MainService service = MainService.Instance;
 
         private bool showAway, showOffline;
         private bool transparency = false;

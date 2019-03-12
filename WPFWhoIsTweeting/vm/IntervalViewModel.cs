@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Windows;
 using Wit.Core;
 
 namespace WhoIsTweeting
@@ -27,7 +26,7 @@ namespace WhoIsTweeting
 
         public IntervalViewModel()
         {
-            service = (Application.Current as App).Service;
+            service = MainService.Instance;
             Interval = service.UpdateInterval;
         }
 

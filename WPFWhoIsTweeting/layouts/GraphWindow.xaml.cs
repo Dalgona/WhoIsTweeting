@@ -15,7 +15,7 @@ namespace WhoIsTweeting
     public partial class GraphWindow : Window
     {
         private GraphViewModel viewModel;
-        private MainService service = (Application.Current as App).Service;
+        private MainService service = MainService.Instance;
 
         private DispatcherTimer timer;
         private int dataIndex;
