@@ -59,7 +59,7 @@ namespace WhoIsTweeting
                     return;
                 }
                 ErrorDescription = string.Format(Strings.Critical_AutoRetry_Message, i);
-                OnPropertyChanged("ErrorDescription");
+                OnPropertyChanged(nameof(ErrorDescription));
                 Thread.Sleep(1000);
             }
             retryCount += 1;
@@ -141,7 +141,7 @@ namespace WhoIsTweeting
             set
             {
                 selectedItem = value;
-                OnPropertyChanged("SelectedItem");
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
@@ -176,7 +176,7 @@ namespace WhoIsTweeting
             set
             {
                 transparency = value;
-                OnPropertyChanged("Transparency");
+                OnPropertyChanged(nameof(Transparency));
             }
         }
 
@@ -186,7 +186,7 @@ namespace WhoIsTweeting
             set
             {
                 hideBorder = value;
-                OnPropertyChanged("HideBorder");
+                OnPropertyChanged(nameof(HideBorder));
             }
         }
 

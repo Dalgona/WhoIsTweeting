@@ -37,7 +37,7 @@ namespace WhoIsTweeting
             {
                 Log("MainService::State.set", $"{state} -> {value}");
                 state = value;
-                OnPropertyChanged("State");
+                OnPropertyChanged(nameof(State));
             }
         }
 

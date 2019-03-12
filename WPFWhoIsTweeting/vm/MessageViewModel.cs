@@ -46,7 +46,7 @@ namespace WhoIsTweeting
             set
             {
                 content = value;
-                OnPropertyChanged("Content");
+                OnPropertyChanged(nameof(Content));
             }
         }
 

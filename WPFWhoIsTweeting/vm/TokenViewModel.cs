@@ -13,7 +13,7 @@ namespace WhoIsTweeting
             set
             {
                 consumerKey = value;
-                OnPropertyChanged("ConsumerKey");
+                OnPropertyChanged(nameof(ConsumerKey));
             }
         }
 
@@ -23,7 +23,7 @@ namespace WhoIsTweeting
             set
             {
                 consumerSecret = value;
-                OnPropertyChanged("ConsumerSecret");
+                OnPropertyChanged(nameof(ConsumerSecret));
             }
         }
 
@@ -33,7 +33,7 @@ namespace WhoIsTweeting
             set
             {
                 pin = value;
-                OnPropertyChanged("Pin");
+                OnPropertyChanged(nameof(Pin));
             }
         }
 
