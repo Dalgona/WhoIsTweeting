@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Text;
 using System.Globalization;
+using Wit.Core;
 
 namespace WhoIsTweeting
 {
