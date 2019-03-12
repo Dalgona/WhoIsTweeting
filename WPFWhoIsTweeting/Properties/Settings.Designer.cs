@@ -22,53 +22,5 @@ namespace WhoIsTweeting.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AlwaysOnTop {
-            get {
-                return ((bool)(this["AlwaysOnTop"]));
-            }
-            set {
-                this["AlwaysOnTop"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowAway {
-            get {
-                return ((bool)(this["ShowAway"]));
-            }
-            set {
-                this["ShowAway"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ShowOffline {
-            get {
-                return ((bool)(this["ShowOffline"]));
-            }
-            set {
-                this["ShowOffline"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool UpdateSettings {
-            get {
-                return ((bool)(this["UpdateSettings"]));
-            }
-            set {
-                this["UpdateSettings"] = value;
-            }
-        }
     }
 }

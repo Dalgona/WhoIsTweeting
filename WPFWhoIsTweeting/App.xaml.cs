@@ -8,11 +8,11 @@ namespace WhoIsTweeting
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (WhoIsTweeting.Properties.Settings.Default.UpdateSettings)
+            if (Wit.VM.Properties.Settings.Default.UpgradeSettings)
             {
-                WhoIsTweeting.Properties.Settings.Default.Upgrade();
-                WhoIsTweeting.Properties.Settings.Default.UpdateSettings = false;
-                WhoIsTweeting.Properties.Settings.Default.Save();
+                Wit.VM.Properties.Settings.Default.Upgrade();
+                Wit.VM.Properties.Settings.Default.UpgradeSettings = false;
+                Wit.VM.Properties.Settings.Default.Save();
             }
 
             MainService service = MainService.Instance;
@@ -23,7 +23,7 @@ namespace WhoIsTweeting
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            WhoIsTweeting.Properties.Settings.Default.Save();
+            Wit.VM.Properties.Settings.Default.Save();
             Wit.Core.Properties.Settings.Default.Save();
         }
     }

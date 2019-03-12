@@ -8,7 +8,7 @@ namespace Wit.VM
 {
     public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
-        private Properties.Settings appSettings = Properties.Settings.Default;
+        private Properties.Settings settings = Properties.Settings.Default;
 
         public MainService Service { get; } = MainService.Instance;
 
@@ -41,8 +41,8 @@ namespace Wit.VM
             UserListView.GroupDescriptions.Add(new PropertyGroupDescription("Status"));
             UserListView.LiveFilteringProperties.Add("Status");
 
-            showAway = appSettings.ShowAway;
-            showOffline = appSettings.ShowOffline;
+            showAway = settings.ShowAway;
+            showOffline = settings.ShowOffline;
         }
 
         #region Event Handlers
