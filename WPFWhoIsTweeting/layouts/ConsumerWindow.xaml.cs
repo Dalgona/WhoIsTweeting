@@ -19,8 +19,11 @@ namespace WhoIsTweeting
         {
             Dispatcher.Invoke(new Action(() =>
             {
-                viewModel.ConsumerKey = Properties.Settings.Default.ConsumerKey;
-                viewModel.ConsumerSecret = Properties.Settings.Default.ConsumerSecret;
+                var coreSettings = Wit.Core.Properties.Settings.Default;
+
+                viewModel.ConsumerKey = coreSettings.ConsumerKey;
+                viewModel.ConsumerSecret = coreSettings.ConsumerSecret;
+
                 consumerKey.Focus();
                 Keyboard.Focus(consumerKey);
             }));

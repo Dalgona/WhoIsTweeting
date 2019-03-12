@@ -47,10 +47,12 @@ namespace WhoIsTweeting
         {
             ConsumerWindow win = new ConsumerWindow();
             TokenViewModel mdl = win.DataContext as TokenViewModel;
+            var coreSettings = Wit.Core.Properties.Settings.Default;
+
             win.Owner = this;
             if ((bool)win.ShowDialog())
-                if (!(mdl.ConsumerKey == appSettings.ConsumerKey
-                    && mdl.ConsumerSecret == appSettings.ConsumerSecret))
+                if (!(mdl.ConsumerKey == coreSettings.ConsumerKey
+                    && mdl.ConsumerSecret == coreSettings.ConsumerSecret))
                     viewModel.SetConsumerKey(mdl.ConsumerKey, mdl.ConsumerSecret);
         }
 
