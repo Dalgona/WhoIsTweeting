@@ -138,9 +138,6 @@
                 <Button DockPanel.Dock="right" Content="0" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
             </DockPanel>
             <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top">
-                <Menu.Resources>
-                    <local:ServiceStateConverter x:Key="ServiceStateConverter" />
-                </Menu.Resources>
                 <MenuItem Padding="6,2">
                     <MenuItem.Header>
                         <TextBlock>
@@ -153,8 +150,8 @@
                                         <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="SignInRequired">
                                             <Setter Property="Text" Value="{x:Static local:Strings.Menu_Main_NeedSignIn}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Service.State, Converter={StaticResource ServiceStateConverter}}" Value="True">
-                                            <Setter Property="Text" Value="{Binding Service.Me.screen_name}" />
+                                        <DataTrigger Binding="{Binding IsSignedIn}" Value="True">
+                                            <Setter Property="Text" Value="{Binding Service.Me.screen_name, StringFormat={}@{0}}" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                     <Setter Property="Text" Value="--" />

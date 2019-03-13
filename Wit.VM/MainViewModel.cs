@@ -98,10 +98,9 @@ namespace Wit.VM
             Service.Resume();
         }
 
-        public bool CanSignIn
-            => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError;
+        public bool CanSignIn => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError;
 
-        public ListCollectionView UserListView { get; private set; }
+        public bool IsSignedIn => Service.State >= ServiceState.Ready;
 
         public UserListItem SelectedItem
         {
