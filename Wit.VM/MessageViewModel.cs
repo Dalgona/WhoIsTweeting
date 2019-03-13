@@ -1,11 +1,11 @@
-﻿using System.ComponentModel;
-using Wit.Core;
+﻿using Wit.Core;
+using Wit.UI.Core;
 
 namespace Wit.VM
 {
     public enum MessageWindowType { MentionWindow, DirectMessageWindow };
 
-    public class MessageViewModel : INotifyPropertyChanged
+    public class MessageViewModel : ViewModelBase
     {
         private UserListItem user;
         private string content;
@@ -42,10 +42,5 @@ namespace Wit.VM
                 OnPropertyChanged(nameof(Content));
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

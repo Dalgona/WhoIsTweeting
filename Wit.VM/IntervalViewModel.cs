@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
-using Wit.Core;
+﻿using Wit.Core;
+using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class IntervalViewModel : INotifyPropertyChanged
+    public class IntervalViewModel : ViewModelBase
     {
         public int Interval
         {
@@ -13,16 +13,15 @@ namespace Wit.VM
                 if (value <= 10) interval = 10;
                 else if (value >= 60) interval = 60;
                 else interval = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Interval"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MaxFollowings"));
+
+                OnPropertyChanged(nameof(Interval));
+                OnPropertyChanged(nameof(MaxFollowings));
             }
         }
         public int MaxFollowings => Interval * 20;
 
         private MainService service;
         private int interval;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public IntervalViewModel()
         {

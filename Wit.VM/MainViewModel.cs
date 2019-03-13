@@ -2,10 +2,11 @@
 using System.ComponentModel;
 using System.Threading;
 using Wit.Core;
+using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class MainViewModel : INotifyPropertyChanged, IDisposable
+    public class MainViewModel : ViewModelBase, IDisposable
     {
         public MainService Service { get; } = MainService.Instance;
 
@@ -188,10 +189,6 @@ namespace Wit.VM
         }
 
         public event EventHandler RefreshUserList;
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         #region IDisposable Support
         private bool disposedValue = false;

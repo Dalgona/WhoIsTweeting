@@ -58,6 +58,10 @@
       <Project>{0b682b25-2490-4136-ba5d-2cc9ccd91dd6}</Project>
       <Name>Wit.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Wit.UI.Core\Wit.UI.Core.csproj">
+      <Project>{e627c86d-f685-4dd6-b3af-93ddd8a52257}</Project>
+      <Name>Wit.UI.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

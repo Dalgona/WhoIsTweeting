@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class TokenViewModel : INotifyPropertyChanged
+    public class TokenViewModel : ViewModelBase
     {
         private string consumerKey, consumerSecret;
         private string pin;
@@ -36,10 +36,5 @@ namespace Wit.VM
                 OnPropertyChanged(nameof(Pin));
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

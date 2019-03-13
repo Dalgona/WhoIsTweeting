@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using System.ComponentModel;
 using Wit.Core;
+using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class GraphViewModel : INotifyPropertyChanged
+    public class GraphViewModel : ViewModelBase
     {
         private const string dateformat = "yyyy-MM-dd HH:mm";
         private MainService service = MainService.Instance;
@@ -17,7 +18,9 @@ namespace Wit.VM
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "State" && service.State == ServiceState.Running)
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
+            {
+                OnPropertyChanged("");
+            }
         }
 
         public string From
@@ -50,10 +53,5 @@ namespace Wit.VM
             service.ResetStatistics();
             OnPropertyChanged("");
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string name)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
