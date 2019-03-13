@@ -5,6 +5,8 @@
              xmlns:ctrl="clr-namespace:Wit.Controls"
              StartupUri="layouts/MainWindow.xaml" Exit="Application_Exit" Startup="Application_Startup">
     <Application.Resources>
+        <local:LastTweetConverter x:Key="LastTweetConverter" />
+
         <StreamGeometry x:Key="MinimizeWindowGlyphGeometry">
             M0,5 L10,5 L10,6 L0,6Z
         </StreamGeometry>

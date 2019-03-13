@@ -7,7 +7,9 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     xmlns:local="clr-namespace:WhoIsTweeting"
+    xmlns:core="clr-namespace:Wit.Core;assembly=Wit.Core"
     xmlns:ctrl="clr-namespace:Wit.Controls"
+    xmlns:view="clr-namespace:WhoIsTweeting.Views"
     xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
     Title="WhoIsTweeting" Height="600" Width="270" Icon="../wit.ico"
@@ -17,7 +19,6 @@
     Style="{StaticResource MainWindowStyle}"
     MinWidth="270" MinHeight="270">
     <Window.Resources>
-        <local:LastTweetConverter x:Key="LastTweetConverter"/>
         <CollectionViewSource x:Key="UserListSource" Source="{Binding Service.UserList}" Filter="FilterUserList" IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="True">
             <CollectionViewSource.LiveFilteringProperties>
                 <sys:String>Status</sys:String>
@@ -177,8 +178,11 @@
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <Label Content="{Binding Name}" Foreground="Gray" FontSize="16" />
-                                <Label Content="{Binding ItemCount}" Foreground="Gray" FontSize="16" ContentStringFormat="({0})"/>
+                                <Label Foreground="Gray" FontSize="16">
+                                    <TextBlock>
+                                        <Run Text="{Binding Name, Mode=OneWay}" /> (<Run Text="{Binding ItemCount, Mode=OneWay}" />)
+                                    </TextBlock>
+                                </Label>
                             </StackPanel>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
@@ -190,49 +194,8 @@
                 </Style>
             </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="14"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Ellipse Width="9" Height="9">
-                            <Ellipse.Style>
-                                <Style TargetType="Ellipse">
-                                    <Setter Property="Fill" Value="MediumSpringGreen"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Status}" Value="Away">
-                                            <Setter Property="Fill" Value="LightGray"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status}" Value="Offline">
-                                            <Setter Property="Fill" Value="Transparent"/>
-                                            <Setter Property="Stroke" Value="LightGray"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Ellipse.Style>
-                        </Ellipse>
-                        <Label Grid.Column="1" Padding="5,1">
-                            <Label.Style>
-                                <Style TargetType="Label">
-                                    <Setter Property="Foreground" Value="#FF333333"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Status}" Value="Online">
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Status}" Value="Offline">
-                                            <Setter Property="Foreground" Value="Gray"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Label.Style>
-                            <Label.Content>
-                                <TextBlock Text="{Binding ScreenName, StringFormat=@{0}, Mode=OneWay}"/>
-                            </Label.Content>
-                        </Label>
-                        <Label Grid.Column="2" Content="{Binding Converter={StaticResource LastTweetConverter}, Mode=OneWay}" Padding="3,1" Foreground="Gray"/>
-                    </Grid>
+                <DataTemplate DataType="{x:Type core:UserListItem}">
+                    <view:UserListItemView />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

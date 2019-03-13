@@ -1,0 +1,53 @@
+﻿<UserControl
+    x:Class="WhoIsTweeting.Views.UserListItemView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:core="clr-namespace:Wit.Core;assembly=Wit.Core"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type={x:Type core:UserListItem}}"
+    d:DesignHeight="20" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="14"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Ellipse Width="9" Height="9">
+            <Ellipse.Style>
+                <Style TargetType="Ellipse">
+                    <Setter Property="Fill" Value="MediumSpringGreen"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="Away">
+                            <Setter Property="Fill" Value="LightGray"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="Offline">
+                            <Setter Property="Fill" Value="Transparent"/>
+                            <Setter Property="Stroke" Value="LightGray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Ellipse.Style>
+        </Ellipse>
+        <Label Grid.Column="1" Padding="5,1">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Setter Property="Foreground" Value="#FF333333"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="Online">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Status}" Value="Offline">
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+            <Label.Content>
+                <TextBlock Text="{Binding ScreenName, StringFormat=@{0}, Mode=OneWay}"/>
+            </Label.Content>
+        </Label>
+        <Label Grid.Column="2" Content="{Binding Converter={StaticResource LastTweetConverter}, Mode=OneWay}" Padding="3,1" Foreground="Gray"/>
+    </Grid>
+</UserControl>
