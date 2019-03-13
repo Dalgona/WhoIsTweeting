@@ -3,12 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:cm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:local="clr-namespace:WhoIsTweeting"
         xmlns:p="clr-namespace:WhoIsTweeting.Properties"
+        xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
         mc:Ignorable="d"
         Title="WhoIsTweeting" Height="600" Width="270" Icon="../wit.ico"
         Topmost="{Binding Source={x:Static p:Settings.Default}, Path=AlwaysOnTop, Mode=OneWay}"
-        d:DataContext="{d:DesignInstance {x:Type local:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MinWidth="270" MinHeight="270">
+        d:DataContext="{d:DesignInstance {x:Type vm:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MinWidth="270" MinHeight="270">
     <Window.Resources>
         <local:LastTweetConverter x:Key="LastTweetConverter"/>
         <Style x:Key="CommandButtonStyle" TargetType="{x:Type Button}">
@@ -62,6 +65,20 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <CollectionViewSource x:Key="UserListSource" Source="{Binding Service.UserList}" IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="True">
+            <!--<CollectionViewSource.LiveFilteringProperties>
+                <sys:String>Status</sys:String>
+            </CollectionViewSource.LiveFilteringProperties>-->
+            <CollectionViewSource.LiveSortingProperties>
+                <sys:String>MinutesFromLastTweet</sys:String>
+            </CollectionViewSource.LiveSortingProperties>
+            <CollectionViewSource.LiveGroupingProperties>
+                <sys:String>Status</sys:String>
+            </CollectionViewSource.LiveGroupingProperties>
+            <CollectionViewSource.SortDescriptions>
+                <cm:SortDescription PropertyName="MinutesFromLastTweet" Direction="Ascending" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Closed"/>
@@ -195,7 +212,7 @@
                 </Label>
                 <Button Content="{x:Static local:Strings.Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
             </StackPanel>
-            <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding UserListView}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
+            <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding Source={StaticResource UserListSource}}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <ContextMenu.Style>

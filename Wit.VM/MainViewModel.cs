@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading;
-using System.Windows.Data;
 using Wit.Core;
 
 namespace Wit.VM
@@ -31,16 +30,6 @@ namespace Wit.VM
             autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
             autoRetryWorker.WorkerSupportsCancellation = true;
 
-            UserListView = new ListCollectionView(Service.UserList)
-            {
-                IsLiveFiltering = true,
-                Filter = UserListFilter
-            };
-            
-            UserListView.SortDescriptions.Add(new SortDescription("MinutesFromLastTweet", ListSortDirection.Ascending));
-            UserListView.GroupDescriptions.Add(new PropertyGroupDescription("Status"));
-            UserListView.LiveFilteringProperties.Add("Status");
-
             showAway = settings.ShowAway;
             showOffline = settings.ShowOffline;
         }
@@ -57,7 +46,7 @@ namespace Wit.VM
                     e.Cancel = true;
                     return;
                 }
-                ErrorDescription = string.Format(Strings.Critical_AutoRetry_Message, i);
+                // ErrorDescription = string.Format(Strings.Critical_AutoRetry_Message, i);
                 OnPropertyChanged(nameof(ErrorDescription));
                 Thread.Sleep(1000);
             }
@@ -71,7 +60,7 @@ namespace Wit.VM
             while (autoRetryWorker.IsBusy) Thread.Sleep(50); // spin-wait
             if (retryCount >= maxRetryCount)
             {
-                ErrorDescription = string.Format(Strings.Critical_AutoRetry_Failed, maxRetryCount);
+                // ErrorDescription = string.Format(Strings.Critical_AutoRetry_Failed, maxRetryCount);
             }
             else
             {
@@ -104,7 +93,7 @@ namespace Wit.VM
         public void PostTweet(string content, Action<Exception> onError)
             => Service.PostTweet(content, onError);
 
-        internal void SendDirectMessage(string screenName, string content, Action<Exception> onError)
+        public void SendDirectMessage(string screenName, string content, Action<Exception> onError)
             => Service.SendDirectMessage(screenName, content, onError);
 
         public void TryResume()
@@ -141,7 +130,6 @@ namespace Wit.VM
             set
             {
                 Properties.Settings.Default.ShowAway = showAway = value;
-                UserListView.Refresh();
             }
         }
 
@@ -151,7 +139,6 @@ namespace Wit.VM
             set
             {
                 Properties.Settings.Default.ShowOffline = showOffline = value;
-                UserListView.Refresh();
             }
         }
 
