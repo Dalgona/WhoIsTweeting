@@ -64,10 +64,10 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <CollectionViewSource x:Key="UserListSource" Source="{Binding Service.UserList}" IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="True">
-            <!--<CollectionViewSource.LiveFilteringProperties>
+        <CollectionViewSource x:Key="UserListSource" Source="{Binding Service.UserList}" Filter="FilterUserList" IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="True">
+            <CollectionViewSource.LiveFilteringProperties>
                 <sys:String>Status</sys:String>
-            </CollectionViewSource.LiveFilteringProperties>-->
+            </CollectionViewSource.LiveFilteringProperties>
             <CollectionViewSource.LiveSortingProperties>
                 <sys:String>MinutesFromLastTweet</sys:String>
             </CollectionViewSource.LiveSortingProperties>

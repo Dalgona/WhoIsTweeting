@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
 using Wit.VM;
+using Wit.Core;
 
 namespace WhoIsTweeting
 {
@@ -22,6 +24,7 @@ namespace WhoIsTweeting
             InitializeComponent();
 
             DataContext = viewModel = new MainViewModel();
+            viewModel.RefreshUserList += UserListRefreshRequested;
 
             if (blurry == null)
             {
@@ -208,6 +211,19 @@ namespace WhoIsTweeting
 
         private void OnTryAgainClicked(object sender, RoutedEventArgs e)
             => viewModel.TryResume();
+
+        private void FilterUserList(object sender, FilterEventArgs e)
+        {
+            if (e.Item is UserListItem item)
+            {
+                e.Accepted = (viewModel.ShowAway || item.Status != UserStatus.Away) && (viewModel.ShowOffline || item.Status != UserStatus.Offline);
+            }
+        }
+
+        private void UserListRefreshRequested(object sender, EventArgs e)
+        {
+            (FindResource("UserListSource") as CollectionViewSource)?.View?.Refresh();
+        }
     }
 
     internal static class NativeMethods

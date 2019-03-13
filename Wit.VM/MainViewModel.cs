@@ -135,6 +135,7 @@ namespace Wit.VM
             {
                 Properties.Settings.Default.ShowAway = value;
                 OnPropertyChanged(nameof(ShowAway));
+                RefreshUserList?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -145,6 +146,7 @@ namespace Wit.VM
             {
                 Properties.Settings.Default.ShowOffline = value;
                 OnPropertyChanged(nameof(ShowOffline));
+                RefreshUserList?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -170,12 +172,7 @@ namespace Wit.VM
 
         public string ErrorDescription { get; private set; }
 
-        private bool UserListFilter(object _item)
-        {
-            UserListItem item = _item as UserListItem;
-            return (ShowAway || item.Status != UserStatus.Away) && (ShowOffline || item.Status != UserStatus.Offline);
-        }
-
+        public event EventHandler RefreshUserList;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string name)
