@@ -10,60 +10,9 @@
         mc:Ignorable="d"
         Title="WhoIsTweeting" Height="600" Width="270" Icon="../wit.ico"
         Topmost="{Binding AlwaysOnTop}"
-        d:DataContext="{d:DesignInstance {x:Type vm:MainViewModel}}" SnapsToDevicePixels="True" AllowsTransparency="True" WindowStyle="None" Background="{x:Null}" MinWidth="270" MinHeight="270">
+        d:DataContext="{d:DesignInstance {x:Type vm:MainViewModel}}" SnapsToDevicePixels="True" Background="{x:Null}" MinWidth="270" MinHeight="270">
     <Window.Resources>
         <local:LastTweetConverter x:Key="LastTweetConverter"/>
-        <Style x:Key="CommandButtonStyle" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#18FFFFFF"/>
-            <Setter Property="Foreground" Value="WhiteSmoke"/>
-            <Setter Property="FontFamily" Value="Webdings"/>
-            <Setter Property="Margin" Value="3,0,0,3"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border Background="{TemplateBinding Background}">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="MediumSpringGreen"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Opacity" Value="0.75"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="RestoreButtonStyle" TargetType="Button" BasedOn="{StaticResource CommandButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Normal">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="MaximizeButtonStyle" TargetType="Button" BasedOn="{StaticResource CommandButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="HideableBorder" TargetType="Grid">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding HideBorder}" Value="True">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        <Style x:Key="HideableTitlebar" TargetType="DockPanel">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding HideBorder}" Value="True">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
         <CollectionViewSource x:Key="UserListSource" Source="{Binding Service.UserList}" Filter="FilterUserList" IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="True">
             <CollectionViewSource.LiveFilteringProperties>
                 <sys:String>Status</sys:String>
@@ -82,12 +31,6 @@
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
     </Window.Resources>
-    <Window.CommandBindings>
-        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Closed"/>
-        <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Restored"/>
-        <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Maximized"/>
-        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Minimized"/>
-    </Window.CommandBindings>
     <Window.Style>
         <Style TargetType="Window">
             <Style.Triggers>
@@ -98,257 +41,221 @@
         </Style>
     </Window.Style>
     <Grid Background="#FF333333">
-        <Grid.Style>
-            <Style TargetType="Grid">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType=Window}}" Value="Maximized">
-                        <Setter Property="Margin" Value="4"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Style>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
-        <Grid Style="{StaticResource HideableBorder}" x:Name="_61444" Grid.Row="0" Grid.Column="0" Cursor="SizeNWSE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow" Width="3" Height="3"/>
-        <Grid Style="{StaticResource HideableBorder}" x:Name="_61443" Grid.Row="0" Grid.Column="1" Cursor="SizeNS" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid Style="{StaticResource HideableBorder}" x:Name="_61445" Grid.Row="0" Grid.Column="2" Cursor="SizeNESW" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow" Width="3" Height="3"/>
-        <Grid Style="{StaticResource HideableBorder}" x:Name="_61441" Grid.Row="1" Grid.Column="0" Cursor="SizeWE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid Style="{StaticResource HideableBorder}" x:Name="_61442" Grid.Row="1" Grid.Column="2" Cursor="SizeWE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid Style="{StaticResource HideableBorder}" x:Name="_61447" Grid.Row="2" Grid.Column="0" Cursor="SizeNESW" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow" Width="3" Height="3"/>
-        <Grid Style="{StaticResource HideableBorder}" x:Name="_61446" Grid.Row="2" Grid.Column="1" Cursor="SizeNS" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow"/>
-        <Grid Style="{StaticResource HideableBorder}" x:Name="_61448" Grid.Row="2" Grid.Column="2" Cursor="SizeNWSE" Background="#FF333333" PreviewMouseLeftButtonDown="ResizeWindow" Width="3" Height="3"/>
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <DockPanel Style="{StaticResource HideableTitlebar}" Background="#FF333333" MouseLeftButtonDown="DockPanel_MouseLeftButtonDown" MouseLeftButtonUp="DockPanel_MouseLeftButtonUp" MouseMove="DockPanel_MouseMove">
-                <Label DockPanel.Dock="Left" Content="WhoIsTweeting" Foreground="LightGray" FontWeight="Bold" Padding="5,2,5,5"/>
-                <Button DockPanel.Dock="right" Content="r" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.CloseWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
-                <Button DockPanel.Dock="right" Content="2" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.RestoreWindowCommand}" Style="{StaticResource RestoreButtonStyle}"/>
-                <Button DockPanel.Dock="right" Content="1" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MaximizeWindowCommand}" Style="{StaticResource MaximizeButtonStyle}"/>
-                <Button DockPanel.Dock="right" Content="0" Width="20" HorizontalAlignment="Right" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Style="{StaticResource CommandButtonStyle}"/>
-            </DockPanel>
-            <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top">
-                <MenuItem Padding="6,2">
-                    <MenuItem.Header>
-                        <TextBlock>
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
+        <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top">
+            <MenuItem Padding="6,2">
+                <MenuItem.Header>
+                    <TextBlock>
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="NeedConsumerKey">
+                                        <Setter Property="Text" Value="{x:Static local:Strings.Menu_Main_NeedConsumer}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="SignInRequired">
+                                        <Setter Property="Text" Value="{x:Static local:Strings.Menu_Main_NeedSignIn}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsSignedIn}" Value="True">
+                                        <Setter Property="Text" Value="{Binding Service.Me.screen_name, StringFormat={}@{0}}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                                <Setter Property="Text" Value="--" />
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </MenuItem.Header>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_SignIn}" Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_Consumer}" Click="Menu_OnConsumer"/>
+                <Separator/>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_Interval}" Click="Menu_OnSetInterval"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_Statistics}" Click="Menu_OnStatistics"/>
+                <Separator/>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_About}" Click="Menu_OnAbout"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_Quit}" Click="Menu_OnQuit"/>
+            </MenuItem>
+            <MenuItem Header="{x:Static local:Strings.Menu_View}" Padding="6,2">
+                <MenuItem Header="{x:Static local:Strings.Menu_View_Topmost}" IsChecked="{Binding AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_View_Transparency}" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_View_HideBorder}" IsChecked="{Binding HideBorder, Mode=TwoWay}" IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Header="{x:Static local:Strings.Menu_View_ShowAway}" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
+            </MenuItem>
+        </Menu>
+        <StackPanel Grid.Row="2" Background="#FFFF4000">
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsErrorSet}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <Label FontWeight="Bold" Foreground="White" Margin="2,0" Padding="5,5,5,2">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="ApiError">
+                                <Setter Property="Content" Value="{x:Static local:Strings.Critical_ApiError}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="NetError">
+                                <Setter Property="Content" Value="{x:Static local:Strings.Critical_NetError}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="Content" Value="No Error" />
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Label Foreground="White" Margin="2,0" Padding="5,2,5,5">
+                <Label.Content>
+                    <TextBlock TextWrapping="WrapWithOverflow">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsErrorSet}" Value="True" />
+                                            <Condition Binding="{Binding IsRetryPending}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Text" Value="{Binding RetryTimeout, StringFormat={x:Static local:Strings.Critical_AutoRetry_Message}}" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsErrorSet}" Value="True" />
+                                            <Condition Binding="{Binding IsRetryPending}" Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Text" Value="{Binding RetryCount, StringFormat={x:Static local:Strings.Critical_AutoRetry_Failed}}" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                                <Setter Property="Text" Value="This program is running normally." />
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Label.Content>
+            </Label>
+            <Button Content="{x:Static local:Strings.Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
+        </StackPanel>
+        <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding Source={StaticResource UserListSource}}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <ContextMenu.Style>
+                        <Style TargetType="ContextMenu">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContextMenu.Style>
+                    <MenuItem IsEnabled="False" Foreground="#c0000000">
+                        <MenuItem.Header>
+                            <TextBlock Text="{Binding SelectedItem.Name}"/>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem IsEnabled="False" Foreground="#c0000000">
+                        <MenuItem.Header>
+                            <TextBlock Text="{Binding SelectedItem.ScreenName, StringFormat=@{0}}"/>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Context_Mention}" Click="Context_OnMention"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Context_DM}" Click="Context_OnDirectMessage"/>
+                    <Separator/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Context_Profile}" Click="Context_OnProfile"/>
+                </ContextMenu>
+            </ListBox.ContextMenu>
+            <ListBox.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding Name}" Foreground="Gray" FontSize="16" />
+                                <Label Content="{Binding ItemCount}" Foreground="Gray" FontSize="16" ContentStringFormat="({0})"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListBox.GroupStyle>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="14"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Ellipse Width="9" Height="9">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="MediumSpringGreen"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="NeedConsumerKey">
-                                            <Setter Property="Text" Value="{x:Static local:Strings.Menu_Main_NeedConsumer}" />
+                                        <DataTrigger Binding="{Binding Status}" Value="Away">
+                                            <Setter Property="Fill" Value="LightGray"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="SignInRequired">
-                                            <Setter Property="Text" Value="{x:Static local:Strings.Menu_Main_NeedSignIn}" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsSignedIn}" Value="True">
-                                            <Setter Property="Text" Value="{Binding Service.Me.screen_name, StringFormat={}@{0}}" />
+                                        <DataTrigger Binding="{Binding Status}" Value="Offline">
+                                            <Setter Property="Fill" Value="Transparent"/>
+                                            <Setter Property="Stroke" Value="LightGray"/>
                                         </DataTrigger>
                                     </Style.Triggers>
-                                    <Setter Property="Text" Value="--" />
                                 </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </MenuItem.Header>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Main_SignIn}" Click="Menu_OnSignIn" IsEnabled="{Binding CanSignIn}"/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Main_Consumer}" Click="Menu_OnConsumer"/>
-                    <Separator/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Main_Interval}" Click="Menu_OnSetInterval"/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Main_Statistics}" Click="Menu_OnStatistics"/>
-                    <Separator/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Main_About}" Click="Menu_OnAbout"/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Main_Quit}" Click="Menu_OnQuit"/>
-                </MenuItem>
-                <MenuItem Header="{x:Static local:Strings.Menu_View}" Padding="6,2">
-                    <MenuItem Header="{x:Static local:Strings.Menu_View_Topmost}" IsChecked="{Binding AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_View_Transparency}" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_View_HideBorder}" IsChecked="{Binding HideBorder, Mode=TwoWay}" IsCheckable="True"/>
-                    <Separator/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_View_ShowAway}" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
-                </MenuItem>
-            </Menu>
-            <StackPanel Grid.Row="2" Background="#FFFF4000">
-                <StackPanel.Style>
-                    <Style TargetType="StackPanel">
+                            </Ellipse.Style>
+                        </Ellipse>
+                        <Label Grid.Column="1" Padding="5,1">
+                            <Label.Style>
+                                <Style TargetType="Label">
+                                    <Setter Property="Foreground" Value="#FF333333"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status}" Value="Online">
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Status}" Value="Offline">
+                                            <Setter Property="Foreground" Value="Gray"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Label.Style>
+                            <Label.Content>
+                                <TextBlock Text="{Binding ScreenName, StringFormat=@{0}, Mode=OneWay}"/>
+                            </Label.Content>
+                        </Label>
+                        <Label Grid.Column="2" Content="{Binding Converter={StaticResource LastTweetConverter}, Mode=OneWay}" Padding="3,1" Foreground="Gray"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StatusBar Grid.Row="4" Background="#FF333333">
+            <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
+            <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Away}" Padding="0" Foreground="LightGray"/>
+            <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Offline}" Padding="0" Foreground="DimGray"/>
+            <Label Padding="0" Foreground="#FFFF8000">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                        <Setter Property="Content" Value=""/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsErrorSet}" Value="False">
-                                <Setter Property="Visibility" Value="Collapsed"/>
+                            <DataTrigger Binding="{Binding StatUpdating, Mode=OneWay}" Value="True">
+                                <Setter Property="Content" Value="&#xe117;"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </StackPanel.Style>
-                <Label FontWeight="Bold" Foreground="White" Margin="2,0" Padding="5,5,5,2">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="ApiError">
-                                    <Setter Property="Content" Value="{x:Static local:Strings.Critical_ApiError}" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="NetError">
-                                    <Setter Property="Content" Value="{x:Static local:Strings.Critical_NetError}" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                            <Setter Property="Content" Value="No Error" />
-                        </Style>
-                    </Label.Style>
-                </Label>
-                <Label Foreground="White" Margin="2,0" Padding="5,2,5,5">
-                    <Label.Content>
-                        <TextBlock TextWrapping="WrapWithOverflow">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding IsErrorSet}" Value="True" />
-                                                <Condition Binding="{Binding IsRetryPending}" Value="True" />
-                                            </MultiDataTrigger.Conditions>
-                                            <MultiDataTrigger.Setters>
-                                                <Setter Property="Text" Value="{Binding RetryTimeout, StringFormat={x:Static local:Strings.Critical_AutoRetry_Message}}" />
-                                            </MultiDataTrigger.Setters>
-                                        </MultiDataTrigger>
-                                        <MultiDataTrigger>
-                                            <MultiDataTrigger.Conditions>
-                                                <Condition Binding="{Binding IsErrorSet}" Value="True" />
-                                                <Condition Binding="{Binding IsRetryPending}" Value="False" />
-                                            </MultiDataTrigger.Conditions>
-                                            <MultiDataTrigger.Setters>
-                                                <Setter Property="Text" Value="{Binding RetryCount, StringFormat={x:Static local:Strings.Critical_AutoRetry_Failed}}" />
-                                            </MultiDataTrigger.Setters>
-                                        </MultiDataTrigger>
-                                    </Style.Triggers>
-                                    <Setter Property="Text" Value="This program is running normally." />
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </Label.Content>
-                </Label>
-                <Button Content="{x:Static local:Strings.Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
-            </StackPanel>
-            <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding Source={StaticResource UserListSource}}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <ContextMenu.Style>
-                            <Style TargetType="ContextMenu">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding SelectedItem}" Value="{x:Null}">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ContextMenu.Style>
-                        <MenuItem IsEnabled="False" Foreground="#c0000000">
-                            <MenuItem.Header>
-                                <TextBlock Text="{Binding SelectedItem.Name}"/>
-                            </MenuItem.Header>
-                        </MenuItem>
-                        <MenuItem IsEnabled="False" Foreground="#c0000000">
-                            <MenuItem.Header>
-                                <TextBlock Text="{Binding SelectedItem.ScreenName, StringFormat=@{0}}"/>
-                            </MenuItem.Header>
-                        </MenuItem>
-                        <Separator/>
-                        <MenuItem Header="{x:Static local:Strings.Menu_Context_Mention}" Click="Context_OnMention"/>
-                        <MenuItem Header="{x:Static local:Strings.Menu_Context_DM}" Click="Context_OnDirectMessage"/>
-                        <Separator/>
-                        <MenuItem Header="{x:Static local:Strings.Menu_Context_Profile}" Click="Context_OnProfile"/>
-                    </ContextMenu>
-                </ListBox.ContextMenu>
-                <ListBox.GroupStyle>
-                    <GroupStyle>
-                        <GroupStyle.HeaderTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="{Binding Name}" Foreground="Gray" FontSize="16" />
-                                    <Label Content="{Binding ItemCount}" Foreground="Gray" FontSize="16" ContentStringFormat="({0})"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GroupStyle.HeaderTemplate>
-                    </GroupStyle>
-                </ListBox.GroupStyle>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="14"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Ellipse Width="9" Height="9">
-                                <Ellipse.Style>
-                                    <Style TargetType="Ellipse">
-                                        <Setter Property="Fill" Value="MediumSpringGreen"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Status}" Value="Away">
-                                                <Setter Property="Fill" Value="LightGray"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Status}" Value="Offline">
-                                                <Setter Property="Fill" Value="Transparent"/>
-                                                <Setter Property="Stroke" Value="LightGray"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Ellipse.Style>
-                            </Ellipse>
-                            <Label Grid.Column="1" Padding="5,1">
-                                <Label.Style>
-                                    <Style TargetType="Label">
-                                        <Setter Property="Foreground" Value="#FF333333"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Status}" Value="Online">
-                                                <Setter Property="FontWeight" Value="Bold"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Status}" Value="Offline">
-                                                <Setter Property="Foreground" Value="Gray"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Label.Style>
-                                <Label.Content>
-                                    <TextBlock Text="{Binding ScreenName, StringFormat=@{0}, Mode=OneWay}"/>
-                                </Label.Content>
-                            </Label>
-                            <Label Grid.Column="2" Content="{Binding Converter={StaticResource LastTweetConverter}, Mode=OneWay}" Padding="3,1" Foreground="Gray"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <StatusBar Grid.Row="4" Background="#FF333333">
-                <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
-                <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Away}" Padding="0" Foreground="LightGray"/>
-                <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Offline}" Padding="0" Foreground="DimGray"/>
-                <Label Padding="0" Foreground="#FFFF8000">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-                            <Setter Property="Content" Value=""/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding StatUpdating, Mode=OneWay}" Value="True">
-                                    <Setter Property="Content" Value="&#xe117;"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Label.Style>
-                </Label>
-            </StatusBar>
-        </Grid>
+                </Label.Style>
+            </Label>
+        </StatusBar>
     </Grid>
 </Window>
