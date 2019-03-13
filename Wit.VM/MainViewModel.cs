@@ -7,11 +7,8 @@ namespace Wit.VM
 {
     public class MainViewModel : INotifyPropertyChanged, IDisposable
     {
-        private Properties.Settings settings = Properties.Settings.Default;
-
         public MainService Service { get; } = MainService.Instance;
 
-        private bool showAway, showOffline;
         private bool transparency = false;
         private bool hideBorder = false;
 
@@ -29,9 +26,6 @@ namespace Wit.VM
 
             autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
             autoRetryWorker.WorkerSupportsCancellation = true;
-
-            showAway = settings.ShowAway;
-            showOffline = settings.ShowOffline;
         }
 
         #region Event Handlers
@@ -124,21 +118,33 @@ namespace Wit.VM
         public int StatOffline => Service.OfflineCount;
         public bool StatUpdating => Service.State == ServiceState.Updating;
 
-        public bool ShowAway
+        public bool AlwaysOnTop
         {
-            get => showAway;
+            get => Properties.Settings.Default.AlwaysOnTop;
             set
             {
-                Properties.Settings.Default.ShowAway = showAway = value;
+                Properties.Settings.Default.AlwaysOnTop = value;
+                OnPropertyChanged(nameof(AlwaysOnTop));
+            }
+        }
+
+        public bool ShowAway
+        {
+            get => Properties.Settings.Default.ShowAway;
+            set
+            {
+                Properties.Settings.Default.ShowAway = value;
+                OnPropertyChanged(nameof(ShowAway));
             }
         }
 
         public bool ShowOffline
         {
-            get => showOffline;
+            get => Properties.Settings.Default.ShowOffline;
             set
             {
-                Properties.Settings.Default.ShowOffline = showOffline = value;
+                Properties.Settings.Default.ShowOffline = value;
+                OnPropertyChanged(nameof(ShowOffline));
             }
         }
 
@@ -167,7 +173,7 @@ namespace Wit.VM
         private bool UserListFilter(object _item)
         {
             UserListItem item = _item as UserListItem;
-            return (showAway || item.Status != UserStatus.Away) && (ShowOffline || item.Status != UserStatus.Offline);
+            return (ShowAway || item.Status != UserStatus.Away) && (ShowOffline || item.Status != UserStatus.Offline);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
