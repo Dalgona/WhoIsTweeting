@@ -15,6 +15,12 @@ namespace Wit.VM
             service.PropertyChanged += Service_PropertyChanged;
         }
 
+        public GraphViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
+        {
+            this.vmFactory = vmFactory;
+            this.winManager = winManager;
+        }
+
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "State" && service.State == ServiceState.Running)

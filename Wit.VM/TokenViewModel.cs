@@ -7,6 +7,14 @@ namespace Wit.VM
         private string consumerKey, consumerSecret;
         private string pin;
 
+        public TokenViewModel() { }
+
+        public TokenViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
+        {
+            this.vmFactory = vmFactory;
+            this.winManager = winManager;
+        }
+
         public string ConsumerKey
         {
             get => consumerKey;

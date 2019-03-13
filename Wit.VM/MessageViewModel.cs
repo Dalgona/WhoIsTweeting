@@ -18,6 +18,12 @@ namespace Wit.VM
             this.user = user;
         }
 
+        public MessageViewModel(ViewModelFactory vmFactory, IWindowManager winManager, MessageWindowType type, UserListItem user) : this(type, user)
+        {
+            this.vmFactory = vmFactory;
+            this.winManager = winManager;
+        }
+
         public int MaxChars
         {
             get

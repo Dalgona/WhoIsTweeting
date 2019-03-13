@@ -29,6 +29,12 @@ namespace Wit.VM
             autoRetryWorker.WorkerSupportsCancellation = true;
         }
 
+        public MainViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
+        {
+            this.vmFactory = vmFactory;
+            this.winManager = winManager;
+        }
+
         #region Event Handlers
 
         private void AutoRetryWorker_DoWork(object sender, DoWorkEventArgs e)

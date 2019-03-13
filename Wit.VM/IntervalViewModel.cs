@@ -29,6 +29,12 @@ namespace Wit.VM
             Interval = service.UpdateInterval;
         }
 
+        public IntervalViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
+        {
+            this.vmFactory = vmFactory;
+            this.winManager = winManager;
+        }
+
         public void CommitInterval() => service.UpdateInterval = interval;
     }
 }
