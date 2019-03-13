@@ -3,9 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WhoIsTweeting"
              xmlns:ctrl="clr-namespace:Wit.Controls"
-             StartupUri="layouts/MainWindow.xaml" Exit="Application_Exit" Startup="Application_Startup">
+             xmlns:view="clr-namespace:WhoIsTweeting.Views"
+             xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
+             ShutdownMode="OnMainWindowClose"
+             Exit="Application_Exit"
+             Startup="Application_Startup">
     <Application.Resources>
         <local:LastTweetConverter x:Key="LastTweetConverter" />
+
+        <DataTemplate DataType="{x:Type vm:MainViewModel}">
+            <view:MainView />
+        </DataTemplate>
 
         <StreamGeometry x:Key="MinimizeWindowGlyphGeometry">
             M0,5 L10,5 L10,6 L0,6Z

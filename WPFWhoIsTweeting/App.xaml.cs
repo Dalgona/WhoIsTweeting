@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Data;
 using Wit.Core;
+using Wit.UI.Core;
+using Wit.VM;
 
 namespace WhoIsTweeting
 {
@@ -16,9 +18,13 @@ namespace WhoIsTweeting
             }
 
             MainService service = MainService.Instance;
+            WindowManager winManager = new WindowManager();
+            ViewModelFactory vmFactory = new ViewModelFactory(winManager);
 
             BindingOperations.EnableCollectionSynchronization(service.UserList, service.UserListLock);
             BindingOperations.EnableCollectionSynchronization(service.Graph, service.GraphLock);
+
+            winManager.ShowWindow(vmFactory.Create<MainViewModel>());
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
