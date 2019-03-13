@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System.Text;
 using System.Globalization;
 using Wit.Core;
+using Wit.VM;
 
 namespace WhoIsTweeting
 {

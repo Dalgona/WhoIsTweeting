@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Media.Effects;
+using Wit.VM;
 
 namespace WhoIsTweeting
 {
