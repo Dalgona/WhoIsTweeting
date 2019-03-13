@@ -80,8 +80,6 @@
             </MenuItem>
             <MenuItem Header="{x:Static local:Strings.Menu_View}" Padding="6,2">
                 <MenuItem Header="{x:Static local:Strings.Menu_View_Topmost}" IsChecked="{Binding AlwaysOnTop, Mode=TwoWay}" IsCheckable="True"/>
-                <MenuItem Header="{x:Static local:Strings.Menu_View_Transparency}" IsChecked="{Binding Transparency, Mode=TwoWay}" IsCheckable="True"/>
-                <MenuItem Header="{x:Static local:Strings.Menu_View_HideBorder}" IsChecked="{Binding HideBorder, Mode=TwoWay}" IsCheckable="True"/>
                 <Separator/>
                 <MenuItem Header="{x:Static local:Strings.Menu_View_ShowAway}" IsChecked="{Binding ShowAway, Mode=TwoWay}" IsCheckable="True"/>
                 <MenuItem Header="{x:Static local:Strings.Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>

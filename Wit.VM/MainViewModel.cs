@@ -9,9 +9,6 @@ namespace Wit.VM
     {
         public MainService Service { get; } = MainService.Instance;
 
-        private bool transparency = false;
-        private bool hideBorder = false;
-
         private const int maxRetryCount = 5;
         private double retryTimeMultiplier = 1.0;
         private bool isRetryPending = false;
@@ -187,26 +184,6 @@ namespace Wit.VM
                 Properties.Settings.Default.ShowOffline = value;
                 OnPropertyChanged(nameof(ShowOffline));
                 RefreshUserList?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        public bool Transparency
-        {
-            get => transparency;
-            set
-            {
-                transparency = value;
-                OnPropertyChanged(nameof(Transparency));
-            }
-        }
-
-        public bool HideBorder
-        {
-            get => hideBorder;
-            set
-            {
-                hideBorder = value;
-                OnPropertyChanged(nameof(HideBorder));
             }
         }
 
