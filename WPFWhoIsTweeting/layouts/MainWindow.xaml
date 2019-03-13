@@ -12,7 +12,10 @@
     mc:Ignorable="d"
     Title="WhoIsTweeting" Height="600" Width="270" Icon="../wit.ico"
     Topmost="{Binding AlwaysOnTop}"
-    d:DataContext="{d:DesignInstance {x:Type vm:MainViewModel}}" SnapsToDevicePixels="True" Background="{x:Null}" MinWidth="270" MinHeight="270">
+    d:DataContext="{d:DesignInstance {x:Type vm:MainViewModel}}"
+    SnapsToDevicePixels="True"
+    Style="{StaticResource MainWindowStyle}"
+    MinWidth="270" MinHeight="270">
     <Window.Resources>
         <local:LastTweetConverter x:Key="LastTweetConverter"/>
         <CollectionViewSource x:Key="UserListSource" Source="{Binding Service.UserList}" Filter="FilterUserList" IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="True">
@@ -33,23 +36,17 @@
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
     </Window.Resources>
-    <Window.Style>
-        <Style TargetType="Window">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Transparency}" Value="True">
-                    <Setter Property="Opacity" Value="0.65"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Style>
-    <Grid Background="#FF333333">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="32"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label Margin="4,0,0,0" Content="Wit" VerticalContentAlignment="Center" FontWeight="Bold" Foreground="MediumSpringGreen"/>
+        </StackPanel>
         <Menu Margin="0" Grid.Row="1" VerticalAlignment="Top">
             <MenuItem Padding="6,2">
                 <MenuItem.Header>

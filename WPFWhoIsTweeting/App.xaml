@@ -2,11 +2,107 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WhoIsTweeting"
+             xmlns:ctrl="clr-namespace:Wit.Controls"
              StartupUri="layouts/MainWindow.xaml" Exit="Application_Exit" Startup="Application_Startup">
     <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <StreamGeometry x:Key="MinimizeWindowGlyphGeometry">
+            M0,5 L10,5 L10,6 L0,6Z
+        </StreamGeometry>
+
+        <StreamGeometry x:Key="MaximizeWindowGlyphGeometry">
+            M0,0 L10,0 L10,10 L0,10Z M1,1 L9,1 L9,9 L1,9Z
+        </StreamGeometry>
+
+        <StreamGeometry x:Key="RestoreWindowGlyphGeometry">
+            M2,0 L10,0 L10,8 L8,8 L8,10 L0,10 L0,2 L2,2Z M3,1 L9,1 L9,7 L8,7 L8,2 L3,2Z M1,3 L7,3 L7,9 L1,9Z
+        </StreamGeometry>
+
+        <StreamGeometry x:Key="CloseWindowGlyphGeometry">
+            F1 M0,0 L0.6,0 L10,9.4 L10,10 L9.4,10 L0,0.6Z M10,0 L10,0.6 L0.6,10 L0,10 L0,9.4 L9.4,0Z
+        </StreamGeometry>
+
+        <ControlTemplate x:Key="WindowCommandButtonTemplate" TargetType="ButtonBase">
+            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+            </Border>
+        </ControlTemplate>
+
+        <Style x:Key="WindowCommandButtonStyle" TargetType="ButtonBase">
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="WhiteSmoke" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Width" Value="46" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template" Value="{StaticResource WindowCommandButtonTemplate}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#20FFFFFF" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="MediumSpringGreen" />
+                    <Setter Property="Foreground" Value="#FF333333" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MainWindowStyle" TargetType="ctrl:WindowBase">
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome CaptionHeight="32" GlassFrameThickness="-1" UseAeroCaptionButtons="False" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ctrl:WindowBase">
+                        <Border Background="#FF333333" BorderBrush="#FF222222" BorderThickness="1">
+                            <Grid x:Name="grid">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="32" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="Button" BasedOn="{StaticResource WindowCommandButtonStyle}" />
+                                        <Style TargetType="Path">
+                                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                                            <Setter Property="UseLayoutRounding" Value="True" />
+                                            <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button}, Path=Foreground}" />
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <Button x:Name="minimizeButton" Command="{x:Static SystemCommands.MinimizeWindowCommand}">
+                                        <Path Data="{StaticResource MinimizeWindowGlyphGeometry}" />
+                                    </Button>
+                                    <Button x:Name="maximizeButton" Command="{x:Static SystemCommands.MaximizeWindowCommand}">
+                                        <Path Data="{StaticResource MaximizeWindowGlyphGeometry}" />
+                                    </Button>
+                                    <Button x:Name="restoreButton" Command="{x:Static SystemCommands.RestoreWindowCommand}">
+                                        <Path Data="{StaticResource RestoreWindowGlyphGeometry}" />
+                                    </Button>
+                                    <Button Command="{x:Static SystemCommands.CloseWindowCommand}">
+                                        <Path Data="{StaticResource CloseWindowGlyphGeometry}" />
+                                    </Button>
+                                </StackPanel>
+                                <ContentPresenter Grid.Row="0" Grid.RowSpan="2" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="WindowState" Value="Maximized">
+                                <Setter Property="Margin" TargetName="grid" Value="7" />
+                            </Trigger>
+                            <Trigger Property="ResizeMode" Value="NoResize">
+                                <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed" />
+                                <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed" />
+                                <Setter Property="Visibility" TargetName="restoreButton" Value="Collapsed" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>
