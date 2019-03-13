@@ -2,11 +2,12 @@
 using System.Windows;
 using System.Windows.Data;
 using Wit.VM;
+using Wit.Controls;
 using Wit.Core;
 
 namespace WhoIsTweeting
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : WindowBase
     {
         private MainViewModel viewModel;
         private Properties.Settings appSettings = Properties.Settings.Default;

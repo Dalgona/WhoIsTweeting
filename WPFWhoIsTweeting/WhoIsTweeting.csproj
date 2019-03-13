@@ -79,6 +79,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\WindowBase.cs" />
     <Compile Include="LastTweetConverter.cs" />
     <Compile Include="layouts\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
