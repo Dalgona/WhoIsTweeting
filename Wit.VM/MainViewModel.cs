@@ -13,8 +13,11 @@ namespace Wit.VM
         private bool hideBorder = false;
 
         private const int maxRetryCount = 5;
-        private int retryCount = 0;
         private double retryTimeMultiplier = 1.0;
+        private bool isRetryPending = false;
+        private bool isRetrying = false;
+        private int retryCount = 0;
+        private int retryTimeout = 0;
 
         private UserListItem selectedItem;
         private BackgroundWorker autoRetryWorker = new BackgroundWorker();
@@ -33,31 +36,34 @@ namespace Wit.VM
         private void AutoRetryWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
-            for (int i = (int)(Service.UpdateInterval * retryTimeMultiplier); i > 0; i--)
+            for (RetryTimeout = (int)(Service.UpdateInterval * retryTimeMultiplier); RetryTimeout > 0; RetryTimeout--)
             {
                 if (worker.CancellationPending)
                 {
                     e.Cancel = true;
                     return;
                 }
-                // ErrorDescription = string.Format(Strings.Critical_AutoRetry_Message, i);
-                OnPropertyChanged(nameof(ErrorDescription));
                 Thread.Sleep(1000);
             }
-            retryCount += 1;
+            RetryCount += 1;
             retryTimeMultiplier *= 1.5;
+            isRetrying = true;
+            OnPropertyChanged(nameof(IsErrorSet));
             Service.Resume();
         }
 
         private void Service_ErrorOccurred(object sender, ErrorOccurredEventArgs e)
         {
+            isRetrying = false;
+            OnPropertyChanged(nameof(IsErrorSet));
             while (autoRetryWorker.IsBusy) Thread.Sleep(50); // spin-wait
-            if (retryCount >= maxRetryCount)
+            if (RetryCount >= maxRetryCount)
             {
-                // ErrorDescription = string.Format(Strings.Critical_AutoRetry_Failed, maxRetryCount);
+                IsRetryPending = false;
             }
             else
             {
+                IsRetryPending = true;
                 autoRetryWorker.RunWorkerAsync();
             }
         }
@@ -69,8 +75,9 @@ namespace Wit.VM
             if (e.PropertyName == "State" && svc.State >= 0)
             {
                 if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
-                retryCount = 0;
+                RetryCount = 0;
                 retryTimeMultiplier = 1.0;
+                isRetrying = false;
             }
 
             OnPropertyChanged("");
@@ -93,14 +100,48 @@ namespace Wit.VM
         public void TryResume()
         {
             if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
-            retryCount = 0;
+            RetryCount = 0;
             retryTimeMultiplier = 1.0;
+            isRetrying = true;
+            OnPropertyChanged(nameof(IsErrorSet));
             Service.Resume();
         }
 
         public bool CanSignIn => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError;
 
         public bool IsSignedIn => Service.State >= ServiceState.Ready;
+
+        public bool IsErrorSet => Service.State < 0 && !isRetrying;
+
+        public bool IsRetryPending
+        {
+            get => isRetryPending;
+            set
+            {
+                isRetryPending = value;
+                OnPropertyChanged(nameof(IsRetryPending));
+            }
+        }
+
+        public int RetryCount
+        {
+            get => retryCount;
+            set
+            {
+                retryCount = value;
+                OnPropertyChanged(nameof(RetryCount));
+            }
+        }
+
+        public int RetryTimeout
+        {
+            get => retryTimeout;
+            set
+            {
+                retryTimeout = value;
+                OnPropertyChanged(nameof(RetryTimeout));
+            }
+        }
 
         public UserListItem SelectedItem
         {
@@ -168,8 +209,6 @@ namespace Wit.VM
                 OnPropertyChanged(nameof(HideBorder));
             }
         }
-
-        public string ErrorDescription { get; private set; }
 
         public event EventHandler RefreshUserList;
         public event PropertyChangedEventHandler PropertyChanged;

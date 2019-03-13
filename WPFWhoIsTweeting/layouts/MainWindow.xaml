@@ -181,7 +181,7 @@
                 <StackPanel.Style>
                     <Style TargetType="StackPanel">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding ErrorMessage}" Value="">
+                            <DataTrigger Binding="{Binding IsErrorSet}" Value="False">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -198,12 +198,39 @@
                                     <Setter Property="Content" Value="{x:Static local:Strings.Critical_NetError}" />
                                 </DataTrigger>
                             </Style.Triggers>
+                            <Setter Property="Content" Value="No Error" />
                         </Style>
                     </Label.Style>
                 </Label>
                 <Label Foreground="White" Margin="2,0" Padding="5,2,5,5">
                     <Label.Content>
-                        <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding ErrorDescription}"/>
+                        <TextBlock TextWrapping="WrapWithOverflow">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsErrorSet}" Value="True" />
+                                                <Condition Binding="{Binding IsRetryPending}" Value="True" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Text" Value="{Binding RetryTimeout, StringFormat={x:Static local:Strings.Critical_AutoRetry_Message}}" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding IsErrorSet}" Value="True" />
+                                                <Condition Binding="{Binding IsRetryPending}" Value="False" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Text" Value="{Binding RetryCount, StringFormat={x:Static local:Strings.Critical_AutoRetry_Failed}}" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                    </Style.Triggers>
+                                    <Setter Property="Text" Value="This program is running normally." />
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </Label.Content>
                 </Label>
                 <Button Content="{x:Static local:Strings.Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3" Click="OnTryAgainClicked"/>
