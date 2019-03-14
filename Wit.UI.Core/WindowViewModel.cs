@@ -10,6 +10,7 @@
         private double _minHeight = 0.0;
         private double _maxHeight = double.PositiveInfinity;
         private bool _canResize = true;
+        private bool _alwaysOnTop = false;
 
         public virtual string Title
         {
@@ -88,6 +89,16 @@
             {
                 _canResize = value;
                 OnPropertyChanged(nameof(CanResize));
+            }
+        }
+
+        public virtual bool AlwaysOnTop
+        {
+            get => _alwaysOnTop;
+            set
+            {
+                _alwaysOnTop = value;
+                OnPropertyChanged(nameof(AlwaysOnTop));
             }
         }
     }

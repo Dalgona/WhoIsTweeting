@@ -30,6 +30,7 @@ namespace Wit.Controls
             SetBinding(MinHeightProperty, new Binding("MinHeight") { Mode = BindingMode.TwoWay });
             SetBinding(MaxHeightProperty, new Binding("MaxHeight") { Mode = BindingMode.TwoWay });
             SetBinding(ResizeModeProperty, new Binding("CanResize") { Converter = _resizeModeConverter });
+            SetBinding(TopmostProperty, new Binding("AlwaysOnTop") { Mode = BindingMode.TwoWay });
         }
 
         protected virtual void OnMinimizeWindowExecuted(object sender, ExecutedRoutedEventArgs e)

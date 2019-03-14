@@ -231,7 +231,7 @@ namespace Wit.VM
         public int StatOffline => Service.OfflineCount;
         public bool StatUpdating => Service.State == ServiceState.Updating;
 
-        public bool AlwaysOnTop
+        public override bool AlwaysOnTop
         {
             get => Properties.Settings.Default.AlwaysOnTop;
             set
