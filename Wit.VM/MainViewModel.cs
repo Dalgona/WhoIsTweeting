@@ -104,12 +104,6 @@ namespace Wit.VM
 
         #endregion
 
-        public void SetConsumerKey(string consumerKey, string consumerSecret)
-            => Service.SetConsumerKey(consumerKey, consumerSecret);
-
-        public void SignIn(Func<string, string> callback, Action<Exception> onError)
-            => Service.SignIn(callback, onError);
-
         public void PostTweet(string content, Action<Exception> onError)
             => Service.PostTweet(content, onError);
 
@@ -147,7 +141,7 @@ namespace Wit.VM
 
                 if (vm.Result && (vm.ConsumerKey != coreSettings.ConsumerKey || vm.ConsumerSecret != coreSettings.ConsumerSecret))
                 {
-                    SetConsumerKey(vm.ConsumerKey, vm.ConsumerSecret);
+                    Service.SetConsumerKey(vm.ConsumerKey, vm.ConsumerSecret);
                 }
             }));
 
