@@ -19,7 +19,6 @@ namespace Wit.UI.Core
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Creating a new window for {viewModel.GetType().Name}");
                 Window newWin = CreateWindow(viewModel);
-                newWin.Closed += OnWindowClosed;
 
                 _windows.Add(viewModel, newWin);
                 newWin.Show();
@@ -28,7 +27,19 @@ namespace Wit.UI.Core
 
         public void ShowModalWindow(ViewModelBase viewModel)
         {
-            CreateWindow(viewModel).ShowDialog();
+            if (_windows.TryGetValue(viewModel, out Window win))
+            {
+                System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Activating an existing modal window for {viewModel.GetType().Name}");
+                win.Activate();
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Creating a new modal window for {viewModel.GetType().Name}");
+                Window newWin = CreateWindow(viewModel);
+
+                _windows.Add(viewModel, newWin);
+                newWin.ShowDialog();
+            }
         }
 
         public void CloseWindow(ViewModelBase viewModel)
@@ -43,11 +54,15 @@ namespace Wit.UI.Core
 
         private Window CreateWindow(ViewModelBase viewModel)
         {
-            return new Window()
+            Window newWin = new Window()
             {
                 Content = viewModel,
                 DataContext = viewModel
             };
+
+            newWin.Closed += OnWindowClosed;
+
+            return newWin;
         }
 
         private void OnWindowClosed(object sender, EventArgs e)
