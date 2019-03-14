@@ -5,17 +5,17 @@ using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class GraphViewModel : ViewModelBase
+    public class StatViewModel : ViewModelBase
     {
         private const string dateformat = "yyyy-MM-dd HH:mm";
         private MainService service = MainService.Instance;
 
-        public GraphViewModel()
+        public StatViewModel()
         {
             service.PropertyChanged += Service_PropertyChanged;
         }
 
-        public GraphViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
+        public StatViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
         {
             this.vmFactory = vmFactory;
             this.winManager = winManager;

@@ -125,7 +125,7 @@ namespace Wit.VM
             {
                 if (_statViewModel == null)
                 {
-                    _statViewModel = vmFactory.Create<GraphViewModel>();
+                    _statViewModel = vmFactory.Create<StatViewModel>();
                 }
 
                 winManager.ShowWindow(_statViewModel);

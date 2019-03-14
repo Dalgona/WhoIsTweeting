@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutViewModel.cs" />
-    <Compile Include="GraphViewModel.cs" />
+    <Compile Include="StatViewModel.cs" />
     <Compile Include="IntervalViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="MessageViewModel.cs" />
