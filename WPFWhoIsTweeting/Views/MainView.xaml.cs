@@ -47,19 +47,6 @@ namespace WhoIsTweeting.Views
             win.ShowDialog();
         }
 
-        private void Menu_OnConsumer(object sender, RoutedEventArgs e)
-        {
-            ConsumerWindow win = new ConsumerWindow();
-            TokenViewModel mdl = win.DataContext as TokenViewModel;
-            var coreSettings = Wit.Core.Properties.Settings.Default;
-
-            // win.Owner = this;
-            if ((bool)win.ShowDialog())
-                if (!(mdl.ConsumerKey == coreSettings.ConsumerKey
-                    && mdl.ConsumerSecret == coreSettings.ConsumerSecret))
-                    viewModel.SetConsumerKey(mdl.ConsumerKey, mdl.ConsumerSecret);
-        }
-
         private void Menu_OnSignIn(object sender, RoutedEventArgs e)
         {
             MessageBoxResult cont = MessageBox.Show(Strings.SignIn_Confirm, Strings.SignIn_Title,

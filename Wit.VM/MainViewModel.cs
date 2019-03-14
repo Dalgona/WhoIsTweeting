@@ -134,15 +134,14 @@ namespace Wit.VM
             get => _openKeyCommand ?? (_openKeyCommand = new RelayCommand(() =>
             {
                 TokenViewModel vm = (TokenViewModel)vmFactory.Create<TokenViewModel>();
+                Core.Properties.Settings coreSettings = Core.Properties.Settings.Default;
+
                 winManager.ShowModalWindow(vm);
 
-                /* Core.Properties.Settings coreSettings = Core.Properties.Settings.Default;
-
-                // win.Owner = this;
-                if ((bool)win.ShowDialog())
-                    if (!(mdl.ConsumerKey == coreSettings.ConsumerKey
-                        && mdl.ConsumerSecret == coreSettings.ConsumerSecret))
-                        viewModel.SetConsumerKey(mdl.ConsumerKey, mdl.ConsumerSecret); */
+                if (vm.Result && (vm.ConsumerKey != coreSettings.ConsumerKey || vm.ConsumerSecret != coreSettings.ConsumerSecret))
+                {
+                    SetConsumerKey(vm.ConsumerKey, vm.ConsumerSecret);
+                }
             }));
         }
 
