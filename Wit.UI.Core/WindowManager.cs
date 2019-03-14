@@ -66,6 +66,12 @@ namespace Wit.UI.Core
                 DataContext = viewModel
             };
 
+            if (viewModel is WindowViewModel wvm)
+            {
+                newWin.Width = wvm.Width;
+                newWin.Height = wvm.Height;
+            }
+
             newWin.Closed += OnWindowClosed;
 
             return newWin;
