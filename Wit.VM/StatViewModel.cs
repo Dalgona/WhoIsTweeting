@@ -1,5 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections;
 using System.ComponentModel;
+using System.Linq;
 using Wit.Core;
 using Wit.UI.Core;
 
@@ -52,6 +53,7 @@ namespace Wit.VM
             }
         }
 
+        public IEnumerable Graph => service.Graph;
         public int DataCount => service.GraphCount;
         public int FollowingsCount => service.OnlineCount + service.AwayCount + service.OfflineCount;
 

@@ -73,7 +73,6 @@ namespace WhoIsTweeting.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            list1.ItemsSource = service.Graph;
             drawGraph();
         }
 
