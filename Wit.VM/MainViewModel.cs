@@ -13,6 +13,7 @@ namespace Wit.VM
         private ViewModelBase _statViewModel;
 
         private RelayCommand _openStatCommand;
+        private RelayCommand _openKeyCommand;
 
         private const int maxRetryCount = 5;
         private double retryTimeMultiplier = 1.0;
@@ -125,6 +126,23 @@ namespace Wit.VM
                 }
 
                 winManager.ShowWindow(_statViewModel);
+            }));
+        }
+
+        public RelayCommand OpenKeyCommand
+        {
+            get => _openKeyCommand ?? (_openKeyCommand = new RelayCommand(() =>
+            {
+                TokenViewModel vm = (TokenViewModel)vmFactory.Create<TokenViewModel>();
+                winManager.ShowModalWindow(vm);
+
+                /* Core.Properties.Settings coreSettings = Core.Properties.Settings.Default;
+
+                // win.Owner = this;
+                if ((bool)win.ShowDialog())
+                    if (!(mdl.ConsumerKey == coreSettings.ConsumerKey
+                        && mdl.ConsumerSecret == coreSettings.ConsumerSecret))
+                        viewModel.SetConsumerKey(mdl.ConsumerKey, mdl.ConsumerSecret); */
             }));
         }
 
