@@ -23,7 +23,7 @@ namespace Wit.VM
         public PinViewModel()
         {
             Width = 300;
-            Height = 150;
+            Height = 130;
             CanResize = false;
         }
 

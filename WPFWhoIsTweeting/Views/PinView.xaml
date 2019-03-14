@@ -8,12 +8,22 @@
     xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type vm:PinViewModel}}"
-    d:DesignHeight="150" d:DesignWidth="300">
-    <StackPanel Margin="5">
-        <Label HorizontalAlignment="Center">
+    d:DesignHeight="130" d:DesignWidth="300"
+    FocusManager.FocusedElement="{Binding ElementName=pin}">
+    <UserControl.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <Label DockPanel.Dock="Top" Background="{x:Null}" HorizontalContentAlignment="Center">
             <TextBlock TextAlignment="Center" Text="{x:Static local:Strings.SignIn_Message}"/>
         </Label>
-        <TextBox Text="{Binding Pin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Padding="0,2" TextAlignment="Center" FontSize="16"/>
-        <Button Content="{x:Static local:Strings.Button_OK}" HorizontalAlignment="Center" Margin="0,5" Padding="15,3" IsDefault="True" Command="{Binding OkCommand}"/>
-    </StackPanel>
+        <Grid DockPanel.Dock="Bottom">
+            <Button Content="{x:Static local:Strings.Button_OK}" HorizontalAlignment="Center" Margin="0,5" Padding="15,3" IsDefault="True" Command="{Binding OkCommand}"/>
+        </Grid>
+        <Grid Background="#40000000">
+            <TextBox x:Name="pin" Text="{Binding Pin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Padding="0,2" TextAlignment="Center" VerticalAlignment="Center" FontSize="16"/>
+        </Grid>
+    </DockPanel>
 </UserControl>
