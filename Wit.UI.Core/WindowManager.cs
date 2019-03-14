@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 
 namespace Wit.UI.Core
@@ -11,11 +12,14 @@ namespace Wit.UI.Core
         {
             if (_windows.TryGetValue(viewModel, out Window win))
             {
+                System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Activating an existing window for {viewModel.GetType().Name}");
                 win.Activate();
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Creating a new window for {viewModel.GetType().Name}");
                 Window newWin = CreateWindow(viewModel);
+                newWin.Closed += OnWindowClosed;
 
                 _windows.Add(viewModel, newWin);
                 newWin.Show();
@@ -29,14 +33,13 @@ namespace Wit.UI.Core
 
         public void CloseWindow(ViewModelBase viewModel)
         {
+            System.Diagnostics.Debug.WriteLine($"[WindowManager::CloseWindow] Attempting to close a window for {viewModel.GetType().Name}");
+
             if (_windows.TryGetValue(viewModel, out Window win))
             {
                 win.Close();
-                _windows.Remove(viewModel);
             }
         }
-
-        // TODO: Handle the case when a user closes a window by clicking the system command button.
 
         private Window CreateWindow(ViewModelBase viewModel)
         {
@@ -45,6 +48,20 @@ namespace Wit.UI.Core
                 Content = viewModel,
                 DataContext = viewModel
             };
+        }
+
+        private void OnWindowClosed(object sender, EventArgs e)
+        {
+            if (sender is Window win)
+            {
+                win.Closed -= OnWindowClosed;
+
+                if (win.DataContext is ViewModelBase viewModel)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[WindowManager::OnWindowClosed] A window for {viewModel.GetType().Name} has closed");
+                    _windows.Remove(viewModel);
+                }
+            }
         }
     }
 }
