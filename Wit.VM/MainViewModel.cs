@@ -140,7 +140,7 @@ namespace Wit.VM
                 TokenViewModel vm = (TokenViewModel)vmFactory.Create<TokenViewModel>();
                 Core.Properties.Settings coreSettings = Core.Properties.Settings.Default;
 
-                winManager.ShowModalWindow(vm);
+                winManager.ShowModalWindow(vm, this);
 
                 if (vm.Result && (vm.ConsumerKey != coreSettings.ConsumerKey || vm.ConsumerSecret != coreSettings.ConsumerSecret))
                 {

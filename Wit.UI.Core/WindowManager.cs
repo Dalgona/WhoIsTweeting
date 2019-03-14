@@ -25,7 +25,7 @@ namespace Wit.UI.Core
             }
         }
 
-        public void ShowModalWindow(ViewModelBase viewModel)
+        public void ShowModalWindow(ViewModelBase viewModel, ViewModelBase owner)
         {
             if (_windows.TryGetValue(viewModel, out TWindow win))
             {
@@ -36,6 +36,12 @@ namespace Wit.UI.Core
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Creating a new modal window for {viewModel.GetType().Name}");
                 TWindow newWin = CreateWindow(viewModel);
+
+                if (owner != null && _windows.TryGetValue(owner, out TWindow ownerWin))
+                {
+                    newWin.Owner = ownerWin;
+                    newWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                }
 
                 _windows.Add(viewModel, newWin);
                 newWin.ShowDialog();
