@@ -23,6 +23,10 @@
             <view:PinView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:AboutViewModel}">
+            <view:AboutView />
+        </DataTemplate>
+
         <StreamGeometry x:Key="MinimizeWindowGlyphGeometry">
             M0,5 L10,5 L10,6 L0,6Z
         </StreamGeometry>

@@ -81,9 +81,6 @@
     </ApplicationDefinition>
     <Compile Include="Controls\WindowBase.cs" />
     <Compile Include="LastTweetConverter.cs" />
-    <Compile Include="layouts\AboutWindow.xaml.cs">
-      <DependentUpon>AboutWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="layouts\SetIntervalWindow.xaml.cs">
       <DependentUpon>SetIntervalWindow.xaml</DependentUpon>
     </Compile>
@@ -104,6 +101,9 @@
     <Compile Include="layouts\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\KeyView.xaml.cs">
       <DependentUpon>KeyView.xaml</DependentUpon>
     </Compile>
@@ -116,10 +116,6 @@
     <Compile Include="Views\UserListItemView.xaml.cs">
       <DependentUpon>UserListItemView.xaml</DependentUpon>
     </Compile>
-    <Page Include="layouts\AboutWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="layouts\GraphWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="layouts\SetIntervalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

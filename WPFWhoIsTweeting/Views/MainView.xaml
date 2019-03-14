@@ -73,7 +73,7 @@
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_Interval}" Click="Menu_OnSetInterval"/>
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_Statistics}" Command="{Binding OpenStatCommand}"/>
                 <Separator/>
-                <MenuItem Header="{x:Static local:Strings.Menu_Main_About}" Click="Menu_OnAbout"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_About}" Command="{Binding OpenAboutCommand}"/>
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_Quit}" Command="{Binding QuitCommand}"/>
             </MenuItem>
             <MenuItem Header="{x:Static local:Strings.Menu_View}" Padding="6,2">

@@ -15,6 +15,7 @@ namespace Wit.VM
         private RelayCommand _openStatCommand;
         private RelayCommand _openKeyCommand;
         private RelayCommand _signInCommand;
+        private RelayCommand _openAboutCommand;
         private RelayCommand _quitCommand;
 
         private const int maxRetryCount = 5;
@@ -166,6 +167,14 @@ namespace Wit.VM
                     // TODO: Show the error message box.
                 });
             }, () => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError));
+
+        public RelayCommand OpenAboutCommand
+            => _openAboutCommand ?? (_openAboutCommand = new RelayCommand(() =>
+            {
+                AboutViewModel vm = (AboutViewModel)vmFactory.Create<AboutViewModel>();
+
+                winManager.ShowModalWindow(vm, this);
+            }));
 
         public RelayCommand QuitCommand
             => _quitCommand ?? (_quitCommand = new RelayCommand(() => winManager.CloseWindow(this)));
