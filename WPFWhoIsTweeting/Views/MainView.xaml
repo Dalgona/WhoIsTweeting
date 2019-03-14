@@ -71,7 +71,7 @@
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_Consumer}" Click="Menu_OnConsumer"/>
                 <Separator/>
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_Interval}" Click="Menu_OnSetInterval"/>
-                <MenuItem Header="{x:Static local:Strings.Menu_Main_Statistics}" Click="Menu_OnStatistics"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_Statistics}" Command="{Binding OpenStatCommand}"/>
                 <Separator/>
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_About}" Click="Menu_OnAbout"/>
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_Quit}" Click="Menu_OnQuit"/>

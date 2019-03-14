@@ -79,12 +79,6 @@ namespace WhoIsTweeting.Views
                 });
         }
 
-        private void Menu_OnStatistics(object sender, RoutedEventArgs e)
-        {
-            GraphWindow win = new GraphWindow();// { Owner = this };
-            win.Show();
-        }
-
         private void Menu_OnSetInterval(object sender, RoutedEventArgs e)
         {
             SetIntervalWindow win = new SetIntervalWindow();// { Owner = this };

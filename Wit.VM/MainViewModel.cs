@@ -10,6 +10,10 @@ namespace Wit.VM
     {
         public MainService Service { get; } = MainService.Instance;
 
+        private ViewModelBase _statViewModel;
+
+        private RelayCommand _openStatCommand;
+
         private const int maxRetryCount = 5;
         private double retryTimeMultiplier = 1.0;
         private bool isRetryPending = false;
@@ -109,6 +113,19 @@ namespace Wit.VM
             isRetrying = true;
             OnPropertyChanged(nameof(IsErrorSet));
             Service.Resume();
+        }
+
+        public RelayCommand OpenStatCommand
+        {
+            get => _openStatCommand ?? (_openStatCommand = new RelayCommand(() =>
+            {
+                if (_statViewModel == null)
+                {
+                    _statViewModel = vmFactory.Create<GraphViewModel>();
+                }
+
+                winManager.ShowWindow(_statViewModel);
+            }));
         }
 
         public bool CanSignIn => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError;
