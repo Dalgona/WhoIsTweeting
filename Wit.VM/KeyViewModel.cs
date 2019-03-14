@@ -10,7 +10,12 @@ namespace Wit.VM
         private RelayCommand _saveCommand;
         private RelayCommand _cancelCommand;
 
-        public KeyViewModel() { }
+        public KeyViewModel()
+        {
+            Width = 480;
+            Height = 180;
+            CanResize = false;
+        }
 
         public KeyViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
         {
