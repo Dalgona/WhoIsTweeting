@@ -2,11 +2,14 @@
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using WhoIsTweeting;
 
 namespace Wit.Controls
 {
     public class WindowBase : Window
     {
+        private static readonly ResizeModeConverter _resizeModeConverter = new ResizeModeConverter();
+
         public WindowBase() : base()
         {
             CommandBindings.Add(new CommandBinding(SystemCommands.MinimizeWindowCommand, OnMinimizeWindowExecuted, CanExecuteMinimizeWindow));
@@ -19,12 +22,14 @@ namespace Wit.Controls
                 Style = s;
             }
 
+            SetBinding(TitleProperty, new Binding("Title"));
             SetBinding(WidthProperty, new Binding("Width") { Mode = BindingMode.TwoWay });
             SetBinding(MinWidthProperty, new Binding("MinWidth") { Mode = BindingMode.TwoWay });
             SetBinding(MaxWidthProperty, new Binding("MaxWidth") { Mode = BindingMode.TwoWay });
             SetBinding(HeightProperty, new Binding("Height") { Mode = BindingMode.TwoWay });
             SetBinding(MinHeightProperty, new Binding("MinHeight") { Mode = BindingMode.TwoWay });
             SetBinding(MaxHeightProperty, new Binding("MaxHeight") { Mode = BindingMode.TwoWay });
+            SetBinding(ResizeModeProperty, new Binding("CanResize") { Converter = _resizeModeConverter });
         }
 
         protected virtual void OnMinimizeWindowExecuted(object sender, ExecutedRoutedEventArgs e)

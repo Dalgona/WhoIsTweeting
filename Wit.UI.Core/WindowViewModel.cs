@@ -2,13 +2,14 @@
 {
     public class WindowViewModel : ViewModelBase
     {
-        private string _title;
+        private string _title = string.Empty;
         private double _width = double.NaN;
         private double _height = double.NaN;
         private double _minWidth = 0.0;
         private double _maxWidth = double.PositiveInfinity;
         private double _minHeight = 0.0;
         private double _maxHeight = double.PositiveInfinity;
+        private bool _canResize = true;
 
         public string Title
         {
@@ -77,6 +78,16 @@
             {
                 _maxHeight = value;
                 OnPropertyChanged(nameof(MaxHeight));
+            }
+        }
+
+        public bool CanResize
+        {
+            get => _canResize;
+            set
+            {
+                _canResize = value;
+                OnPropertyChanged(nameof(CanResize));
             }
         }
     }

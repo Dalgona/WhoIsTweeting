@@ -34,6 +34,7 @@ namespace Wit.VM
             autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
             autoRetryWorker.WorkerSupportsCancellation = true;
 
+            Title = "WhoIsTweeting";
             Width = 300;
             Height = 600;
             MinWidth = 300;
