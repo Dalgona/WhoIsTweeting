@@ -70,7 +70,7 @@
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_SignIn}" Command="{Binding SignInCommand}"/>
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_Consumer}" Command="{Binding OpenKeyCommand}"/>
                 <Separator/>
-                <MenuItem Header="{x:Static local:Strings.Menu_Main_Interval}" Click="Menu_OnSetInterval"/>
+                <MenuItem Header="{x:Static local:Strings.Menu_Main_Interval}" Command="{Binding OpenIntervalCommand}"/>
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_Statistics}" Command="{Binding OpenStatCommand}"/>
                 <Separator/>
                 <MenuItem Header="{x:Static local:Strings.Menu_Main_About}" Command="{Binding OpenAboutCommand}"/>

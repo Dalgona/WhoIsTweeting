@@ -36,16 +36,6 @@ namespace WhoIsTweeting.Views
             base.OnPropertyChanged(e);
         }
 
-        #region Main Menu Handler
-
-        private void Menu_OnSetInterval(object sender, RoutedEventArgs e)
-        {
-            SetIntervalWindow win = new SetIntervalWindow();// { Owner = this };
-            win.ShowDialog();
-        }
-
-        #endregion
-
         #region Context Menu Handler
 
         private void Context_OnMention(object sender, RoutedEventArgs e)

@@ -15,6 +15,7 @@ namespace Wit.VM
         private RelayCommand _openStatCommand;
         private RelayCommand _openKeyCommand;
         private RelayCommand _signInCommand;
+        private RelayCommand _openIntervalCommand;
         private RelayCommand _openAboutCommand;
         private RelayCommand _quitCommand;
 
@@ -167,6 +168,14 @@ namespace Wit.VM
                     // TODO: Show the error message box.
                 });
             }, () => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError));
+
+        public RelayCommand OpenIntervalCommand
+            => _openIntervalCommand ?? (_openIntervalCommand = new RelayCommand(() =>
+            {
+                IntervalViewModel vm = (IntervalViewModel)vmFactory.Create<IntervalViewModel>();
+
+                winManager.ShowModalWindow(vm, this);
+            }));
 
         public RelayCommand OpenAboutCommand
             => _openAboutCommand ?? (_openAboutCommand = new RelayCommand(() =>

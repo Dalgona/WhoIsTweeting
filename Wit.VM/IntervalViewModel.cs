@@ -3,30 +3,61 @@ using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class IntervalViewModel : ViewModelBase
+    public class IntervalViewModel : WindowViewModel
     {
+        private readonly MainService _service;
+        private readonly int _oldInterval;
+        private int _interval;
+
+        private RelayCommand _decreaseIntervalCommand;
+        private RelayCommand _increaseIntervalCommand;
+        private RelayCommand _saveCommand;
+        private RelayCommand _cancelCommand;
+
         public int Interval
         {
-            get => interval;
+            get => _interval;
             set
             {
-                if (value <= 10) interval = 10;
-                else if (value >= 60) interval = 60;
-                else interval = value;
+                if (value <= 10) _interval = 10;
+                else if (value >= 60) _interval = 60;
+                else _interval = value;
 
                 OnPropertyChanged(nameof(Interval));
                 OnPropertyChanged(nameof(MaxFollowings));
             }
         }
-        public int MaxFollowings => Interval * 20;
 
-        private MainService service;
-        private int interval;
+        public RelayCommand DecreaseIntervalCommand
+            => _decreaseIntervalCommand ?? (_decreaseIntervalCommand = new RelayCommand(() => Interval -= 5, () => Interval > 10));
+
+        public RelayCommand IncreaseIntervalCommand
+            => _increaseIntervalCommand ?? (_increaseIntervalCommand = new RelayCommand(() => Interval += 5, () => Interval < 60));
+
+        public RelayCommand SaveCommand
+            => _saveCommand ?? (_saveCommand = new RelayCommand(() =>
+            {
+                if (Interval != _oldInterval)
+                {
+                    _service.UpdateInterval = _interval;
+                }
+
+                winManager.CloseWindow(this);
+            }));
+
+        public RelayCommand CancelCommand
+            => _cancelCommand ?? (_cancelCommand = new RelayCommand(() => winManager.CloseWindow(this)));
+
+        public int MaxFollowings => Interval * 20;
 
         public IntervalViewModel()
         {
-            service = MainService.Instance;
-            Interval = service.UpdateInterval;
+            _service = MainService.Instance;
+            _oldInterval = Interval = _service.UpdateInterval;
+
+            Width = 340;
+            Height = 240;
+            CanResize = false;
         }
 
         public IntervalViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
@@ -34,7 +65,5 @@ namespace Wit.VM
             this.vmFactory = vmFactory;
             this.winManager = winManager;
         }
-
-        public void CommitInterval() => service.UpdateInterval = interval;
     }
 }

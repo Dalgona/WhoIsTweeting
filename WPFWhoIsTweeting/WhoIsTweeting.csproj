@@ -81,9 +81,6 @@
     </ApplicationDefinition>
     <Compile Include="Controls\WindowBase.cs" />
     <Compile Include="LastTweetConverter.cs" />
-    <Compile Include="layouts\SetIntervalWindow.xaml.cs">
-      <DependentUpon>SetIntervalWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ResizeModeConverter.cs" />
     <Compile Include="Strings.ko-KR.Designer.cs">
       <DependentUpon>Strings.ko-KR.resx</DependentUpon>
@@ -103,6 +100,9 @@
     </Compile>
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IntervalView.xaml.cs">
+      <DependentUpon>IntervalView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\KeyView.xaml.cs">
       <DependentUpon>KeyView.xaml</DependentUpon>
@@ -128,11 +128,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="layouts\SetIntervalWindow.xaml">
+    <Page Include="Views\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\AboutView.xaml">
+    <Page Include="Views\IntervalView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
