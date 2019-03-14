@@ -6,7 +6,7 @@ using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class MainViewModel : ViewModelBase, IDisposable
+    public class MainViewModel : WindowViewModel, IDisposable
     {
         public MainService Service { get; } = MainService.Instance;
 
@@ -33,6 +33,11 @@ namespace Wit.VM
 
             autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
             autoRetryWorker.WorkerSupportsCancellation = true;
+
+            Width = 300;
+            Height = 600;
+            MinWidth = 300;
+            MinHeight = 400;
         }
 
         public MainViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
