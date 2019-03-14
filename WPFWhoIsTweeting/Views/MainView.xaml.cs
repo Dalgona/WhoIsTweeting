@@ -38,9 +38,6 @@ namespace WhoIsTweeting.Views
 
         #region Main Menu Handler
 
-        private void Menu_OnQuit(object sender, RoutedEventArgs e)
-            => Application.Current.Shutdown();
-
         private void Menu_OnAbout(object sender, RoutedEventArgs e)
         {
             AboutWindow win = new AboutWindow();// { Owner = this };

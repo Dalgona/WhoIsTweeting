@@ -14,6 +14,7 @@ namespace Wit.VM
 
         private RelayCommand _openStatCommand;
         private RelayCommand _openKeyCommand;
+        private RelayCommand _quitCommand;
 
         private const int maxRetryCount = 5;
         private double retryTimeMultiplier = 1.0;
@@ -117,8 +118,7 @@ namespace Wit.VM
         }
 
         public RelayCommand OpenStatCommand
-        {
-            get => _openStatCommand ?? (_openStatCommand = new RelayCommand(() =>
+            => _openStatCommand ?? (_openStatCommand = new RelayCommand(() =>
             {
                 if (_statViewModel == null)
                 {
@@ -127,11 +127,9 @@ namespace Wit.VM
 
                 winManager.ShowWindow(_statViewModel);
             }));
-        }
 
         public RelayCommand OpenKeyCommand
-        {
-            get => _openKeyCommand ?? (_openKeyCommand = new RelayCommand(() =>
+            => _openKeyCommand ?? (_openKeyCommand = new RelayCommand(() =>
             {
                 TokenViewModel vm = (TokenViewModel)vmFactory.Create<TokenViewModel>();
                 Core.Properties.Settings coreSettings = Core.Properties.Settings.Default;
@@ -143,7 +141,9 @@ namespace Wit.VM
                     SetConsumerKey(vm.ConsumerKey, vm.ConsumerSecret);
                 }
             }));
-        }
+
+        public RelayCommand QuitCommand
+            => _quitCommand ?? (_quitCommand = new RelayCommand(() => winManager.CloseWindow(this)));
 
         public bool CanSignIn => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError;
 
