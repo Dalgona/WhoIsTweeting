@@ -56,7 +56,7 @@ namespace Wit.VM
             _oldInterval = Interval = _service.UpdateInterval;
 
             Width = 340;
-            Height = 240;
+            Height = 200;
             CanResize = false;
         }
 

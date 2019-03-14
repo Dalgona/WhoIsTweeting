@@ -8,43 +8,42 @@
     xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type vm:IntervalViewModel}}"
-    d:DesignHeight="240" d:DesignWidth="340">
-    <StackPanel Margin="5">
-        <Label>
-            <Label.Content>
-                <TextBlock>
-                    <InlineUIContainer>
-                		<TextBlock Text="{x:Static local:Strings.Interval_Message}"/>
-                	</InlineUIContainer>
-                </TextBlock>
-            </Label.Content>
+    d:DesignHeight="200" d:DesignWidth="340">
+    <UserControl.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <Label DockPanel.Dock="Top" Background="{x:Null}">
+            <TextBlock Text="{x:Static local:Strings.Interval_Message}"/>
         </Label>
-        <StackPanel HorizontalAlignment="Stretch" Background="{x:Static SystemColors.ControlBrush}">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Label Content="{Binding Interval}" ContentStringFormat="{x:Static local:Strings.Interval_SecondFormat}" FontSize="16"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <StackPanel.Resources>
-                    <Style TargetType="Button">
-                        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-                        <Setter Property="FontSize" Value="16"/>
-                        <Setter Property="Padding" Value="3,0,3,0"/>
-                    </Style>
-                </StackPanel.Resources>
-                <Button Content="&#xe0e5;" BorderThickness="1,1,0,1" Command="{Binding DecreaseIntervalCommand}"/>
-                <Button Content="&#xe0e4;" Command="{Binding IncreaseIntervalCommand}"/>
-            </StackPanel>
-            <Label HorizontalAlignment="Center" Content="{Binding MaxFollowings}" ContentStringFormat="{x:Static local:Strings.Interval_MaxFollowingsFormat}"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel.Resources>
                 <Style TargetType="Button">
-                    <Setter Property="Padding" Value="15,3,15,3"/>
+                    <Setter Property="Padding" Value="15,3"/>
                     <Setter Property="Margin" Value="5"/>
                 </Style>
             </StackPanel.Resources>
             <Button Content="{x:Static local:Strings.Button_OK}" IsDefault="True" Command="{Binding SaveCommand}"/>
             <Button Content="{x:Static local:Strings.Button_Cancel}" Command="{Binding CancelCommand}"/>
         </StackPanel>
-    </StackPanel>
+        <Grid Background="#40000000">
+            <StackPanel VerticalAlignment="Center">
+                    <Label Content="{Binding Interval}" ContentStringFormat="{x:Static local:Strings.Interval_SecondFormat}" Foreground="MediumSpringGreen" Padding="0,0,0,5" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <Setter Property="Padding" Value="3,0,3,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Content="&#xe0e5;" BorderThickness="1,1,0,1" Command="{Binding DecreaseIntervalCommand}"/>
+                    <Button Content="&#xe0e4;" Command="{Binding IncreaseIntervalCommand}"/>
+                </StackPanel>
+                <Label HorizontalAlignment="Center" Content="{Binding MaxFollowings}" ContentStringFormat="{x:Static local:Strings.Interval_MaxFollowingsFormat}"/>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
 </UserControl>
