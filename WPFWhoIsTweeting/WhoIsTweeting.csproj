@@ -104,12 +104,6 @@
     <Compile Include="layouts\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="layouts\PinInputWindow.xaml.cs">
-      <DependentUpon>PinInputWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="layouts\ConsumerWindow.xaml.cs">
-      <DependentUpon>ConsumerWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\KeyView.xaml.cs">
       <DependentUpon>KeyView.xaml</DependentUpon>
     </Compile>
@@ -126,31 +120,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="layouts\ConsumerWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="layouts\GraphWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="layouts\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="layouts\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="layouts\MessageWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="layouts\PinInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

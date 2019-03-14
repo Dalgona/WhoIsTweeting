@@ -44,25 +44,6 @@ namespace WhoIsTweeting.Views
             win.ShowDialog();
         }
 
-        private void Menu_OnSignIn(object sender, RoutedEventArgs e)
-        {
-            MessageBoxResult cont = MessageBox.Show(Strings.SignIn_Confirm, Strings.SignIn_Title,
-                MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            if (cont == MessageBoxResult.OK)
-                viewModel.SignIn((url) =>
-                {
-                    PinInputWindow win = new PinInputWindow();
-                    PinViewModel mdl = win.DataContext as PinViewModel;
-                    System.Diagnostics.Process.Start(url);
-                    // win.Owner = this;
-                    win.ShowDialog();
-                    return mdl.Pin;
-                }, (ex)=>
-                {
-                    MessageBox.Show(Strings.SignIn_Error, Strings.Title_Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                });
-        }
-
         private void Menu_OnSetInterval(object sender, RoutedEventArgs e)
         {
             SetIntervalWindow win = new SetIntervalWindow();// { Owner = this };
