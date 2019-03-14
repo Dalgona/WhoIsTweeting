@@ -2,11 +2,10 @@
 
 namespace Wit.VM
 {
-    public class KeyViewModel : ViewModelBase
+    public class KeyViewModel : WindowViewModel
     {
         private string consumerKey = Core.Properties.Settings.Default.ConsumerKey;
         private string consumerSecret = Core.Properties.Settings.Default.ConsumerSecret;
-        private string pin;
 
         private RelayCommand _saveCommand;
         private RelayCommand _cancelCommand;
@@ -38,16 +37,6 @@ namespace Wit.VM
             {
                 consumerSecret = value;
                 OnPropertyChanged(nameof(ConsumerSecret));
-            }
-        }
-
-        public string Pin
-        {
-            get => pin;
-            set
-            {
-                pin = value;
-                OnPropertyChanged(nameof(Pin));
             }
         }
 

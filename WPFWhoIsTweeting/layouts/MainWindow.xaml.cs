@@ -52,7 +52,7 @@ namespace WhoIsTweeting
                 viewModel.SignIn((url) =>
                 {
                     PinInputWindow win = new PinInputWindow();
-                    KeyViewModel mdl = win.DataContext as KeyViewModel;
+                    PinViewModel mdl = win.DataContext as PinViewModel;
                     System.Diagnostics.Process.Start(url);
                     win.Owner = this;
                     win.ShowDialog();
