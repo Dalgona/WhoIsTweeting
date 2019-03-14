@@ -5,13 +5,13 @@ namespace WhoIsTweeting
 {
     public partial class PinInputWindow : Window
     {
-        TokenViewModel viewModel;
+        KeyViewModel viewModel;
 
         public PinInputWindow()
         {
             InitializeComponent();
 
-            DataContext = viewModel = new TokenViewModel();
+            DataContext = viewModel = new KeyViewModel();
         }
 
         private void OnOKClicked(object sender, RoutedEventArgs e)

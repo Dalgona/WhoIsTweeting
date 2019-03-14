@@ -34,7 +34,7 @@ namespace WhoIsTweeting
         private void Menu_OnConsumer(object sender, RoutedEventArgs e)
         {
             ConsumerWindow win = new ConsumerWindow();
-            TokenViewModel mdl = win.DataContext as TokenViewModel;
+            KeyViewModel mdl = win.DataContext as KeyViewModel;
             var coreSettings = Wit.Core.Properties.Settings.Default;
 
             win.Owner = this;
@@ -52,7 +52,7 @@ namespace WhoIsTweeting
                 viewModel.SignIn((url) =>
                 {
                     PinInputWindow win = new PinInputWindow();
-                    TokenViewModel mdl = win.DataContext as TokenViewModel;
+                    KeyViewModel mdl = win.DataContext as KeyViewModel;
                     System.Diagnostics.Process.Start(url);
                     win.Owner = this;
                     win.ShowDialog();

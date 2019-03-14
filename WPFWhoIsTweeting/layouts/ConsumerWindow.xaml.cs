@@ -7,13 +7,13 @@ namespace WhoIsTweeting
 {
     public partial class ConsumerWindow : Window
     {
-        TokenViewModel viewModel;
+        KeyViewModel viewModel;
 
         public ConsumerWindow()
         {
             InitializeComponent();
 
-            DataContext = viewModel = new TokenViewModel();
+            DataContext = viewModel = new KeyViewModel();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:WhoIsTweeting"
     xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type={x:Type vm:TokenViewModel}}"
+    d:DataContext="{d:DesignInstance Type={x:Type vm:KeyViewModel}}"
     d:DesignHeight="200" d:DesignWidth="480"
     FocusManager.FocusedElement="{Binding ElementName=consumerKey}">
     <StackPanel Margin="5">

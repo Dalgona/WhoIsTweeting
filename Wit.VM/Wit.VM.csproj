@@ -51,7 +51,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="TokenViewModel.cs" />
+    <Compile Include="KeyViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Wit.Core\Wit.Core.csproj">

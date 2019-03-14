@@ -137,7 +137,7 @@ namespace Wit.VM
         public RelayCommand OpenKeyCommand
             => _openKeyCommand ?? (_openKeyCommand = new RelayCommand(() =>
             {
-                TokenViewModel vm = (TokenViewModel)vmFactory.Create<TokenViewModel>();
+                KeyViewModel vm = (KeyViewModel)vmFactory.Create<KeyViewModel>();
                 Core.Properties.Settings coreSettings = Core.Properties.Settings.Default;
 
                 winManager.ShowModalWindow(vm, this);

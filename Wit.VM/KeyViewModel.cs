@@ -2,7 +2,7 @@
 
 namespace Wit.VM
 {
-    public class TokenViewModel : ViewModelBase
+    public class KeyViewModel : ViewModelBase
     {
         private string consumerKey = Core.Properties.Settings.Default.ConsumerKey;
         private string consumerSecret = Core.Properties.Settings.Default.ConsumerSecret;
@@ -11,9 +11,9 @@ namespace Wit.VM
         private RelayCommand _saveCommand;
         private RelayCommand _cancelCommand;
 
-        public TokenViewModel() { }
+        public KeyViewModel() { }
 
-        public TokenViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
+        public KeyViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
         {
             this.vmFactory = vmFactory;
             this.winManager = winManager;
