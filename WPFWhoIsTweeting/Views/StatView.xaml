@@ -5,8 +5,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:WhoIsTweeting"
+    xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
-    Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded">
+    d:DataContext="{d:DesignInstance Type={x:Type vm:StatViewModel}}"
+    d:DesignHeight="500" d:DesignWidth="450"
+    UseLayoutRounding="False"
+    SnapsToDevicePixels="True"
+    Loaded="Window_Loaded">
     <UserControl.Resources>
         <Style x:Key="InfoKeyLabel" TargetType="Label">
             <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>
@@ -17,7 +22,7 @@
             <Setter Property="Padding" Value="0"/>
         </Style>
     </UserControl.Resources>
-    <TabControl Grid.Row="1" BorderThickness="0,1,0,0" Padding="0">
+    <TabControl Grid.Row="1" Margin="0,32,0,0" BorderThickness="0,1,0,0" Padding="0">
         <TabControl.Items>
             <TabItem Header="{x:Static local:Strings.Stat_Tab_Graph}">
                 <Grid Margin="10">

@@ -5,7 +5,7 @@ using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class StatViewModel : ViewModelBase
+    public class StatViewModel : WindowViewModel
     {
         private const string dateformat = "yyyy-MM-dd HH:mm";
         private MainService service = MainService.Instance;
@@ -13,6 +13,11 @@ namespace Wit.VM
         public StatViewModel()
         {
             service.PropertyChanged += Service_PropertyChanged;
+
+            Width = 450;
+            Height = 500;
+            MinWidth = 450;
+            MinHeight = 500;
         }
 
         public StatViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
