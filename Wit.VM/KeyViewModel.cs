@@ -13,7 +13,7 @@ namespace Wit.VM
         public KeyViewModel()
         {
             Width = 480;
-            Height = 180;
+            Height = 170;
             CanResize = false;
         }
 
