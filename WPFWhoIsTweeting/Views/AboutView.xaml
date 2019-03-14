@@ -7,41 +7,54 @@
     xmlns:local="clr-namespace:WhoIsTweeting"
     xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type={x:Type vm:AboutViewModel}}"
-    d:DesignHeight="400" d:DesignWidth="380">
+    d:DataContext="{d:DesignInstance Type={x:Type vm:AboutViewModel}}" d:DesignWidth="350" d:DesignHeight="360">
     <UserControl.Resources>
-        <Style x:Key="AboutDescStyle" TargetType="Label">
-            <Setter Property="Margin" Value="25,0,0,0"/>
-            <Setter Property="Padding" Value="0"/>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="AboutDescStyle" TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="Padding" Value="5,0,5,5"/>
+        </Style>
+        <Style TargetType="Hyperlink">
+            <Setter Property="Foreground" Value="#FF00DDFA" />
         </Style>
     </UserControl.Resources>
-    <StackPanel Margin="5">
-        <Label x:Name="lblAppVersion" Content="WhoIsTweeting" FontWeight="Bold" Foreground="#FF333333"/>
-        <Label Content="Copyright © 2016~2017 Dalgona." Style="{StaticResource AboutDescStyle}" Foreground="#FF333333"/>
-        <Label Content="This program is not intended for monitoring your employees!" FontStyle="Italic" Foreground="#FF333333"/>
-        <Label Content="{x:Static local:Strings.About_Email}" Foreground="#FF333333"/>
-        <Label Style="{StaticResource AboutDescStyle}">
-            <Hyperlink Command="{Binding EmailCommand}">dalgona@hontou.moe</Hyperlink>
-        </Label>
-        <Label Content="{x:Static local:Strings.About_Website}" Foreground="#FF333333"/>
-        <Label Style="{StaticResource AboutDescStyle}">
-            <Hyperlink Command="{Binding WebsiteCommand}">https://dalgona.github.io</Hyperlink>
-        </Label>
-        <Label Content="{x:Static local:Strings.About_PoweredBy}" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10,0,0" Foreground="#FF333333"/>
-        <Button HorizontalAlignment="Center" Padding="0" Background="Transparent" BorderThickness="0" SnapsToDevicePixels="True" Command="{Binding PbCommand}">
-            <Image x:Name="image" Height="60" Source="../picobird.png" HorizontalAlignment="Center" Width="150"/>
-        </Button>
-        <Label HorizontalAlignment="Center">
-            <Label.Content>
-                <TextBlock TextAlignment="Center" Foreground="#FF333333">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <Label FontWeight="Bold" Foreground="MediumSpringGreen">
+                <TextBlock Text="{Binding Version, StringFormat=WhoIsTweeting {0}}"/>
+            </Label>
+            <Label Content="Copyright © 2016~2019 Dalgona." Style="{StaticResource AboutDescStyle}"/>
+            <Label Content="This program is not intended for monitoring your employees!" FontStyle="Italic"/>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom">
+            <Button x:Name="button" Content="{x:Static local:Strings.Button_Close}" HorizontalAlignment="Center" Margin="5" Padding="15,3" Command="{Binding CloseCommand}"/>
+        </StackPanel>
+        <Grid Background="#40000000">
+            <StackPanel VerticalAlignment="Center">
+                <Label Content="{x:Static local:Strings.About_Email}"/>
+                <Label Style="{StaticResource AboutDescStyle}">
+                    <Hyperlink Command="{Binding EmailCommand}">dalgona@hontou.moe</Hyperlink>
+                </Label>
+                <Label Content="{x:Static local:Strings.About_Website}"/>
+                <Label Style="{StaticResource AboutDescStyle}">
+                    <Hyperlink Command="{Binding WebsiteCommand}">https://dalgona.github.io</Hyperlink>
+                </Label>
+                <Label Content="{x:Static local:Strings.About_PoweredBy}" FontWeight="Bold" Margin="0,10,0,0"/>
+                <Label>
+                    <Label.Content>
+                        <TextBlock TextAlignment="Center">
                     PicoBird Twitter Library for .NET<LineBreak/>
                     Copyright © 2016 Dalgona.
-                </TextBlock>
-            </Label.Content>
-        </Label>
-        <Label HorizontalAlignment="Center">
-            <TextBlock TextAlignment="Center" Foreground="#FF333333" Text="{x:Static local:Strings.About_PoweredBy_License}"/>
-        </Label>
-        <Button x:Name="button" Content="{x:Static local:Strings.Button_Close}" HorizontalAlignment="Center" Padding="15,3" Margin="0,10,0,3" Command="{Binding CloseCommand}"/>
-    </StackPanel>
+                        </TextBlock>
+                    </Label.Content>
+                </Label>
+                <Label>
+                    <TextBlock TextAlignment="Center" Text="{x:Static local:Strings.About_PoweredBy_License}"/>
+                </Label>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
 </UserControl>

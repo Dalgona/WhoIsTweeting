@@ -8,7 +8,6 @@ namespace Wit.VM
         private RelayCommand _closeCommand;
         private RelayCommand _emailCommand;
         private RelayCommand _websiteCommand;
-        private RelayCommand _pbCommand;
 
         public string Version { get; }
 
@@ -21,13 +20,10 @@ namespace Wit.VM
         public RelayCommand WebsiteCommand
             => _websiteCommand ?? (_websiteCommand = new RelayCommand(() => System.Diagnostics.Process.Start("https://dalgona.github.io")));
 
-        public RelayCommand PbCommand
-            => _pbCommand ?? (_pbCommand = new RelayCommand(() => System.Diagnostics.Process.Start("https://github.com/Dalgona/PicoBird")));
-
         public AboutViewModel()
         {
-            Width = 380;
-            Height = 400;
+            Width = 350;
+            Height = 360;
             CanResize = false;
 
             var appVer = Assembly.GetEntryAssembly().GetName().Version;
