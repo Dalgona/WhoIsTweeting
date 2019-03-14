@@ -4,13 +4,13 @@ using System.Windows;
 
 namespace Wit.UI.Core
 {
-    public class WindowManager : IWindowManager
+    public class WindowManager<TWindow> : IWindowManager where TWindow : Window, new()
     {
-        private readonly Dictionary<ViewModelBase, Window> _windows = new Dictionary<ViewModelBase, Window>();
+        private readonly Dictionary<ViewModelBase, TWindow> _windows = new Dictionary<ViewModelBase, TWindow>();
 
         public void ShowWindow(ViewModelBase viewModel)
         {
-            if (_windows.TryGetValue(viewModel, out Window win))
+            if (_windows.TryGetValue(viewModel, out TWindow win))
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Activating an existing window for {viewModel.GetType().Name}");
                 win.Activate();
@@ -18,7 +18,7 @@ namespace Wit.UI.Core
             else
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Creating a new window for {viewModel.GetType().Name}");
-                Window newWin = CreateWindow(viewModel);
+                TWindow newWin = CreateWindow(viewModel);
 
                 _windows.Add(viewModel, newWin);
                 newWin.Show();
@@ -27,7 +27,7 @@ namespace Wit.UI.Core
 
         public void ShowModalWindow(ViewModelBase viewModel)
         {
-            if (_windows.TryGetValue(viewModel, out Window win))
+            if (_windows.TryGetValue(viewModel, out TWindow win))
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Activating an existing modal window for {viewModel.GetType().Name}");
                 win.Activate();
@@ -35,7 +35,7 @@ namespace Wit.UI.Core
             else
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Creating a new modal window for {viewModel.GetType().Name}");
-                Window newWin = CreateWindow(viewModel);
+                TWindow newWin = CreateWindow(viewModel);
 
                 _windows.Add(viewModel, newWin);
                 newWin.ShowDialog();
@@ -46,15 +46,15 @@ namespace Wit.UI.Core
         {
             System.Diagnostics.Debug.WriteLine($"[WindowManager::CloseWindow] Attempting to close a window for {viewModel.GetType().Name}");
 
-            if (_windows.TryGetValue(viewModel, out Window win))
+            if (_windows.TryGetValue(viewModel, out TWindow win))
             {
                 win.Close();
             }
         }
 
-        private Window CreateWindow(ViewModelBase viewModel)
+        private TWindow CreateWindow(ViewModelBase viewModel)
         {
-            Window newWin = new Window()
+            TWindow newWin = new TWindow()
             {
                 Content = viewModel,
                 DataContext = viewModel
