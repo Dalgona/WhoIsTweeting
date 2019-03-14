@@ -1,0 +1,19 @@
+﻿<UserControl
+    x:Class="WhoIsTweeting.Views.PinView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WhoIsTweeting"
+    xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type={x:Type vm:PinViewModel}}"
+    d:DesignHeight="150" d:DesignWidth="300">
+    <StackPanel Margin="5">
+        <Label HorizontalAlignment="Center">
+            <TextBlock TextAlignment="Center" Text="{x:Static local:Strings.SignIn_Message}"/>
+        </Label>
+        <TextBox Text="{Binding Pin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="10,5" Padding="0,2" TextAlignment="Center" FontSize="16"/>
+        <Button Content="{x:Static local:Strings.Button_OK}" HorizontalAlignment="Center" Margin="0,5" Padding="15,3" IsDefault="True" Command="{Binding OkCommand}"/>
+    </StackPanel>
+</UserControl>

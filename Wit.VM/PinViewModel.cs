@@ -4,7 +4,7 @@ namespace Wit.VM
 {
     public class PinViewModel : WindowViewModel
     {
-        private string _pin;
+        private string _pin = "";
 
         private RelayCommand _okCommand;
 
@@ -20,7 +20,12 @@ namespace Wit.VM
             }
         }
 
-        public PinViewModel() { }
+        public PinViewModel()
+        {
+            Width = 300;
+            Height = 150;
+            CanResize = false;
+        }
 
         public PinViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
         {
