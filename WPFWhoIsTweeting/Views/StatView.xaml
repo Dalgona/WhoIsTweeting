@@ -1,12 +1,13 @@
-﻿<Window x:Class="WhoIsTweeting.GraphWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WhoIsTweeting"
-        mc:Ignorable="d"
-        Title="{x:Static local:Strings.Stat_Title}" Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded" Icon="../wit.ico" WindowStartupLocation="CenterOwner">
-    <Window.Resources>
+﻿<UserControl
+    x:Class="WhoIsTweeting.Views.StatView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:WhoIsTweeting"
+    mc:Ignorable="d"
+    Height="500" Width="450" UseLayoutRounding="False" SnapsToDevicePixels="True" MinWidth="450" MinHeight="500" Loaded="Window_Loaded">
+    <UserControl.Resources>
         <Style x:Key="InfoKeyLabel" TargetType="Label">
             <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>
             <Setter Property="Padding" Value="0"/>
@@ -15,7 +16,7 @@
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Padding" Value="0"/>
         </Style>
-    </Window.Resources>
+    </UserControl.Resources>
     <TabControl Grid.Row="1" BorderThickness="0,1,0,0" Padding="0">
         <TabControl.Items>
             <TabItem Header="{x:Static local:Strings.Stat_Tab_Graph}">
@@ -174,4 +175,4 @@
             </TabItem>
         </TabControl.Items>
     </TabControl>
-</Window>
+</UserControl>

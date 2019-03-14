@@ -1,21 +1,22 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.ComponentModel;
 using System.Windows.Threading;
 using Microsoft.Win32;
-using System.Text;
-using System.Globalization;
 using Wit.Core;
 using Wit.VM;
 
-namespace WhoIsTweeting
+namespace WhoIsTweeting.Views
 {
-    public partial class GraphWindow : Window
+    public partial class StatView : UserControl
     {
-        private GraphViewModel viewModel;
+        private StatViewModel viewModel;
         private MainService service = MainService.Instance;
 
         private DispatcherTimer timer;
@@ -23,11 +24,11 @@ namespace WhoIsTweeting
 
         private double graphScale = 1.0;
 
-        public GraphWindow()
+        public StatView()
         {
             InitializeComponent();
 
-            DataContext = viewModel = new GraphViewModel();
+            DataContext = viewModel = new StatViewModel();
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
 
             timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) };

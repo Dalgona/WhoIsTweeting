@@ -92,8 +92,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="layouts\GraphWindow.xaml.cs">
-      <DependentUpon>GraphWindow.xaml</DependentUpon>
+    <Compile Include="Views\StatView.xaml.cs">
+      <DependentUpon>StatView.xaml</DependentUpon>
     </Compile>
     <Compile Include="layouts\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
@@ -116,7 +116,7 @@
     <Compile Include="Views\UserListItemView.xaml.cs">
       <DependentUpon>UserListItemView.xaml</DependentUpon>
     </Compile>
-    <Page Include="layouts\GraphWindow.xaml">
+    <Page Include="Views\StatView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
