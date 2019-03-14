@@ -11,7 +11,7 @@
         private double _maxHeight = double.PositiveInfinity;
         private bool _canResize = true;
 
-        public string Title
+        public virtual string Title
         {
             get => _title;
             set
@@ -21,7 +21,7 @@
             }
         }
 
-        public double Width
+        public virtual double Width
         {
             get => _width;
             set
@@ -31,7 +31,7 @@
             }
         }
 
-        public double Height
+        public virtual double Height
         {
             get => _height;
             set
@@ -41,7 +41,7 @@
             }
         }
 
-        public double MinWidth
+        public virtual double MinWidth
         {
             get => _minWidth;
             set
@@ -51,7 +51,7 @@
             }
         }
 
-        public double MaxWidth
+        public virtual double MaxWidth
         {
             get => _maxWidth;
             set
@@ -61,7 +61,7 @@
             }
         }
 
-        public double MinHeight
+        public virtual double MinHeight
         {
             get => _minHeight;
             set
@@ -71,7 +71,7 @@
             }
         }
 
-        public double MaxHeight
+        public virtual double MaxHeight
         {
             get => _maxHeight;
             set
@@ -81,7 +81,7 @@
             }
         }
 
-        public bool CanResize
+        public virtual bool CanResize
         {
             get => _canResize;
             set
