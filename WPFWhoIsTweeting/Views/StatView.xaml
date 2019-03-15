@@ -5,13 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:WhoIsTweeting"
+    xmlns:ctrl="clr-namespace:Wit.Controls"
     xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type vm:StatViewModel}}"
-    d:DesignHeight="500" d:DesignWidth="450"
-    UseLayoutRounding="False"
-    SnapsToDevicePixels="True"
-    Loaded="Window_Loaded">
+    d:DesignHeight="500" d:DesignWidth="450">
     <UserControl.Resources>
         <Style x:Key="InfoKeyLabel" TargetType="Label">
             <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>
@@ -30,36 +28,36 @@
                         <RowDefinition/>
                         <RowDefinition Height="152"/>
                     </Grid.RowDefinitions>
-                    <Border Margin="0,0,0,10" BorderBrush="#FF00B26E" BorderThickness="1">
-                        <Grid x:Name="graphGrid" MouseMove="MoveCursor" MouseEnter="graphGrid_MouseEnter" MouseLeave="graphGrid_MouseLeave" Background="White" MouseWheel="graphGrid_MouseWheel">
-                            <Polygon x:Name="polyAway" Fill="LightGray" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0,0" IsHitTestVisible="False" ClipToBounds="True">
-                                <Polygon.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform ScaleX="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ScaleY="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Grid}}"/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform X="0" Y="0"/>
-                                    </TransformGroup>
-                                </Polygon.RenderTransform>
-                                <Polygon.Points>
-                                    <PointCollection/>
-                                </Polygon.Points>
-                            </Polygon>
-                            <Polygon x:Name="polyOnline" Fill="MediumSpringGreen" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0,0" IsHitTestVisible="False" ClipToBounds="True">
-                                <Polygon.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform ScaleX="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Grid}}" ScaleY="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Grid}}"/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform X="0" Y="0"/>
-                                    </TransformGroup>
-                                </Polygon.RenderTransform>
-                                <Polygon.Points>
-                                    <PointCollection/>
-                                </Polygon.Points>
-                            </Polygon>
-                            <Line x:Name="cursor" Visibility="Hidden" X2="4294967295" Y2="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Grid}}" Stroke="Black" X1="4294967295" IsHitTestVisible="False"/>
-                            <Popup x:Name="peek" IsHitTestVisible="False" AllowsTransparency="True" PopupAnimation="Fade">
+                    <Border BorderBrush="MediumSpringGreen" BorderThickness="1" Margin="0,0,0,10">
+                        <ItemsControl ItemsSource="{Binding Graph}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel
+                                    VirtualizingPanel.IsVirtualizing="True"
+                                    VirtualizingPanel.VirtualizationMode="Recycling"
+                                    Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ctrl:StatHistogramBar Margin="1" Width="18" OnlineBrush="MediumSpringGreen" AwayBrush="LightGray" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.Template>
+                                <ControlTemplate TargetType="ItemsControl">
+                                    <ScrollViewer
+                                    local:ScrollHelper.ShiftWheelHorizontalScroll="True"
+                                    local:ScrollHelper.AutoScroll="True"
+                                    local:ScrollHelper.AutoScrollDirection="RightEnd"
+                                    HorizontalScrollBarVisibility="Visible"
+                                    VerticalScrollBarVisibility="Hidden">
+                                        <ItemsPresenter Margin="1" SnapsToDevicePixels="True" UseLayoutRounding="True" />
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ItemsControl.Template>
+                        </ItemsControl>
+                    </Border>
+                    <!--<Popup x:Name="peek" IsHitTestVisible="False" AllowsTransparency="True" PopupAnimation="Fade">
                                 <Popup.Resources>
                                     <Style x:Key="NoPadding" TargetType="Label">
                                         <Setter Property="Padding" Value="0"/>
@@ -93,9 +91,7 @@
                                         </Grid>
                                     </StackPanel>
                                 </Border>
-                            </Popup>
-                        </Grid>
-                    </Border>
+                            </Popup>-->
                     <StackPanel Grid.Row="1">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <StackPanel Margin="0,0,20,0">
