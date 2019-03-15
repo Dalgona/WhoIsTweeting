@@ -13,48 +13,47 @@
     d:DesignHeight="500" d:DesignWidth="450">
     <UserControl.Resources>
         <Style x:Key="InfoKeyLabel" TargetType="Label">
-            <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>
+            <Setter Property="Foreground" Value="Gray"/>
             <Setter Property="Padding" Value="0"/>
         </Style>
         <Style x:Key="InfoValueLabel" TargetType="Label">
+            <Setter Property="Foreground" Value="WhiteSmoke"/>
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Padding" Value="0"/>
         </Style>
     </UserControl.Resources>
-    <Grid Margin="10">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="152"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Border BorderBrush="MediumSpringGreen" BorderThickness="1" Margin="0,0,0,10">
-            <ItemsControl ItemsSource="{Binding Graph}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel
+        <ItemsControl ItemsSource="{Binding Graph}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel
                             VirtualizingPanel.IsVirtualizing="True"
                             VirtualizingPanel.VirtualizationMode="Recycling"
                             Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type core:StatData}">
-                        <ctrl:StatHistogramBar Margin="1" Width="18" OnlineBrush="MediumSpringGreen" AwayBrush="LightGray" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.Template>
-                    <ControlTemplate TargetType="ItemsControl">
-                        <ScrollViewer
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type core:StatData}">
+                    <ctrl:StatHistogramBar Margin="1" Width="18" OnlineBrush="MediumSpringGreen" AwayBrush="Gray" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <ScrollViewer
                             local:ScrollHelper.ShiftWheelHorizontalScroll="True"
                             local:ScrollHelper.AutoScroll="True"
                             local:ScrollHelper.AutoScrollDirection="RightEnd"
                             HorizontalScrollBarVisibility="Visible"
                             VerticalScrollBarVisibility="Hidden">
-                            <ItemsPresenter Margin="1" SnapsToDevicePixels="True" UseLayoutRounding="True" />
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </ItemsControl.Template>
-            </ItemsControl>
-        </Border>
+                        <ItemsPresenter Margin="1" SnapsToDevicePixels="True" UseLayoutRounding="True" />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+        </ItemsControl>
         <!--<Popup x:Name="peek" IsHitTestVisible="False" AllowsTransparency="True" PopupAnimation="Fade">
             <Popup.Resources>
                 <Style x:Key="NoPadding" TargetType="Label">
@@ -90,7 +89,7 @@
                 </StackPanel>
             </Border>
         </Popup>-->
-        <StackPanel Grid.Row="1">
+        <StackPanel Grid.Row="1" Margin="10">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,20,0">
                     <Label Style="{StaticResource InfoKeyLabel}" Content="{x:Static local:Strings.Stat_DataFrom}"/>
@@ -101,7 +100,7 @@
                     <Label Grid.Row="1" Grid.Column="1" Style="{StaticResource InfoValueLabel}" Content="{Binding To, FallbackValue=0000-00-00 00:00}"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal">
                 <StackPanel Margin="0,0,20,0">
                     <Label Style="{StaticResource InfoKeyLabel}" Content="{x:Static local:Strings.Stat_NumOfData}"/>
                     <Label Style="{StaticResource InfoValueLabel}" Content="{Binding DataCount, FallbackValue=0}"/>
