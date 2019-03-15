@@ -96,6 +96,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\GraphStatView.xaml.cs">
+      <DependentUpon>GraphStatView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StatView.xaml.cs">
       <DependentUpon>StatView.xaml</DependentUpon>
     </Compile>
@@ -121,6 +124,10 @@
       <DependentUpon>UserListItemView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\StatHistogramBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GraphStatView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
