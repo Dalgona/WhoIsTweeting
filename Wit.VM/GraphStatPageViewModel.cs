@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Wit.UI.Core;
 
 namespace Wit.VM
 {
@@ -29,5 +30,8 @@ namespace Wit.VM
         public int MinOnline => service.MinOnline;
         public int MaxOnline => service.MaxOnline;
         public double AvgOnline => service.SumOnline / (double)service.GraphCount;
+
+        public GraphStatPageViewModel() : base() { }
+        public GraphStatPageViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : base(vmFactory, winManager) { }
     }
 }

@@ -19,6 +19,12 @@ namespace Wit.VM
             service.Graph.CollectionChanged += OnGraphCollectionChanged;
         }
 
+        public StatPageViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
+        {
+            this.vmFactory = vmFactory;
+            this.winManager = winManager;
+        }
+
         protected virtual void OnGraphCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged("");
