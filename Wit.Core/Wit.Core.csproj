@@ -49,6 +49,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="StatData.cs" />
     <Compile Include="UserListItem.cs" />
   </ItemGroup>
   <ItemGroup>
