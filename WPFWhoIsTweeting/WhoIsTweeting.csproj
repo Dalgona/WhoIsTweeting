@@ -120,6 +120,9 @@
     <Compile Include="Views\PinView.xaml.cs">
       <DependentUpon>PinView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\TableStatView.xaml.cs">
+      <DependentUpon>TableStatView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserListItemView.xaml.cs">
       <DependentUpon>UserListItemView.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PinView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TableStatView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
