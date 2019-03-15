@@ -31,6 +31,9 @@ namespace Wit.Controls
             SetBinding(MaxHeightProperty, new Binding("MaxHeight") { Mode = BindingMode.TwoWay });
             SetBinding(ResizeModeProperty, new Binding("CanResize") { Converter = _resizeModeConverter });
             SetBinding(TopmostProperty, new Binding("AlwaysOnTop") { Mode = BindingMode.TwoWay });
+
+            System.Windows.Media.TextOptions.SetTextFormattingMode(this, System.Windows.Media.TextFormattingMode.Display);
+            System.Windows.Media.TextOptions.SetTextRenderingMode(this, System.Windows.Media.TextRenderingMode.ClearType);
         }
 
         protected virtual void OnMinimizeWindowExecuted(object sender, ExecutedRoutedEventArgs e)
