@@ -53,7 +53,7 @@ namespace Wit.Core
         public int MinOnline { get; private set; } = 0;
         public int MaxOnline { get; private set; } = 0;
         public ObservableCollection<UserListItem> UserList { get; private set; }
-        public ObservableCollection<KeyValuePair<DateTime, int[]>> Graph { get; private set; }
+        public ObservableCollection<StatData> Graph { get; private set; }
         public object UserListLock { get; } = new object();
         public object GraphLock { get; } = new object();
 
@@ -165,7 +165,7 @@ namespace Wit.Core
             listUpdateWorker.DoWork += listUpdateWorker_DoWork;
 
             UserList = new ObservableCollection<UserListItem>();
-            Graph = new ObservableCollection<KeyValuePair<DateTime, int[]>>();
+            Graph = new ObservableCollection<StatData>();
 
             api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret)
             {
@@ -277,7 +277,8 @@ namespace Wit.Core
                     SumOnline += OnlineCount;
                     MinOnline = GraphCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
                     MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
-                    Graph.Add(new KeyValuePair<DateTime, int[]>(DateTime.Now, new int[] { OnlineCount, AwayCount, OfflineCount }));
+
+                    Graph.Add(new StatData(OnlineCount, AwayCount, OfflineCount));
                     GraphCount++;
                 }
 

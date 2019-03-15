@@ -59,9 +59,9 @@ namespace WhoIsTweeting.Views
 
                     foreach (var x in service.Graph)
                     {
-                        var arr = x.Value;
-                        string date = x.Key.ToString("yyyy-MM-dd HH:mm:ss");
-                        utfstr = Encoding.UTF8.GetBytes($"\"{date}\",{arr[0]},{arr[1]},{arr[2]}{Environment.NewLine}");
+                        string date = x.Date.ToString("yyyy-MM-dd HH:mm:ss");
+                        utfstr = Encoding.UTF8.GetBytes($"\"{date}\",{x.OnlineCount},{x.AwayCount},{x.OfflineCount}{Environment.NewLine}");
+
                         fs.Write(utfstr, 0, utfstr.Length);
                     }
                 }

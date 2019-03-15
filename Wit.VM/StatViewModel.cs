@@ -40,7 +40,7 @@ namespace Wit.VM
             get
             {
                 if (service.Graph.Count == 0) return "N/A";
-                return service.Graph[0].Key.ToString(dateformat);
+                return service.Graph[0].Date.ToString(dateformat);
             }
         }
 
@@ -49,7 +49,7 @@ namespace Wit.VM
             get
             {
                 if (service.Graph.Count == 0) return "N/A";
-                return service.Graph.Last().Key.ToString(dateformat);
+                return service.Graph.Last().Date.ToString(dateformat);
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Wit.Core;
 
 namespace Wit.Controls
 {
@@ -47,12 +48,12 @@ namespace Wit.Controls
 
             if (e.Property == DataContextProperty)
             {
-                if (DataContext is KeyValuePair<DateTime, int[]> item)
+                if (DataContext is StatData item)
                 {
-                    row00.Height = new GridLength(item.Value[2], GridUnitType.Star);
-                    row01.Height = new GridLength(item.Value[0] + item.Value[1], GridUnitType.Star);
-                    row10.Height = new GridLength(item.Value[1], GridUnitType.Star);
-                    row11.Height = new GridLength(item.Value[0], GridUnitType.Star);
+                    row00.Height = new GridLength(item.OfflineCount, GridUnitType.Star);
+                    row01.Height = new GridLength(item.OnlineCount + item.AwayCount, GridUnitType.Star);
+                    row10.Height = new GridLength(item.AwayCount, GridUnitType.Star);
+                    row11.Height = new GridLength(item.OnlineCount, GridUnitType.Star);
                 }
             }
         }

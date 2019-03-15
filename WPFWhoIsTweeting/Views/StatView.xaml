@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:WhoIsTweeting"
+    xmlns:core="clr-namespace:Wit.Core;assembly=Wit.Core"
     xmlns:ctrl="clr-namespace:Wit.Controls"
     xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
@@ -39,7 +40,7 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate DataType="{x:Type core:StatData}">
                                     <ctrl:StatHistogramBar Margin="1" Width="18" OnlineBrush="MediumSpringGreen" AwayBrush="LightGray" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -149,22 +150,22 @@
                     <ListView Grid.Row="1" ItemsSource="{Binding Graph}" BorderThickness="0" Margin="-2,0">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Key}">
+                                <GridViewColumn DisplayMemberBinding="{Binding Date}">
                                     <GridViewColumn.Header>
                                         <Label Content="{x:Static local:Strings.Stat_Date}"/>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding Value[0]}">
+                                <GridViewColumn DisplayMemberBinding="{Binding OnlineCount}">
                                     <GridViewColumn.Header>
                                         <Label Content="{x:Static local:Strings.Stat_Online}"/>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding Value[1]}">
+                                <GridViewColumn DisplayMemberBinding="{Binding AwayCount}">
                                     <GridViewColumn.Header>
                                         <Label Content="{x:Static local:Strings.Stat_Away}"/>
                                     </GridViewColumn.Header>
                                 </GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding Value[2]}">
+                                <GridViewColumn DisplayMemberBinding="{Binding OfflineCount}">
                                     <GridViewColumn.Header>
                                         <Label Content="{x:Static local:Strings.Stat_Offline}"/>
                                     </GridViewColumn.Header>
