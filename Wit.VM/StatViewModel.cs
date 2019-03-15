@@ -1,20 +1,27 @@
-﻿using System.Collections;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Wit.Core;
 using Wit.UI.Core;
 
 namespace Wit.VM
 {
     public class StatViewModel : WindowViewModel
     {
-        private const string dateformat = "yyyy-MM-dd HH:mm";
-        private MainService service = MainService.Instance;
+        private StatPageViewModel _selectedPage;
+
+        public IEnumerable<StatPageViewModel> Pages { get; }
+
+        public StatPageViewModel SelectedPage
+        {
+            get => _selectedPage;
+            set
+            {
+                _selectedPage = value;
+                OnPropertyChanged(nameof(SelectedPage));
+            }
+        }
 
         public StatViewModel()
         {
-            service.PropertyChanged += Service_PropertyChanged;
-
             Width = 450;
             Height = 500;
             MinWidth = 450;
@@ -23,48 +30,16 @@ namespace Wit.VM
 
         public StatViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
         {
+            Pages = new StatPageViewModel[]
+            {
+                (GraphStatPageViewModel)vmFactory.Create<GraphStatPageViewModel>(),
+                (TableStatPageViewModel)vmFactory.Create<TableStatPageViewModel>()
+            };
+
+            SelectedPage = Pages.First();
+
             this.vmFactory = vmFactory;
             this.winManager = winManager;
-        }
-
-        private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "State" && service.State == ServiceState.Running)
-            {
-                OnPropertyChanged("");
-            }
-        }
-
-        public string From
-        {
-            get
-            {
-                if (service.Graph.Count == 0) return "N/A";
-                return service.Graph[0].Date.ToString(dateformat);
-            }
-        }
-
-        public string To
-        {
-            get
-            {
-                if (service.Graph.Count == 0) return "N/A";
-                return service.Graph.Last().Date.ToString(dateformat);
-            }
-        }
-
-        public IEnumerable Graph => service.Graph;
-        public int DataCount => service.GraphCount;
-        public int FollowingsCount => service.OnlineCount + service.AwayCount + service.OfflineCount;
-
-        public int MinOnline => service.MinOnline;
-        public int MaxOnline => service.MaxOnline;
-        public double AvgOnline => service.SumOnline / (double)service.GraphCount;
-
-        public void ResetStat()
-        {
-            service.ResetStatistics();
-            OnPropertyChanged("");
         }
     }
 }
