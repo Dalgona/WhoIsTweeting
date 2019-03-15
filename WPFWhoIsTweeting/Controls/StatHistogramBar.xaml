@@ -1,0 +1,31 @@
+﻿<UserControl
+    x:Name="root"
+    x:Class="Wit.Controls.StatHistogramBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    mc:Ignorable="d"
+    d:DesignHeight="100" d:DesignWidth="20">
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="row00" />
+            <RowDefinition x:Name="row01" />
+        </Grid.RowDefinitions>
+        <Grid x:Name="barGroup" Grid.Row="1">
+            <Grid.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Rectangle Fill="Black" Width="{Binding ActualWidth, ElementName=barGroup}" Height="{Binding ActualHeight, ElementName=barGroup}" RadiusX="3" RadiusY="3" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Grid.OpacityMask>
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="row10" />
+                <RowDefinition x:Name="row11" />
+            </Grid.RowDefinitions>
+            <Rectangle Grid.Row="0" Fill="{Binding AwayBrush, ElementName=root}" />
+            <Rectangle Grid.Row="1" Fill="{Binding OnlineBrush, ElementName=root}" />
+        </Grid>
+    </Grid>
+</UserControl>
