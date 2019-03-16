@@ -49,7 +49,6 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModelBase.cs" />
     <Compile Include="ViewModelFactory.cs" />
-    <Compile Include="WindowManager.cs" />
     <Compile Include="WindowViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

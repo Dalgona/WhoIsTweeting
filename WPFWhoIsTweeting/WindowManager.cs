@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using Wit.Controls;
+using Wit.UI.Core;
 
-namespace Wit.UI.Core
+namespace WhoIsTweeting
 {
-    public class WindowManager<TWindow> : IWindowManager where TWindow : Window, new()
+    public class WindowManager : IWindowManager
     {
-        private readonly Dictionary<ViewModelBase, TWindow> _windows = new Dictionary<ViewModelBase, TWindow>();
+        private readonly Dictionary<ViewModelBase, WindowBase> _windows = new Dictionary<ViewModelBase, WindowBase>();
 
         public void ShowWindow(ViewModelBase viewModel)
         {
-            if (_windows.TryGetValue(viewModel, out TWindow win))
+            if (_windows.TryGetValue(viewModel, out WindowBase win))
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Activating an existing window for {viewModel.GetType().Name}");
                 win.Activate();
@@ -18,7 +20,7 @@ namespace Wit.UI.Core
             else
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Creating a new window for {viewModel.GetType().Name}");
-                TWindow newWin = CreateWindow(viewModel);
+                WindowBase newWin = CreateWindow(viewModel);
 
                 _windows.Add(viewModel, newWin);
                 newWin.Show();
@@ -27,7 +29,7 @@ namespace Wit.UI.Core
 
         public void ShowModalWindow(ViewModelBase viewModel, ViewModelBase owner)
         {
-            if (_windows.TryGetValue(viewModel, out TWindow win))
+            if (_windows.TryGetValue(viewModel, out WindowBase win))
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Activating an existing modal window for {viewModel.GetType().Name}");
                 win.Activate();
@@ -35,9 +37,9 @@ namespace Wit.UI.Core
             else
             {
                 System.Diagnostics.Debug.WriteLine($"[WindowManager::ShowWindow] Creating a new modal window for {viewModel.GetType().Name}");
-                TWindow newWin = CreateWindow(viewModel);
+                WindowBase newWin = CreateWindow(viewModel);
 
-                if (owner != null && _windows.TryGetValue(owner, out TWindow ownerWin))
+                if (owner != null && _windows.TryGetValue(owner, out WindowBase ownerWin))
                 {
                     newWin.Owner = ownerWin;
                     newWin.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -52,15 +54,15 @@ namespace Wit.UI.Core
         {
             System.Diagnostics.Debug.WriteLine($"[WindowManager::CloseWindow] Attempting to close a window for {viewModel.GetType().Name}");
 
-            if (_windows.TryGetValue(viewModel, out TWindow win))
+            if (_windows.TryGetValue(viewModel, out WindowBase win))
             {
                 win.Close();
             }
         }
 
-        private TWindow CreateWindow(ViewModelBase viewModel)
+        private WindowBase CreateWindow(ViewModelBase viewModel)
         {
-            TWindow newWin = new TWindow()
+            WindowBase newWin = new WindowBase()
             {
                 Content = viewModel,
                 DataContext = viewModel

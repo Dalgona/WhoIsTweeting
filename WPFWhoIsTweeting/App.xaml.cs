@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Data;
-using Wit.Controls;
 using Wit.Core;
 using Wit.UI.Core;
 using Wit.VM;
@@ -19,7 +18,7 @@ namespace WhoIsTweeting
             }
 
             MainService service = MainService.Instance;
-            WindowManager<WindowBase> winManager = new WindowManager<WindowBase>();
+            WindowManager winManager = new WindowManager();
             ViewModelFactory vmFactory = new ViewModelFactory(winManager);
 
             BindingOperations.EnableCollectionSynchronization(service.UserList, service.UserListLock);
