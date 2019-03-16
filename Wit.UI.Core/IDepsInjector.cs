@@ -10,6 +10,8 @@
 
         T Create<T>(params object[] ctorArgs) where T : class, new();
 
+        TInterface GetInstance<TInterface>() where TInterface : class;
+
         void Reset();
     }
 }

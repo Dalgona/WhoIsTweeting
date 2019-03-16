@@ -79,10 +79,32 @@ namespace Wit.UI.Core
                     ReconstructDepsGraph();
                 }
 
-                obj = (T)GetInstance(type, baseType);
+                obj = (T)DoGetInstance(type, baseType);
             }
 
             return obj;
+        }
+
+        public TInterface GetInstance<TInterface>() where TInterface : class
+        {
+            Type iType = typeof(TInterface);
+
+            lock (_stateLock)
+            {
+                if (!_typeMapping.ContainsKey(iType))
+                {
+                    throw new InvalidOperationException($"The interface {iType} is not registered.");
+                }
+            }
+
+            lock (_stateLock) {
+                if (_isGraphStale)
+                {
+                    ReconstructDepsGraph();
+                }
+
+                return (TInterface)DoGetInstance(iType, iType);
+            }
         }
 
         public void Reset()
@@ -115,7 +137,7 @@ namespace Wit.UI.Core
             _isGraphStale = false;
         }
 
-        private object GetInstance(Type instType, Type baseType)
+        private object DoGetInstance(Type instType, Type baseType)
         {
             if (_instMapping.TryGetValue(baseType, out object obj))
             {
@@ -130,7 +152,7 @@ namespace Wit.UI.Core
 
                 foreach (Type depType in _depsGraph[mappedType ?? baseType])
                 {
-                    object depObj = GetInstance(depType, depType);
+                    object depObj = DoGetInstance(depType, depType);
                     var targetProps = props.Where(p => p.PropertyType == depType);
 
                     foreach (var prop in targetProps)
