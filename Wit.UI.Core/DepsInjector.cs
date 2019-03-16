@@ -38,6 +38,7 @@ namespace Wit.UI.Core
                 {
                     _targets.Add(cType);
                     _typeMapping.Add(iType, cType);
+
                     _isGraphStale = true;
                 }
             }
@@ -47,7 +48,11 @@ namespace Wit.UI.Core
         {
             lock (_stateLock)
             {
-                _targets.Add(typeof(T));
+                Type type = typeof(T);
+
+                _targets.Add(type);
+                _typeMapping.Add(type, type);
+
                 _isGraphStale = true;
             }
         }
@@ -79,7 +84,9 @@ namespace Wit.UI.Core
                     ReconstructDepsGraph();
                 }
 
-                obj = (T)DoGetInstance(type, baseType);
+                obj = (T)Activator.CreateInstance(type, ctorArgs);
+
+                InjectDependencies(obj, baseType);
             }
 
             return obj;
@@ -103,7 +110,7 @@ namespace Wit.UI.Core
                     ReconstructDepsGraph();
                 }
 
-                return (TInterface)DoGetInstance(iType, iType);
+                return (TInterface)DoGetInstance(iType);
             }
         }
 
@@ -137,33 +144,36 @@ namespace Wit.UI.Core
             _isGraphStale = false;
         }
 
-        private object DoGetInstance(Type instType, Type baseType)
+        private object DoGetInstance(Type type)
         {
-            if (_instMapping.TryGetValue(baseType, out object obj))
+            if (_instMapping.TryGetValue(type, out object obj))
             {
                 return obj;
             }
             else
             {
-                _typeMapping.TryGetValue(instType, out Type mappedType);
+                object newObj = Activator.CreateInstance(_typeMapping[type]);
 
-                object newObj = Activator.CreateInstance(mappedType ?? instType);
-                var props = instType.GetProperties();
-
-                foreach (Type depType in _depsGraph[mappedType ?? baseType])
-                {
-                    object depObj = DoGetInstance(depType, depType);
-                    var targetProps = props.Where(p => p.PropertyType == depType);
-
-                    foreach (var prop in targetProps)
-                    {
-                        prop.SetValue(newObj, depObj);
-                    }
-                }
-
-                _instMapping.Add(baseType, newObj);
+                InjectDependencies(newObj, type);
+                _instMapping.Add(type, newObj);
 
                 return newObj;
+            }
+        }
+
+        private void InjectDependencies(object newObj, Type type)
+        {
+            var props = type.GetProperties();
+
+            foreach (Type depType in _depsGraph[_typeMapping[type]])
+            {
+                object depObj = DoGetInstance(depType);
+                var targetProps = props.Where(p => p.PropertyType == depType);
+
+                foreach (var prop in targetProps)
+                {
+                    prop.SetValue(newObj, depObj);
+                }
             }
         }
     }
