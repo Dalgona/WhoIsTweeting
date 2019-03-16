@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="DepsInjector.cs" />
     <Compile Include="IDepsInjector.cs" />
+    <Compile Include="IStringProvider.cs" />
     <Compile Include="IWindowManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RelayCommand.cs" />

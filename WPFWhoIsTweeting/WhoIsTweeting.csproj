@@ -84,6 +84,7 @@
     </Compile>
     <Compile Include="Controls\WindowBase.cs" />
     <Compile Include="LastTweetConverter.cs" />
+    <Compile Include="LocalizedStringProvider.cs" />
     <Compile Include="ResizeModeConverter.cs" />
     <Compile Include="ScrollHelper.cs" />
     <Compile Include="Strings.ko-KR.Designer.cs">
