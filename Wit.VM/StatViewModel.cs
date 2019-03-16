@@ -8,6 +8,8 @@ namespace Wit.VM
     {
         private StatPageViewModel _selectedPage;
 
+        public override string Title => StringProvider?.GetString("Stat_Title") ?? "Statistics";
+
         public IEnumerable<StatPageViewModel> Pages { get; } =
             new StatPageViewModel[]
             {

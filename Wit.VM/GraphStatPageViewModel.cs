@@ -6,7 +6,7 @@ namespace Wit.VM
     {
         private const string _dateFormat = "yyyy-MM-dd HH:mm";
 
-        public override string DisplayName => "Graph"; // TODO: Replace with a localized string.
+        public override string DisplayName => StringProvider.GetString("Stat_Tab_Graph") ?? "Graph";
 
         public string From
         {

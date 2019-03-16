@@ -2,7 +2,7 @@
 {
     public class TableStatPageViewModel : StatPageViewModel
     {
-        public override string DisplayName => "Table"; // TODO: Replace with a localized string.
+        public override string DisplayName => StringProvider.GetString("Stat_Tab_Table") ?? "Table";
 
         public TableStatPageViewModel() : base() { }
 

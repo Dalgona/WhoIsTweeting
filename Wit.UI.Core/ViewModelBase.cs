@@ -5,6 +5,7 @@ namespace Wit.UI.Core
     public class ViewModelBase : INotifyPropertyChanged
     {
         public IWindowManager WindowManager { get; set; }
+        public IStringProvider StringProvider { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
