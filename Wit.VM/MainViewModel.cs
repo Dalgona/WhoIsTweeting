@@ -44,12 +44,6 @@ namespace Wit.VM
             MinHeight = 400;
         }
 
-        public MainViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
-        {
-            this.vmFactory = vmFactory;
-            this.winManager = winManager;
-        }
-
         #region Event Handlers
 
         private void AutoRetryWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -125,19 +119,19 @@ namespace Wit.VM
             {
                 if (_statViewModel == null)
                 {
-                    _statViewModel = vmFactory.Create<StatViewModel>();
+                    _statViewModel = DepsInjector.Default.Create<StatViewModel>();
                 }
 
-                winManager.ShowWindow(_statViewModel);
+                WindowManager.ShowWindow(_statViewModel);
             }));
 
         public RelayCommand OpenKeyCommand
             => _openKeyCommand ?? (_openKeyCommand = new RelayCommand(() =>
             {
-                KeyViewModel vm = (KeyViewModel)vmFactory.Create<KeyViewModel>();
+                KeyViewModel vm = DepsInjector.Default.Create<KeyViewModel>();
                 Core.Properties.Settings coreSettings = Core.Properties.Settings.Default;
 
-                winManager.ShowModalWindow(vm, this);
+                WindowManager.ShowModalWindow(vm, this);
 
                 if (vm.Result && (vm.ConsumerKey != coreSettings.ConsumerKey || vm.ConsumerSecret != coreSettings.ConsumerSecret))
                 {
@@ -151,10 +145,10 @@ namespace Wit.VM
                 // TODO: Show a message box?
                 Service.SignIn(url =>
                 {
-                    PinViewModel vm = (PinViewModel)vmFactory.Create<PinViewModel>();
+                    PinViewModel vm = DepsInjector.Default.Create<PinViewModel>();
 
                     System.Diagnostics.Process.Start(url);
-                    winManager.ShowModalWindow(vm, this);
+                    WindowManager.ShowModalWindow(vm, this);
 
                     return vm.Pin;
                 }, ex =>
@@ -166,21 +160,21 @@ namespace Wit.VM
         public RelayCommand OpenIntervalCommand
             => _openIntervalCommand ?? (_openIntervalCommand = new RelayCommand(() =>
             {
-                IntervalViewModel vm = (IntervalViewModel)vmFactory.Create<IntervalViewModel>();
+                IntervalViewModel vm = DepsInjector.Default.Create<IntervalViewModel>();
 
-                winManager.ShowModalWindow(vm, this);
+                WindowManager.ShowModalWindow(vm, this);
             }));
 
         public RelayCommand OpenAboutCommand
             => _openAboutCommand ?? (_openAboutCommand = new RelayCommand(() =>
             {
-                AboutViewModel vm = (AboutViewModel)vmFactory.Create<AboutViewModel>();
+                AboutViewModel vm = DepsInjector.Default.Create<AboutViewModel>();
 
-                winManager.ShowModalWindow(vm, this);
+                WindowManager.ShowModalWindow(vm, this);
             }));
 
         public RelayCommand QuitCommand
-            => _quitCommand ?? (_quitCommand = new RelayCommand(() => winManager.CloseWindow(this)));
+            => _quitCommand ?? (_quitCommand = new RelayCommand(() => WindowManager.CloseWindow(this)));
 
         public bool IsSignedIn => Service.State >= ServiceState.Ready;
 

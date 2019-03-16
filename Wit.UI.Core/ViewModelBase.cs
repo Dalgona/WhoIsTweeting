@@ -2,10 +2,9 @@
 
 namespace Wit.UI.Core
 {
-    public abstract class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
-        protected ViewModelFactory vmFactory;
-        protected IWindowManager winManager;
+        public IWindowManager WindowManager { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -27,17 +27,11 @@ namespace Wit.VM
             CanResize = false;
         }
 
-        public PinViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
-        {
-            this.vmFactory = vmFactory;
-            this.winManager = winManager;
-        }
-
         public RelayCommand OkCommand
             => _okCommand ?? (_okCommand = new RelayCommand(() =>
             {
                 Result = true;
-                winManager.CloseWindow(this);
+                WindowManager.CloseWindow(this);
             }, () => !string.IsNullOrWhiteSpace(Pin)));
     }
 }

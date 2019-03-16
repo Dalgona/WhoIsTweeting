@@ -8,7 +8,12 @@ namespace Wit.VM
     {
         private StatPageViewModel _selectedPage;
 
-        public IEnumerable<StatPageViewModel> Pages { get; }
+        public IEnumerable<StatPageViewModel> Pages { get; } =
+            new StatPageViewModel[]
+            {
+                DepsInjector.Default.Create<GraphStatPageViewModel>(),
+                DepsInjector.Default.Create<TableStatPageViewModel>()
+            };
 
         public StatPageViewModel SelectedPage
         {
@@ -26,20 +31,8 @@ namespace Wit.VM
             Height = 500;
             MinWidth = 450;
             MinHeight = 500;
-        }
-
-        public StatViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
-        {
-            Pages = new StatPageViewModel[]
-            {
-                (GraphStatPageViewModel)vmFactory.Create<GraphStatPageViewModel>(),
-                (TableStatPageViewModel)vmFactory.Create<TableStatPageViewModel>()
-            };
 
             SelectedPage = Pages.First();
-
-            this.vmFactory = vmFactory;
-            this.winManager = winManager;
         }
     }
 }

@@ -18,13 +18,17 @@ namespace WhoIsTweeting
             }
 
             MainService service = MainService.Instance;
-            WindowManager winManager = new WindowManager();
-            ViewModelFactory vmFactory = new ViewModelFactory(winManager);
+            DepsInjector ioc = DepsInjector.Default;
 
             BindingOperations.EnableCollectionSynchronization(service.UserList, service.UserListLock);
             BindingOperations.EnableCollectionSynchronization(service.Graph, service.GraphLock);
 
-            winManager.ShowWindow(vmFactory.Create<MainViewModel>());
+            ioc.Register<IWindowManager, WindowManager>();
+            ioc.Register<ViewModelBase>();
+
+            IWindowManager winManager = ioc.GetInstance<IWindowManager>();
+
+            winManager.ShowWindow(ioc.Create<MainViewModel>());
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)

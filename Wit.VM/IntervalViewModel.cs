@@ -42,11 +42,11 @@ namespace Wit.VM
                     _service.UpdateInterval = _interval;
                 }
 
-                winManager.CloseWindow(this);
+                WindowManager.CloseWindow(this);
             }));
 
         public RelayCommand CancelCommand
-            => _cancelCommand ?? (_cancelCommand = new RelayCommand(() => winManager.CloseWindow(this)));
+            => _cancelCommand ?? (_cancelCommand = new RelayCommand(() => WindowManager.CloseWindow(this)));
 
         public int MaxFollowings => Interval * 20;
 
@@ -58,12 +58,6 @@ namespace Wit.VM
             Width = 340;
             Height = 200;
             CanResize = false;
-        }
-
-        public IntervalViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
-        {
-            this.vmFactory = vmFactory;
-            this.winManager = winManager;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Wit.VM
         public string Version { get; }
 
         public RelayCommand CloseCommand
-            => _closeCommand ?? (_closeCommand = new RelayCommand(() => winManager.CloseWindow(this)));
+            => _closeCommand ?? (_closeCommand = new RelayCommand(() => WindowManager.CloseWindow(this)));
 
         public RelayCommand EmailCommand
             => _emailCommand ?? (_emailCommand = new RelayCommand(() => System.Diagnostics.Process.Start("mailto:dalgona@hontou.moe")));
@@ -28,12 +28,6 @@ namespace Wit.VM
 
             var appVer = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"{appVer.Major}.{appVer.Minor}.{appVer.Build}";
-        }
-
-        public AboutViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
-        {
-            this.vmFactory = vmFactory;
-            this.winManager = winManager;
         }
     }
 }

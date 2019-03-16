@@ -17,12 +17,6 @@ namespace Wit.VM
             CanResize = false;
         }
 
-        public KeyViewModel(ViewModelFactory vmFactory, IWindowManager winManager) : this()
-        {
-            this.vmFactory = vmFactory;
-            this.winManager = winManager;
-        }
-
         public bool Result { get; private set; } = false;
 
         public string ConsumerKey
@@ -51,14 +45,14 @@ namespace Wit.VM
             => _saveCommand ?? (_saveCommand = new RelayCommand(() =>
             {
                 Result = true;
-                winManager.CloseWindow(this);
+                WindowManager.CloseWindow(this);
             }, () => !string.IsNullOrWhiteSpace(ConsumerKey) && !string.IsNullOrWhiteSpace(consumerSecret)));
 
         public RelayCommand CancelCommand
             => _cancelCommand ?? (_cancelCommand = new RelayCommand(() =>
             {
                 Result = false;
-                winManager.CloseWindow(this);
+                WindowManager.CloseWindow(this);
             }));
     }
 }
