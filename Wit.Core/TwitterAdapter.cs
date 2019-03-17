@@ -44,6 +44,10 @@ namespace Wit.Core
 
                 return new UserListItem(user.id_str, user.name, user.screen_name, user.status);
             }
+            catch (AggregateException e)
+            {
+                return e.InnerException;
+            }
             catch (Exception e)
             {
                 return e;
@@ -66,6 +70,10 @@ namespace Wit.Core
                     )).Result;
 
                 return ids.ids;
+            }
+            catch (AggregateException e)
+            {
+                return e.InnerException;
             }
             catch (Exception e)
             {
@@ -99,6 +107,10 @@ namespace Wit.Core
 
                 return list;
             }
+            catch (AggregateException e)
+            {
+                return e.InnerException;
+            }
             catch (Exception e)
             {
                 return e;
@@ -115,6 +127,10 @@ namespace Wit.Core
                 })).Wait();
 
                 return true;
+            }
+            catch (AggregateException e)
+            {
+                return e.InnerException;
             }
             catch (Exception e)
             {
