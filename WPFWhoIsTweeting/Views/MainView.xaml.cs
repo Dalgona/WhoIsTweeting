@@ -57,7 +57,7 @@ namespace WhoIsTweeting.Views
             MessageViewModel mdl = win.DataContext as MessageViewModel;
             // win.Owner = this;
             if ((bool)win.ShowDialog())
-                viewModel.SendDirectMessage(mdl.ScreenName, mdl.Content, (ex) =>
+                viewModel.SendDirectMessage(mdl.User.ScreenName, mdl.Content, (ex) =>
                 {
                     MessageBox.Show(Strings.Message_Error_DM, Strings.Title_Error,
                         MessageBoxButton.OK, MessageBoxImage.Error);

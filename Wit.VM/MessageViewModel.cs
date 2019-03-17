@@ -7,16 +7,13 @@ namespace Wit.VM
 
     public class MessageViewModel : ViewModelBase
     {
-        private UserListItem user;
-        private string content;
+        private string _content;
+        private RelayCommand _sendCommand;
+        private RelayCommand _cancelCommand;
 
         public MessageWindowType Type { get; }
-
-        public MessageViewModel(MessageWindowType type, UserListItem user)
-        {
-            Type = type;
-            this.user = user;
-        }
+        public UserListItem User { get; }
+        public bool Result { get; set; } = false;
 
         public int MaxChars
         {
@@ -27,20 +24,34 @@ namespace Wit.VM
             }
         }
 
-        public string ScreenName => user.ScreenName;
-
-        public string ScreenNameColor
-            => user.Status == UserStatus.Online ? "MediumSpringGreen"
-                : (user.Status == UserStatus.Away ? "LightGray" : "Gray");
-
         public string Content
         {
-            get => content;
+            get => _content;
             set
             {
-                content = value;
+                _content = value;
                 OnPropertyChanged(nameof(Content));
             }
+        }
+
+        public RelayCommand SendCommand
+            => _sendCommand ?? (_sendCommand = new RelayCommand(() =>
+            {
+                Result = true;
+                WindowManager.CloseWindow(this);
+            }));
+
+        public RelayCommand CancelCommand
+            => _cancelCommand ?? (_cancelCommand = new RelayCommand(() =>
+            {
+                Result = false;
+                WindowManager.CloseWindow(this);
+            }));
+
+        public MessageViewModel(MessageWindowType type, UserListItem user)
+        {
+            Type = type;
+            User = user;
         }
     }
 }
