@@ -50,6 +50,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="StatData.cs" />
+    <Compile Include="TwitterApiResult.cs" />
     <Compile Include="UserListItem.cs" />
   </ItemGroup>
   <ItemGroup>
