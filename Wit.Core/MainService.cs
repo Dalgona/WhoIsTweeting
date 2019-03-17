@@ -241,42 +241,26 @@ namespace Wit.Core
             listUpdateWorker.RunWorkerAsync();
         }
 
-        private async Task UpdateUserList()
+        private void UpdateUserList()
         {
             if (State < ServiceState.Ready) return;
             if (State == ServiceState.Updating) return;
             State = ServiceState.Updating;
 
-            UserListItem.lastUpdated = DateTime.Now;
-            HashSet<string> tmpSet = new HashSet<string>(idSet);
-            List<UserListItem> list = new List<UserListItem>();
+            TwitterApiResult<IEnumerable<UserListItem>> result = _twtAdapter.RetrieveFollowings(idSet);
 
-            try
+            if (result.DidSucceed)
             {
-                Log("MainService::UpdateUserList", "Fetching users list");
-                do
-                {
-                    Log("MainService::UpdateUserList", "loop");
-                    HashSet<string> _ = new HashSet<string>(tmpSet.Take(100));
-                    tmpSet.ExceptWith(_);
-                    string data = string.Join(",", _);
-                    List<User> tmp = await api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
-                    {
-                        { "user_id", data },
-                        { "include_entities", "true" }
-                    });
-                    foreach (var x in tmp) list.Add(new UserListItem(x.id_str, x.name, x.screen_name, x.status));
-                } while (tmpSet.Count != 0);
-                Log("MainService::UpdateUserList", "Fetched users list");
+                IEnumerable<UserListItem> users = result.Data;
 
-                AwayCount = list.Count(x => x.Status == UserStatus.Away);
-                OfflineCount = list.Count(x => x.Status == UserStatus.Offline);
+                AwayCount = users.Count(x => x.Status == UserStatus.Away);
+                OfflineCount = users.Count(x => x.Status == UserStatus.Offline);
                 OnlineCount = idSet.Count - AwayCount - OfflineCount;
 
                 lock (UserListLock)
                 {
                     UserList.Clear();
-                    foreach (var x in list) UserList.Add(x);
+                    foreach (var x in users) UserList.Add(x);
                 }
 
                 lock (GraphLock)
@@ -291,26 +275,22 @@ namespace Wit.Core
 
                 State = ServiceState.Running;
             }
-            catch (APIException e)
+            else
             {
-                Log("MainService::UpdateUserList", $"Caught APIException: {e.Message}\n{e.StackTrace}");
+                string exMessage = result.Exception.Message;
+
+                if (result.ErrorType == TwitterErrorType.ApiError)
+                {
+                    State = ServiceState.ApiError;
+                    OnErrorOccurred("API Error", exMessage);
+                }
+                else
+                {
+                    State = ServiceState.NetError;
+                    OnErrorOccurred("Network Error", exMessage);
+                }
+
                 listUpdateWorker.CancelAsync();
-                State = ServiceState.ApiError;
-                OnErrorOccurred("API Error", e.Message);
-            }
-            catch (System.Net.Http.HttpRequestException e)
-            {
-                Log("MainService::UpdateUserList", $"Caught HttpRequestException: {e.Message}\n{e.StackTrace}");
-                listUpdateWorker.CancelAsync();
-                State = ServiceState.NetError;
-                OnErrorOccurred("Network Error", e.Message);
-            }
-            catch (TaskCanceledException e)
-            {
-                Log("MainService::UpdateUserList", $"Caught TaskCanceledException: {e.Message}\n{e.StackTrace}");
-                listUpdateWorker.CancelAsync();
-                State = ServiceState.NetError;
-                OnErrorOccurred("Network Error", e.Message);
             }
         }
 
@@ -331,7 +311,7 @@ namespace Wit.Core
                 {
                     Log("MainService::listUpdateWorker_DoWork", "Executing interval job");
                     timer = 0;
-                    Task.Factory.StartNew(async () => await UpdateUserList());
+                    Task.Run((Action)UpdateUserList);
                 }
                 Thread.Sleep(TimeSpan.FromSeconds(0.999));
                 timer++;
