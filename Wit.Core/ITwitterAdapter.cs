@@ -15,5 +15,7 @@ namespace Wit.Core
         TwitterApiResult<UserListItem> CheckUser();
 
         TwitterApiResult<IEnumerable<string>> RetrieveFollowingIds(string userId);
+
+        TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings(ISet<string> userIds);
     }
 }

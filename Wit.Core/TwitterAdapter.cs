@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 using PicoBird;
 using PicoBird.Objects;
@@ -65,6 +66,38 @@ namespace Wit.Core
                     )).Result;
 
                 return ids.ids;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
+
+        public TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings(ISet<string> userIds)
+        {
+            UserListItem.lastUpdated = DateTime.Now;
+            HashSet<string> userIdsCopy = new HashSet<string>(userIds);
+            List<UserListItem> list = new List<UserListItem>();
+
+            try
+            {
+                do
+                {
+                    HashSet<string> batch = new HashSet<string>(userIdsCopy.Take(100));
+                    string data = string.Join(",", batch);
+
+                    List<User> tmp =
+                        Task.Run(() => _api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
+                        {
+                            { "user_id", data },
+                            { "include_entities", "true" }
+                        })).Result;
+
+                    list.AddRange(from u in tmp select new UserListItem(u.id_str, u.name, u.screen_name, u.status));
+                    userIdsCopy.ExceptWith(batch);
+                } while (userIdsCopy.Count != 0);
+
+                return list;
             }
             catch (Exception e)
             {
