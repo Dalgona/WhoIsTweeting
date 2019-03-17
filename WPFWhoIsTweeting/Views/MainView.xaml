@@ -164,10 +164,10 @@
                         </MenuItem.Header>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Context_Mention}" Click="Context_OnMention"/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Context_DM}" Click="Context_OnDirectMessage"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Context_Mention}" Command="{Binding OpenMentionCommand}" CommandParameter="{Binding SelectedItem}"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Context_DM}" Command="{Binding OpenMessageCommand}" CommandParameter="{Binding SelectedItem}"/>
                     <Separator/>
-                    <MenuItem Header="{x:Static local:Strings.Menu_Context_Profile}" Click="Context_OnProfile"/>
+                    <MenuItem Header="{x:Static local:Strings.Menu_Context_Profile}" Command="{Binding OpenProfileCommand}" CommandParameter="{Binding SelectedItem}"/>
                 </ContextMenu>
             </ListBox.ContextMenu>
             <ListBox.GroupStyle>

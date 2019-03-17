@@ -19,6 +19,7 @@ namespace Wit.VM
         private RelayCommand _openAboutCommand;
         private RelayCommand _openMentionCommand;
         private RelayCommand _openMessageCommand;
+        private RelayCommand _openProfileCommand;
         private RelayCommand _quitCommand;
 
         private const int maxRetryCount = 5;
@@ -215,6 +216,15 @@ namespace Wit.VM
 
                         MessageBoxHelper.ShowError(errTitle, errMessage);
                     });
+                }
+            }));
+
+        public RelayCommand OpenProfileCommand
+            => _openProfileCommand ?? (_openProfileCommand = new RelayCommand(param =>
+            {
+                if (param is UserListItem user)
+                {
+                    System.Diagnostics.Process.Start($"https://twitter.com/{user.ScreenName}");
                 }
             }));
 

@@ -36,13 +36,6 @@ namespace WhoIsTweeting.Views
             base.OnPropertyChanged(e);
         }
 
-        #region Context Menu Handler
-
-        private void Context_OnProfile(object sender, RoutedEventArgs e)
-            => System.Diagnostics.Process.Start($"https://twitter.com/{viewModel.SelectedItem.ScreenName}");
-
-        #endregion
-
         private void OnTryAgainClicked(object sender, RoutedEventArgs e)
             => viewModel.TryResume();
 
