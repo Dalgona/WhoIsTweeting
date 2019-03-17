@@ -45,6 +45,7 @@ namespace Wit.Core
         }
 
         public User Me { get; private set; }
+        public UserListItem MeEx { get; private set; }
         public int OnlineCount { get; private set; }
         public int AwayCount { get; private set; }
         public int OfflineCount { get; private set; }
@@ -102,9 +103,9 @@ namespace Wit.Core
         {
             api.Token = api.TokenSecret = "";
             Task requestTask = api.RequestToken(url => callback(url));
-            requestTask.ContinueWith(async (_) =>
+            requestTask.ContinueWith(_ =>
             {
-                if (await ValidateUser())
+                if (ValidateUser())
                 {
                     appSettings.Token = api.Token;
                     appSettings.TokenSecret = api.TokenSecret;
@@ -121,9 +122,9 @@ namespace Wit.Core
 
         public void Resume()
         {
-            Task.Factory.StartNew(async () =>
+            Task.Factory.StartNew(() =>
             {
-                if (await ValidateUser())
+                if (ValidateUser())
                 {
                     State = ServiceState.Ready;
                     Run();
@@ -139,6 +140,7 @@ namespace Wit.Core
 
         private ServiceState state = ServiceState.Initial;
         private API api;
+        private ITwitterAdapter _twtAdapter;
         private HashSet<string> idSet;
 
         private BackgroundWorker listUpdateWorker;
@@ -167,6 +169,14 @@ namespace Wit.Core
             UserList = new ObservableCollection<UserListItem>();
             Graph = new ObservableCollection<StatData>();
 
+            _twtAdapter = new TwitterAdapter
+            {
+                ConsumerKey = appSettings.ConsumerKey,
+                ConsumerSecret = appSettings.ConsumerSecret,
+                AccessToken = appSettings.Token,
+                AccessTokenSecret = appSettings.TokenSecret
+            };
+
             api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret)
             {
                 HttpTimeout = 10,
@@ -187,41 +197,39 @@ namespace Wit.Core
             Resume();
         }
 
-        private async Task<bool> ValidateUser()
+        private bool ValidateUser()
         {
             if (api.Token == "" || api.TokenSecret == "") return false;
-            try
+
+            var result =
+                _twtAdapter.CheckUser().Then(user =>
+                {
+                    MeEx = user;
+
+                    return _twtAdapter.RetrieveFollowingIds(user.Id);
+                });
+
+            if (result.DidSucceed)
             {
-                Me = await api.Get<User>("/1.1/account/verify_credentials.json");
-                CursoredIdStrings ids = await api.Get<CursoredIdStrings>("/1.1/friends/ids.json",
-                    new NameValueCollection
-                    {
-                        { "user_id", Me.id_str },
-                        { "stringify_id", "true" },
-                        { "count", "5000" }
-                    });
-                idSet = new HashSet<string>(ids.ids);
+                idSet = new HashSet<string>(result.Data);
+
                 return true;
             }
-            catch (APIException e)
+            else
             {
-                Log("MainService::ValidateUser", $"Caught APIException: {e.Message}\n{e.StackTrace}");
-                State = ServiceState.ApiError;
-                OnErrorOccurred("API Error", e.Message);
-                return false;
-            }
-            catch (System.Net.Http.HttpRequestException e)
-            {
-                Log("MainService::ValidateUser", $"Caught HttpRequestException: {e.Message}\n{e.StackTrace}");
-                State = ServiceState.NetError;
-                OnErrorOccurred("Network Error", e.Message);
-                return false;
-            }
-            catch (TaskCanceledException e)
-            {
-                Log("MainService::ValidateUser", $"Caught TaskCanceledException: {e.Message}\n{e.StackTrace}");
-                State = ServiceState.NetError;
-                OnErrorOccurred("Network Error", e.Message);
+                string exMessage = result.Exception.Message;
+
+                if (result.ErrorType == TwitterErrorType.ApiError)
+                {
+                    State = ServiceState.ApiError;
+                    OnErrorOccurred("API Error", exMessage);
+                }
+                else
+                {
+                    State = ServiceState.NetError;
+                    OnErrorOccurred("Network Error", exMessage);
+                }
+
                 return false;
             }
         }
