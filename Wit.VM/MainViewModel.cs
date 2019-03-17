@@ -142,7 +142,11 @@ namespace Wit.VM
         public RelayCommand SignInCommand
             => _signInCommand ?? (_signInCommand = new RelayCommand(() =>
             {
-                // TODO: Show a message box?
+                string confirmTitle = StringProvider.GetString("SignIn_Title");
+                string confirmMessage = StringProvider.GetString("SignIn_Confirm");
+
+                MessageBoxHelper.ShowInfo(confirmTitle, confirmMessage);
+
                 Service.SignIn(url =>
                 {
                     PinViewModel vm = DepsInjector.Default.Create<PinViewModel>();
@@ -153,7 +157,10 @@ namespace Wit.VM
                     return vm.Pin;
                 }, ex =>
                 {
-                    // TODO: Show the error message box.
+                    string errTitle = StringProvider.GetString("Title_Error");
+                    string errMessage = StringProvider.GetString("SignIn_Error");
+
+                    MessageBoxHelper.ShowError(errTitle, errMessage);
                 });
             }, () => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError));
 
