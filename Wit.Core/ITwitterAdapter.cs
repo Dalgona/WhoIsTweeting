@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Wit.Core
 {
@@ -13,8 +12,8 @@ namespace Wit.Core
 
         string AccessTokenSecret { get; set; }
 
-        Task<TwitterApiResult<UserListItem>> CheckUser();
+        TwitterApiResult<UserListItem> CheckUser();
 
-        Task<TwitterApiResult<IEnumerable<string>>> RetrieveFollowingIds(string userId);
+        TwitterApiResult<IEnumerable<string>> RetrieveFollowingIds(string userId);
     }
 }

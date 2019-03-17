@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using PicoBird;
 using PicoBird.Objects;
@@ -38,11 +35,11 @@ namespace Wit.Core
             set => _api.TokenSecret = value;
         }
 
-        public async Task<TwitterApiResult<UserListItem>> CheckUser()
+        public TwitterApiResult<UserListItem> CheckUser()
         {
             try
             {
-                User user = await _api.Get<User>("/1.1/account/verify_credentials.json");
+                User user = Task.Run(() => _api.Get<User>("/1.1/account/verify_credentials.json")).Result;
 
                 return new UserListItem(user.id_str, user.name, user.screen_name, user.status);
             }
@@ -52,12 +49,12 @@ namespace Wit.Core
             }
         }
 
-        public async Task<TwitterApiResult<IEnumerable<string>>> RetrieveFollowingIds(string userId)
+        public TwitterApiResult<IEnumerable<string>> RetrieveFollowingIds(string userId)
         {
             try
             {
                 CursoredIdStrings ids =
-                    await _api.Get<CursoredIdStrings>(
+                    Task.Run(() => _api.Get<CursoredIdStrings>(
                         "/1.1/friends/ids.json",
                         new NameValueCollection
                         {
@@ -65,7 +62,7 @@ namespace Wit.Core
                             { "stringify_id", "true" },
                             { "count", "5000" }
                         }
-                    );
+                    )).Result;
 
                 return ids.ids;
             }
