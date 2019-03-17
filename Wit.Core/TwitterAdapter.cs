@@ -40,6 +40,12 @@ namespace Wit.Core
             set => _api.TokenSecret = value;
         }
 
+        public int HttpTimeout
+        {
+            get => _api.HttpTimeout;
+            set => _api.HttpTimeout = value;
+        }
+
         public async Task<TwitterApiResult<bool>> SetAccessTokenAsync(Func<string, string> getVerifier)
         {
             try
