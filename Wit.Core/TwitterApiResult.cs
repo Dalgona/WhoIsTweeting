@@ -15,7 +15,7 @@ namespace Wit.Core
 
     class TwitterApiResult<T>
     {
-        public bool IsSucceeded { get; }
+        public bool DidSucceed { get; }
 
         public T Data { get; }
 
@@ -25,7 +25,7 @@ namespace Wit.Core
 
         private TwitterApiResult(bool isSucceeded, T data, TwitterErrorType errorType, Exception exception)
         {
-            IsSucceeded = isSucceeded;
+            DidSucceed = isSucceeded;
             Data = data;
             ErrorType = errorType;
             Exception = exception;
