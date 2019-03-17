@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -7,29 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 using Wit.Core;
-using Wit.VM;
 
 namespace WhoIsTweeting.Views
 {
     public partial class TableStatView : UserControl
     {
-        private TableStatPageViewModel viewModel;
         private MainService service = MainService.Instance;
 
         public TableStatView()
         {
             InitializeComponent();
-
-            // FIXME
-            DataContext = viewModel = new TableStatPageViewModel();
-        }
-
-        private void OnResetClick(object sender, RoutedEventArgs e)
-        {
-            var res = MessageBox.Show(Strings.Stat_Reset_Message, Strings.Stat_Reset_Title,
-                MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (res == MessageBoxResult.Yes) viewModel.ResetStat();
         }
 
         private void OnExportClick(object sender, RoutedEventArgs e)
