@@ -99,25 +99,23 @@ namespace Wit.Core
             }
         }
 
-        public void SignIn(Func<string, string> callback, Action<Exception> onError)
+        public async void SignIn(Func<string, string> callback, Action<Exception> onError)
         {
-            api.Token = api.TokenSecret = "";
-            Task requestTask = api.RequestToken(url => callback(url));
-            requestTask.ContinueWith(_ =>
+            TwitterApiResult<bool> result = await _twtAdapter.SetAccessTokenAsync(callback);
+
+            if (result.DidSucceed && ValidateUser())
             {
-                if (ValidateUser())
-                {
-                    appSettings.Token = api.Token;
-                    appSettings.TokenSecret = api.TokenSecret;
-                    appSettings.Save();
-                    State = ServiceState.Ready;
-                    Run();
-                }
-            }, TaskContinuationOptions.NotOnFaulted);
-            requestTask.ContinueWith((task) =>
+                appSettings.Token = _twtAdapter.AccessToken;
+                appSettings.TokenSecret = _twtAdapter.AccessTokenSecret;
+                appSettings.Save();
+
+                State = ServiceState.Ready;
+                Run();
+            }
+            else
             {
-                onError(task.Exception);
-            }, TaskContinuationOptions.OnlyOnFaulted);
+                onError(result.Exception);
+            }
         }
 
         public void Resume()
