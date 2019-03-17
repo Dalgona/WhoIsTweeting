@@ -44,8 +44,7 @@ namespace Wit.Core
             }
         }
 
-        public User Me { get; private set; }
-        public UserListItem MeEx { get; private set; }
+        public UserListItem Me { get; private set; }
         public int OnlineCount { get; private set; }
         public int AwayCount { get; private set; }
         public int OfflineCount { get; private set; }
@@ -204,7 +203,7 @@ namespace Wit.Core
             var result =
                 _twtAdapter.CheckUser().Then(user =>
                 {
-                    MeEx = user;
+                    Me = user;
 
                     return _twtAdapter.RetrieveFollowingIds(user.Id);
                 });

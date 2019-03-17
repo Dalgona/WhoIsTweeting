@@ -59,7 +59,7 @@
                                         <Setter Property="Text" Value="{x:Static local:Strings.Menu_Main_NeedSignIn}" />
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding IsSignedIn}" Value="True">
-                                        <Setter Property="Text" Value="{Binding Service.Me.screen_name, StringFormat={}@{0}}" />
+                                        <Setter Property="Text" Value="{Binding Service.Me.ScreenName, StringFormat={}@{0}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                                 <Setter Property="Text" Value="--" />
