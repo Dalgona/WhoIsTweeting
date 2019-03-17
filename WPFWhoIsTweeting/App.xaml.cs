@@ -24,6 +24,7 @@ namespace WhoIsTweeting
             BindingOperations.EnableCollectionSynchronization(service.Graph, service.GraphLock);
 
             ioc.Register<IWindowManager, WindowManager>();
+            ioc.Register<IMessageBoxHelper, MessageBoxHelper>();
             ioc.Register<IStringProvider, LocalizedStringProvider>();
             ioc.Register<ViewModelBase>();
 
