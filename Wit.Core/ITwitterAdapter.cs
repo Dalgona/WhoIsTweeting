@@ -5,6 +5,14 @@ namespace Wit.Core
 {
     interface ITwitterAdapter
     {
+        string ConsumerKey { get; set; }
+
+        string ConsumerSecret { get; set; }
+
+        string AccessToken { get; set; }
+
+        string AccessTokenSecret { get; set; }
+
         Task<TwitterApiResult<string>> CheckUser();
 
         Task<TwitterApiResult<IEnumerable<string>>> RetrieveFollowingIds(string userId);

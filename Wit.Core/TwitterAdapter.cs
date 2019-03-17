@@ -14,6 +14,30 @@ namespace Wit.Core
     {
         API _api = new API("", "");
 
+        public string ConsumerKey
+        {
+            get => _api.ConsumerKey;
+            set => _api.ConsumerKey = value;
+        }
+
+        public string ConsumerSecret
+        {
+            get => _api.ConsumerSecret;
+            set => _api.ConsumerSecret = value;
+        }
+
+        public string AccessToken
+        {
+            get => _api.Token;
+            set => _api.Token = value;
+        }
+
+        public string AccessTokenSecret
+        {
+            get => _api.TokenSecret;
+            set => _api.TokenSecret = value;
+        }
+
         public async Task<TwitterApiResult<string>> CheckUser()
         {
             try
