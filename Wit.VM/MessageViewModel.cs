@@ -5,7 +5,7 @@ namespace Wit.VM
 {
     public enum MessageWindowType { MentionWindow, DirectMessageWindow };
 
-    public class MessageViewModel : ViewModelBase
+    public class MessageViewModel : WindowViewModel
     {
         private string _content;
         private RelayCommand _sendCommand;
@@ -39,7 +39,7 @@ namespace Wit.VM
             {
                 Result = true;
                 WindowManager.CloseWindow(this);
-            }));
+            }, () => string.IsNullOrWhiteSpace(Content)));
 
         public RelayCommand CancelCommand
             => _cancelCommand ?? (_cancelCommand = new RelayCommand(() =>
@@ -52,6 +52,17 @@ namespace Wit.VM
         {
             Type = type;
             User = user;
+
+            if (type == MessageWindowType.MentionWindow)
+            {
+                Content = $"@{user.ScreenName} ";
+            }
+
+            Width = 400;
+            Height = 160;
+            MinWidth = 400;
+            MinHeight = 160;
+            MaxWidth = 400;
         }
     }
 }
