@@ -17,6 +17,8 @@ namespace Wit.VM
         private RelayCommand _signInCommand;
         private RelayCommand _openIntervalCommand;
         private RelayCommand _openAboutCommand;
+        private RelayCommand _openMentionCommand;
+        private RelayCommand _openMessageCommand;
         private RelayCommand _quitCommand;
 
         private const int maxRetryCount = 5;
@@ -98,12 +100,6 @@ namespace Wit.VM
 
         #endregion
 
-        public void PostTweet(string content, Action<Exception> onError)
-            => Service.PostTweet(content, onError);
-
-        public void SendDirectMessage(string screenName, string content, Action<Exception> onError)
-            => Service.SendDirectMessage(screenName, content, onError);
-
         public void TryResume()
         {
             if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
@@ -178,6 +174,48 @@ namespace Wit.VM
                 AboutViewModel vm = DepsInjector.Default.Create<AboutViewModel>();
 
                 WindowManager.ShowModalWindow(vm, this);
+            }));
+
+        public RelayCommand OpenMentionCommand
+            => _openMentionCommand ?? (_openMentionCommand = new RelayCommand(param =>
+            {
+                MessageViewModel vm = DepsInjector.Default.Create<MessageViewModel>();
+                vm.Type = MessageWindowType.MentionWindow;
+                vm.User = param as UserListItem;
+
+                WindowManager.ShowModalWindow(vm, this);
+
+                if (vm.Result)
+                {
+                    Service.PostTweet(vm.Content, ex =>
+                    {
+                        string errTitle = StringProvider.GetString("Title_Error");
+                        string errMessage = StringProvider.GetString("Message_Error_Mention");
+
+                        MessageBoxHelper.ShowError(errTitle, errMessage);
+                    });
+                }
+            }));
+
+        public RelayCommand OpenMessageCommand
+            => _openMessageCommand ?? (_openMessageCommand = new RelayCommand(param =>
+            {
+                MessageViewModel vm = DepsInjector.Default.Create<MessageViewModel>();
+                vm.Type = MessageWindowType.DirectMessageWindow;
+                vm.User = param as UserListItem;
+
+                WindowManager.ShowModalWindow(vm, this);
+
+                if (vm.Result)
+                {
+                    Service.SendDirectMessage(vm.User.ScreenName, vm.Content, ex =>
+                    {
+                        string errTitle = StringProvider.GetString("Title_Error");
+                        string errMessage = StringProvider.GetString("Message_Error_DM");
+
+                        MessageBoxHelper.ShowError(errTitle, errMessage);
+                    });
+                }
             }));
 
         public RelayCommand QuitCommand

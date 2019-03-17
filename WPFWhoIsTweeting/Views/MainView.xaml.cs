@@ -38,32 +38,6 @@ namespace WhoIsTweeting.Views
 
         #region Context Menu Handler
 
-        private void Context_OnMention(object sender, RoutedEventArgs e)
-        {
-            MessageWindow win = new MessageWindow(MessageWindowType.MentionWindow, viewModel.SelectedItem);
-            MessageViewModel mdl = win.DataContext as MessageViewModel;
-            // win.Owner = this;
-            if ((bool)win.ShowDialog())
-                viewModel.PostTweet(mdl.Content, (ex) =>
-                {
-                    MessageBox.Show(Strings.Message_Error_Mention, Strings.Title_Error,
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                });
-        }
-
-        private void Context_OnDirectMessage(object sender, RoutedEventArgs e)
-        {
-            MessageWindow win = new MessageWindow(MessageWindowType.DirectMessageWindow, viewModel.SelectedItem);
-            MessageViewModel mdl = win.DataContext as MessageViewModel;
-            // win.Owner = this;
-            if ((bool)win.ShowDialog())
-                viewModel.SendDirectMessage(mdl.User.ScreenName, mdl.Content, (ex) =>
-                {
-                    MessageBox.Show(Strings.Message_Error_DM, Strings.Title_Error,
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                });
-        }
-
         private void Context_OnProfile(object sender, RoutedEventArgs e)
             => System.Diagnostics.Process.Start($"https://twitter.com/{viewModel.SelectedItem.ScreenName}");
 

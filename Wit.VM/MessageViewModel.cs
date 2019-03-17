@@ -7,13 +7,35 @@ namespace Wit.VM
 
     public class MessageViewModel : WindowViewModel
     {
+        private MessageWindowType _type;
+        private UserListItem _user;
         private string _content;
         private RelayCommand _sendCommand;
         private RelayCommand _cancelCommand;
 
-        public MessageWindowType Type { get; }
-        public UserListItem User { get; }
         public bool Result { get; set; } = false;
+
+        public MessageWindowType Type
+        {
+            get => _type;
+            set
+            {
+                _type = value;
+                ResetContent();
+                OnPropertyChanged(nameof(Type));
+            }
+        }
+
+        public UserListItem User
+        {
+            get => _user;
+            set
+            {
+                _user = value;
+                ResetContent();
+                OnPropertyChanged(nameof(User));
+            }
+        }
 
         public int MaxChars
         {
@@ -48,21 +70,23 @@ namespace Wit.VM
                 WindowManager.CloseWindow(this);
             }));
 
-        public MessageViewModel(MessageWindowType type, UserListItem user)
+        public MessageViewModel()
         {
-            Type = type;
-            User = user;
-
-            if (type == MessageWindowType.MentionWindow)
-            {
-                Content = $"@{user.ScreenName} ";
-            }
-
             Width = 400;
             Height = 160;
             MinWidth = 400;
             MinHeight = 160;
             MaxWidth = 400;
+
+            ResetContent();
+        }
+
+        private void ResetContent()
+        {
+            if (Type == MessageWindowType.MentionWindow)
+            {
+                Content = $"@{User.ScreenName} ";
+            }
         }
     }
 }
