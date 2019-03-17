@@ -104,5 +104,22 @@ namespace Wit.Core
                 return e;
             }
         }
+
+        public TwitterApiResult<bool> PostTweet(string content)
+        {
+            try
+            {
+                Task.Run(() => _api.Post("/1.1/statuses/update.json", null, new NameValueCollection
+                {
+                    { "status", content }
+                })).Wait();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
+        }
     }
 }

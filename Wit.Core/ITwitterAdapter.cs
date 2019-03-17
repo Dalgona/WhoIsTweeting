@@ -17,5 +17,7 @@ namespace Wit.Core
         TwitterApiResult<IEnumerable<string>> RetrieveFollowingIds(string userId);
 
         TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings(ISet<string> userIds);
+
+        TwitterApiResult<bool> PostTweet(string content);
     }
 }
