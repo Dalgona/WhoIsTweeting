@@ -14,6 +14,8 @@ namespace Wit.VM
         private RelayCommand _saveCommand;
         private RelayCommand _cancelCommand;
 
+        public override string Title => StringProvider.GetString("Interval_Title") ?? "Set Update Interval";
+
         public int Interval
         {
             get => _interval;

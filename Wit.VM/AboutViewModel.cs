@@ -9,6 +9,8 @@ namespace Wit.VM
         private RelayCommand _emailCommand;
         private RelayCommand _websiteCommand;
 
+        public override string Title => StringProvider.GetString("About_Title") ?? "About WhoIsTweeting";
+
         public string Version { get; }
 
         public RelayCommand CloseCommand

@@ -17,6 +17,8 @@ namespace Wit.VM
             CanResize = false;
         }
 
+        public override string Title => StringProvider.GetString("Consumer_Title") ?? "Set Consumer Key";
+
         public bool Result { get; private set; } = false;
 
         public string ConsumerKey

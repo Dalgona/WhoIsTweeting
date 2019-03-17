@@ -8,6 +8,8 @@ namespace Wit.VM
 
         private RelayCommand _okCommand;
 
+        public override string Title => StringProvider.GetString("SignIn_Title") ?? "Sign in with Twitter";
+
         public bool Result { get; private set; } = false;
 
         public string Pin
