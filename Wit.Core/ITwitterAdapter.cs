@@ -13,7 +13,7 @@ namespace Wit.Core
 
         string AccessTokenSecret { get; set; }
 
-        Task<TwitterApiResult<string>> CheckUser();
+        Task<TwitterApiResult<UserListItem>> CheckUser();
 
         Task<TwitterApiResult<IEnumerable<string>>> RetrieveFollowingIds(string userId);
     }

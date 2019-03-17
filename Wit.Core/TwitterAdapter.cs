@@ -38,13 +38,13 @@ namespace Wit.Core
             set => _api.TokenSecret = value;
         }
 
-        public async Task<TwitterApiResult<string>> CheckUser()
+        public async Task<TwitterApiResult<UserListItem>> CheckUser()
         {
             try
             {
                 User user = await _api.Get<User>("/1.1/account/verify_credentials.json");
 
-                return user.id_str;
+                return new UserListItem(user.id_str, user.name, user.screen_name, user.status);
             }
             catch (Exception e)
             {
