@@ -61,7 +61,7 @@ namespace Wit.VM
             {
                 Result = true;
                 WindowManager.CloseWindow(this);
-            }, () => string.IsNullOrWhiteSpace(Content)));
+            }, () => !string.IsNullOrWhiteSpace(Content)));
 
         public RelayCommand CancelCommand
             => _cancelCommand ?? (_cancelCommand = new RelayCommand(() =>
@@ -77,15 +77,13 @@ namespace Wit.VM
             MinWidth = 400;
             MinHeight = 160;
             MaxWidth = 400;
-
-            ResetContent();
         }
 
         private void ResetContent()
         {
             if (Type == MessageWindowType.MentionWindow)
             {
-                Content = $"@{User.ScreenName} ";
+                Content = $"@{User?.ScreenName} ";
             }
         }
     }

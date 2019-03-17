@@ -12,7 +12,7 @@
     FocusManager.FocusedElement="{Binding ElementName=content}">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top">
-            <Label Foreground="whitesmoke" FontWeight="Bold" Padding="5,5,5,0">
+            <Label Background="{x:Null}" Foreground="WhiteSmoke" FontWeight="Bold" Padding="5,5,5,0" HorizontalAlignment="Left">
                 <Label.Style>
                     <Style TargetType="Label">
                         <Style.Triggers>
@@ -24,7 +24,7 @@
                     </Style>
                 </Label.Style>
             </Label>
-            <Label FontSize="16" Padding="5,0,5,5">
+            <Label Background="{x:Null}" FontSize="16" Padding="5,0,5,5" HorizontalAlignment="Left">
                 <Label.Style>
                     <Style TargetType="Label">
                         <Setter Property="Foreground" Value="MediumSpringGreen"/>
