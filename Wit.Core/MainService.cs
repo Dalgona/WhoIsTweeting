@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using PicoBird;
-using PicoBird.Objects;
-using System.Collections.Specialized;
-using System.Collections.ObjectModel;
 
 namespace Wit.Core
 {
@@ -83,19 +81,22 @@ namespace Wit.Core
 
         public void SendDirectMessage(string screenName, string content, Action<Exception> onError)
         {
-            Task postTask = api.Post("/1.1/direct_messages/new.json", null, new NameValueCollection
-                {
-                    { "screen_name", screenName },
-                    { "text", content }
-                });
-            postTask.ContinueWith(task => { onError(task.Exception); }, TaskContinuationOptions.OnlyOnFaulted);
+            //Task postTask = api.Post("/1.1/direct_messages/new.json", null, new NameValueCollection
+            //    {
+            //        { "screen_name", screenName },
+            //        { "text", content }
+            //    });
+            //postTask.ContinueWith(task => { onError(task.Exception); }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
         public void PostTweet(string content, Action<Exception> onError)
         {
-            Task postTask = api.Post("/1.1/statuses/update.json", null, new NameValueCollection
-                { { "status", content } });
-            postTask.ContinueWith(task => { onError(task.Exception); }, TaskContinuationOptions.OnlyOnFaulted);
+            TwitterApiResult<bool> result = _twtAdapter.PostTweet(content);
+
+            if (!result.DidSucceed)
+            {
+                onError(result.Exception);
+            }
         }
 
         public void SignIn(Func<string, string> callback, Action<Exception> onError)
