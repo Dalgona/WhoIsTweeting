@@ -10,7 +10,11 @@ namespace Wit.Core
 {
     class TwitterAdapter : ITwitterAdapter
     {
-        API _api = new API("", "");
+        API _api = new API("", "")
+        {
+            HttpTimeout = 10,
+            OAuthCallback = "oob"
+        };
 
         public string ConsumerKey
         {
@@ -34,6 +38,26 @@ namespace Wit.Core
         {
             get => _api.TokenSecret;
             set => _api.TokenSecret = value;
+        }
+
+        public async Task<TwitterApiResult<bool>> SetAccessTokenAsync(Func<string, string> getVerifier)
+        {
+            try
+            {
+                AccessToken = AccessTokenSecret = "";
+
+                await _api.RequestToken(getVerifier);
+
+                return true;
+            }
+            catch (AggregateException e)
+            {
+                return e.InnerException;
+            }
+            catch (Exception e)
+            {
+                return e;
+            }
         }
 
         public TwitterApiResult<UserListItem> CheckUser()

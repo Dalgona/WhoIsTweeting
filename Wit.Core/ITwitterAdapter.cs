@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Wit.Core
 {
@@ -11,6 +13,8 @@ namespace Wit.Core
         string AccessToken { get; set; }
 
         string AccessTokenSecret { get; set; }
+
+        Task<TwitterApiResult<bool>> SetAccessTokenAsync(Func<string, string> getVerifier);
 
         TwitterApiResult<UserListItem> CheckUser();
 
