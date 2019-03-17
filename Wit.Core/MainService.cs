@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PicoBird;
 
 namespace Wit.Core
 {
@@ -61,7 +60,7 @@ namespace Wit.Core
             set
             {
                 appSettings.Interval = updateInterval = value;
-                api.HttpTimeout = (int)(value * 0.9);
+                _twtAdapter.HttpTimeout = (int)(value * 0.9);
                 appSettings.Save();
             }
         }
@@ -73,8 +72,8 @@ namespace Wit.Core
             appSettings.ConsumerSecret = consumerSecret;
             appSettings.Save();
 
-            api.ConsumerKey = consumerKey;
-            api.ConsumerSecret = consumerSecret;
+            _twtAdapter.ConsumerKey = consumerKey;
+            _twtAdapter.ConsumerSecret = consumerSecret;
 
             State = ServiceState.SignInRequired;
         }
@@ -137,7 +136,6 @@ namespace Wit.Core
         }
 
         private ServiceState state = ServiceState.Initial;
-        private API api;
         private ITwitterAdapter _twtAdapter;
         private HashSet<string> idSet;
 
@@ -175,17 +173,10 @@ namespace Wit.Core
                 AccessTokenSecret = appSettings.TokenSecret
             };
 
-            api = new API(appSettings.ConsumerKey, appSettings.ConsumerSecret)
-            {
-                HttpTimeout = 10,
-                Token = appSettings.Token,
-                TokenSecret = appSettings.TokenSecret,
-                OAuthCallback = "oob"
-            };
             UpdateInterval = appSettings.Interval;
 
-            if (string.IsNullOrEmpty(api.ConsumerKey)
-                || string.IsNullOrEmpty(api.ConsumerSecret))
+            if (string.IsNullOrEmpty(_twtAdapter.ConsumerKey)
+                || string.IsNullOrEmpty(_twtAdapter.ConsumerSecret))
             {
                 State = ServiceState.NeedConsumerKey;
                 return;
@@ -197,7 +188,10 @@ namespace Wit.Core
 
         private bool ValidateUser()
         {
-            if (api.Token == "" || api.TokenSecret == "") return false;
+            if (_twtAdapter.AccessToken == "" || _twtAdapter.AccessTokenSecret == "")
+            {
+                return false;
+            }
 
             var result =
                 _twtAdapter.CheckUser().Then(user =>
