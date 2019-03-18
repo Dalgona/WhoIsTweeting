@@ -14,8 +14,6 @@ namespace Wit.Core
         NeedConsumerKey,
         SignInRequired,
         Ready,
-        Running,
-        Updating,
         Error = -1,
     };
 
@@ -53,6 +51,7 @@ namespace Wit.Core
 
         public TwitterErrorType LastError { get; private set; } = TwitterErrorType.None;
 
+        public bool IsUpdating => _listUpdater.Status == UpdaterStatus.Updating;
         public UserListItem Me { get; private set; }
         public int OnlineCount { get; private set; }
         public int AwayCount { get; private set; }
@@ -106,6 +105,7 @@ namespace Wit.Core
 
             _listUpdater = new UserListUpdater(_twt);
             _listUpdater.UserListUpdated += OnUserListUpdated;
+            _listUpdater.PropertyChanged += OnUpdaterPropertyChanged;
 
             UpdateInterval = _settings.Interval;
 
@@ -229,6 +229,14 @@ namespace Wit.Core
 
                 Graph.Add(new StatData(OnlineCount, AwayCount, OfflineCount));
                 GraphCount++;
+            }
+        }
+
+        private void OnUpdaterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(UserListUpdater.Status))
+            {
+                OnPropertyChanged(nameof(IsUpdating));
             }
         }
 

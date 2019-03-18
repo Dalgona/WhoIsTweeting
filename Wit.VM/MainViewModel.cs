@@ -255,7 +255,6 @@ namespace Wit.VM
         public int StatOnline => Service.OnlineCount;
         public int StatAway => Service.AwayCount;
         public int StatOffline => Service.OfflineCount;
-        public bool StatUpdating => Service.State == ServiceState.Updating;
 
         public override bool AlwaysOnTop
         {

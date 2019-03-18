@@ -204,7 +204,7 @@
                         <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
                         <Setter Property="Content" Value=""/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding StatUpdating, Mode=OneWay}" Value="True">
+                            <DataTrigger Binding="{Binding Service.IsUpdating, Mode=OneWay}" Value="True">
                                 <Setter Property="Content" Value="&#xe117;"/>
                             </DataTrigger>
                         </Style.Triggers>
