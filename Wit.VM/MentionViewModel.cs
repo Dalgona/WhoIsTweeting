@@ -5,7 +5,7 @@ namespace Wit.VM
 {
     public enum MessageWindowType { MentionWindow, DirectMessageWindow };
 
-    public class MessageViewModel : WindowViewModel
+    public class MentionViewModel : WindowViewModel
     {
         private MessageWindowType _type;
         private UserListItem _user;
@@ -70,7 +70,7 @@ namespace Wit.VM
                 WindowManager.CloseWindow(this);
             }));
 
-        public MessageViewModel()
+        public MentionViewModel()
         {
             Width = 400;
             Height = 160;

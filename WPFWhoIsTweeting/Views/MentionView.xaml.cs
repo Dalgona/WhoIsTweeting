@@ -2,9 +2,9 @@
 
 namespace WhoIsTweeting.Views
 {
-    public partial class MessageView : UserControl
+    public partial class MentionView : UserControl
     {
-        public MessageView()
+        public MentionView()
         {
             InitializeComponent();
         }

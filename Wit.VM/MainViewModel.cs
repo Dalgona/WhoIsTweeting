@@ -179,7 +179,7 @@ namespace Wit.VM
         public RelayCommand OpenMentionCommand
             => _openMentionCommand ?? (_openMentionCommand = new RelayCommand(param =>
             {
-                MessageViewModel vm = DepsInjector.Default.Create<MessageViewModel>();
+                MentionViewModel vm = DepsInjector.Default.Create<MentionViewModel>();
                 vm.Type = MessageWindowType.MentionWindow;
                 vm.User = param as UserListItem;
 

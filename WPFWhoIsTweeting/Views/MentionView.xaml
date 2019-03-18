@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="WhoIsTweeting.Views.MessageView"
+    x:Class="WhoIsTweeting.Views.MentionView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:WhoIsTweeting"
     xmlns:vm="clr-namespace:Wit.VM;assembly=Wit.VM"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type={x:Type vm:MessageViewModel}}"
+    d:DataContext="{d:DesignInstance Type={x:Type vm:MentionViewModel}}"
     d:DesignHeight="160" d:DesignWidth="400"
     FocusManager.FocusedElement="{Binding ElementName=content}">
     <DockPanel>

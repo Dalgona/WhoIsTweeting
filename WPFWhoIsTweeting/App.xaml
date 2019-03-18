@@ -35,8 +35,8 @@
             <view:StatView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:MessageViewModel}">
-            <view:MessageView />
+        <DataTemplate DataType="{x:Type vm:MentionViewModel}">
+            <view:MentionView />
         </DataTemplate>
 
         <StreamGeometry x:Key="MinimizeWindowGlyphGeometry">
