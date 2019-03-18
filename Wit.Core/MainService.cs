@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Wit.Core
@@ -57,10 +56,10 @@ namespace Wit.Core
 
         public int UpdateInterval
         {
-            get => updateInterval;
+            get => _listUpdater.UpdateInterval;
             set
             {
-                appSettings.Interval = updateInterval = value;
+                appSettings.Interval = _listUpdater.UpdateInterval = value;
                 _twtAdapter.HttpTimeout = (int)(value * 0.9);
                 appSettings.Save();
             }
@@ -68,7 +67,8 @@ namespace Wit.Core
 
         public void SetConsumerKey(string consumerKey, string consumerSecret)
         {
-            if (listUpdateWorker.IsBusy) listUpdateWorker.CancelAsync();
+            _listUpdater.Stop();
+
             appSettings.ConsumerKey = consumerKey;
             appSettings.ConsumerSecret = consumerSecret;
             appSettings.Save();
@@ -126,12 +126,12 @@ namespace Wit.Core
             GraphCount = SumOnline = MinOnline = MaxOnline = 0;
         }
 
-        private ITwitterAdapter _twtAdapter;
+        public void Dispose() => _listUpdater.Dispose();
+
+        private readonly ITwitterAdapter _twtAdapter;
+        private readonly UserListUpdater _listUpdater;
         private ServiceState state = ServiceState.Initial;
         private HashSet<string> idSet;
-
-        private BackgroundWorker listUpdateWorker;
-        private int updateInterval;
 
         Properties.Settings appSettings = Properties.Settings.Default;
 
@@ -150,9 +150,6 @@ namespace Wit.Core
 
         private MainService()
         {
-            listUpdateWorker = new BackgroundWorker { WorkerSupportsCancellation = true };
-            listUpdateWorker.DoWork += listUpdateWorker_DoWork;
-
             UserList = new ObservableCollection<UserListItem>();
             Graph = new ObservableCollection<StatData>();
 
@@ -163,6 +160,9 @@ namespace Wit.Core
                 AccessToken = appSettings.Token,
                 AccessTokenSecret = appSettings.TokenSecret
             };
+
+            _listUpdater = new UserListUpdater(_twtAdapter);
+            _listUpdater.UserListUpdated += OnUserListUpdated;
 
             UpdateInterval = appSettings.Interval;
 
@@ -210,77 +210,40 @@ namespace Wit.Core
 
         private void Run()
         {
-            if (State >= ServiceState.Running) return;
-            State = ServiceState.Running;
-            while (listUpdateWorker.IsBusy) Thread.Sleep(50); // spin-wait
-            listUpdateWorker.RunWorkerAsync();
+            _listUpdater.Start(idSet);
         }
 
-        private void UpdateUserList()
+        private void OnUserListUpdated(object sender, IEnumerable<UserListItem> users)
         {
-            if (State < ServiceState.Ready) return;
-            if (State == ServiceState.Updating) return;
-            State = ServiceState.Updating;
+            var countQuery =
+                from user in users
+                group user by user.Status into g
+                orderby g.Key
+                select g.Count();
 
-            TwitterApiResult<IEnumerable<UserListItem>> result = _twtAdapter.RetrieveFollowings(idSet);
+            List<int> counts = new List<int>(countQuery);
+            OnlineCount = counts[0];
+            AwayCount = counts[1];
+            OfflineCount = counts[2];
 
-            if (result.DidSucceed)
+            lock (UserListLock)
             {
-                IEnumerable<UserListItem> users = result.Data;
+                UserList.Clear();
 
-                AwayCount = users.Count(x => x.Status == UserStatus.Away);
-                OfflineCount = users.Count(x => x.Status == UserStatus.Offline);
-                OnlineCount = idSet.Count - AwayCount - OfflineCount;
-
-                lock (UserListLock)
+                foreach (UserListItem user in users)
                 {
-                    UserList.Clear();
-                    foreach (var x in users) UserList.Add(x);
+                    UserList.Add(user);
                 }
-
-                lock (GraphLock)
-                {
-                    SumOnline += OnlineCount;
-                    MinOnline = GraphCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
-                    MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
-
-                    Graph.Add(new StatData(OnlineCount, AwayCount, OfflineCount));
-                    GraphCount++;
-                }
-
-                State = ServiceState.Running;
             }
-            else
-            {
-                LastError = result.ErrorType;
-                State = ServiceState.Error;
-                OnErrorOccurred();
 
-                listUpdateWorker.CancelAsync();
-            }
-        }
-
-        private void listUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Log("MainService::listUpdateWorker_DoWork", "called");
-            BackgroundWorker worker = sender as BackgroundWorker;
-            int timer = 0;
-            while (true)
+            lock (GraphLock)
             {
-                if (worker.CancellationPending)
-                {
-                    Log("MainService::listUpdateWorker_DoWork", "Worker cancellation was requested");
-                    e.Cancel = true;
-                    break;
-                }
-                if (timer % UpdateInterval == 0)
-                {
-                    Log("MainService::listUpdateWorker_DoWork", "Executing interval job");
-                    timer = 0;
-                    Task.Run((Action)UpdateUserList);
-                }
-                Thread.Sleep(TimeSpan.FromSeconds(0.999));
-                timer++;
+                SumOnline += OnlineCount;
+                MinOnline = GraphCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
+                MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
+
+                Graph.Add(new StatData(OnlineCount, AwayCount, OfflineCount));
+                GraphCount++;
             }
         }
 
@@ -297,27 +260,5 @@ namespace Wit.Core
 
         public void OnErrorOccurred()
             => ErrorOccurred?.Invoke(this, EventArgs.Empty);
-
-        #region IDisposable Support
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    listUpdateWorker.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }
