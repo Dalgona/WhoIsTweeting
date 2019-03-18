@@ -32,7 +32,7 @@ namespace Wit.Core
         #region Fields
 
         private readonly Settings _settings = Settings.Default;
-        private readonly ITwitterAdapter _twtAdapter;
+        private readonly ITwitterAdapter _twt;
         private readonly UserListUpdater _listUpdater;
         private ServiceState _state = ServiceState.Initial;
         private HashSet<string> _userIds;
@@ -73,7 +73,7 @@ namespace Wit.Core
             set
             {
                 _settings.Interval = _listUpdater.UpdateInterval = value;
-                _twtAdapter.HttpTimeout = (int)(value * 0.9);
+                _twt.HttpTimeout = (int)(value * 0.9);
                 _settings.Save();
             }
         }
@@ -97,7 +97,7 @@ namespace Wit.Core
             UserList = new ObservableCollection<UserListItem>();
             Graph = new ObservableCollection<StatData>();
 
-            _twtAdapter = new TwitterAdapter
+            _twt = new TwitterAdapter
             {
                 ConsumerKey = _settings.ConsumerKey,
                 ConsumerSecret = _settings.ConsumerSecret,
@@ -105,20 +105,15 @@ namespace Wit.Core
                 AccessTokenSecret = _settings.TokenSecret
             };
 
-            _listUpdater = new UserListUpdater(_twtAdapter);
+            _listUpdater = new UserListUpdater(_twt);
             _listUpdater.UserListUpdated += OnUserListUpdated;
 
             UpdateInterval = _settings.Interval;
 
-            if (string.IsNullOrEmpty(_twtAdapter.ConsumerKey)
-                || string.IsNullOrEmpty(_twtAdapter.ConsumerSecret))
-            {
-                State = ServiceState.NeedConsumerKey;
-                return;
-            }
-
-            State = ServiceState.SignInRequired;
-            Resume();
+            State =
+                string.IsNullOrEmpty(_twt.ConsumerKey) || string.IsNullOrEmpty(_twt.ConsumerSecret)
+                ? ServiceState.NeedConsumerKey
+                : ServiceState.SignInRequired;
         }
 
         #endregion
@@ -132,19 +127,16 @@ namespace Wit.Core
         {
             _listUpdater.Stop();
 
-            _settings.ConsumerKey = consumerKey;
-            _settings.ConsumerSecret = consumerSecret;
+            _settings.ConsumerKey = _twt.ConsumerKey = consumerKey;
+            _settings.ConsumerSecret = _twt.ConsumerSecret = consumerSecret;
             _settings.Save();
-
-            _twtAdapter.ConsumerKey = consumerKey;
-            _twtAdapter.ConsumerSecret = consumerSecret;
 
             State = ServiceState.SignInRequired;
         }
 
         public void PostTweet(string content, Action<Exception> onError)
         {
-            TwitterApiResult<bool> result = _twtAdapter.PostTweet(content);
+            TwitterApiResult<bool> result = _twt.PostTweet(content);
 
             if (!result.DidSucceed)
             {
@@ -154,16 +146,16 @@ namespace Wit.Core
 
         public async void SignIn(Func<string, string> callback, Action<Exception> onError)
         {
-            TwitterApiResult<bool> result = await _twtAdapter.SetAccessTokenAsync(callback);
+            TwitterApiResult<bool> result = await _twt.SetAccessTokenAsync(callback);
 
             if (result.DidSucceed && ValidateUser())
             {
-                _settings.Token = _twtAdapter.AccessToken;
-                _settings.TokenSecret = _twtAdapter.AccessTokenSecret;
+                _settings.Token = _twt.AccessToken;
+                _settings.TokenSecret = _twt.AccessTokenSecret;
                 _settings.Save();
 
                 State = ServiceState.Ready;
-                Run();
+                _listUpdater.Start(_userIds);
             }
             else
             {
@@ -178,7 +170,7 @@ namespace Wit.Core
                 if (ValidateUser())
                 {
                     State = ServiceState.Ready;
-                    Run();
+                    _listUpdater.Start(_userIds);
                 }
             });
         }
@@ -195,17 +187,17 @@ namespace Wit.Core
 
         private bool ValidateUser()
         {
-            if (_twtAdapter.AccessToken == "" || _twtAdapter.AccessTokenSecret == "")
+            if (_twt.AccessToken == "" || _twt.AccessTokenSecret == "")
             {
                 return false;
             }
 
             var result =
-                _twtAdapter.CheckUser().Then(user =>
+                _twt.CheckUser().Then(user =>
                 {
                     Me = user;
 
-                    return _twtAdapter.RetrieveFollowingIds(user.Id);
+                    return _twt.RetrieveFollowingIds(user.Id);
                 });
 
             if (result.DidSucceed)
@@ -222,11 +214,6 @@ namespace Wit.Core
 
                 return false;
             }
-        }
-
-        private void Run()
-        {
-            _listUpdater.Start(_userIds);
         }
 
         private void OnUserListUpdated(object sender, IEnumerable<UserListItem> users)

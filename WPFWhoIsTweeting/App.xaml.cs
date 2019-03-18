@@ -20,6 +20,7 @@ namespace WhoIsTweeting
             MainService service = MainService.Instance;
             DepsInjector ioc = DepsInjector.Default;
 
+            service.Resume();
             BindingOperations.EnableCollectionSynchronization(service.UserList, service.UserListLock);
             BindingOperations.EnableCollectionSynchronization(service.Graph, service.GraphLock);
 
