@@ -78,16 +78,6 @@ namespace Wit.Core
             State = ServiceState.SignInRequired;
         }
 
-        public void SendDirectMessage(string screenName, string content, Action<Exception> onError)
-        {
-            //Task postTask = api.Post("/1.1/direct_messages/new.json", null, new NameValueCollection
-            //    {
-            //        { "screen_name", screenName },
-            //        { "text", content }
-            //    });
-            //postTask.ContinueWith(task => { onError(task.Exception); }, TaskContinuationOptions.OnlyOnFaulted);
-        }
-
         public void PostTweet(string content, Action<Exception> onError)
         {
             TwitterApiResult<bool> result = _twtAdapter.PostTweet(content);

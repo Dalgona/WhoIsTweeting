@@ -18,7 +18,6 @@ namespace Wit.VM
         private RelayCommand _openIntervalCommand;
         private RelayCommand _openAboutCommand;
         private RelayCommand _openMentionCommand;
-        private RelayCommand _openMessageCommand;
         private RelayCommand _openProfileCommand;
         private RelayCommand _quitCommand;
 
@@ -192,27 +191,6 @@ namespace Wit.VM
                     {
                         string errTitle = StringProvider.GetString("Title_Error");
                         string errMessage = StringProvider.GetString("Message_Error_Mention");
-
-                        MessageBoxHelper.ShowError(errTitle, errMessage);
-                    });
-                }
-            }));
-
-        public RelayCommand OpenMessageCommand
-            => _openMessageCommand ?? (_openMessageCommand = new RelayCommand(param =>
-            {
-                MessageViewModel vm = DepsInjector.Default.Create<MessageViewModel>();
-                vm.Type = MessageWindowType.DirectMessageWindow;
-                vm.User = param as UserListItem;
-
-                WindowManager.ShowModalWindow(vm, this);
-
-                if (vm.Result)
-                {
-                    Service.SendDirectMessage(vm.User.ScreenName, vm.Content, ex =>
-                    {
-                        string errTitle = StringProvider.GetString("Title_Error");
-                        string errMessage = StringProvider.GetString("Message_Error_DM");
 
                         MessageBoxHelper.ShowError(errTitle, errMessage);
                     });
