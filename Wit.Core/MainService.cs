@@ -136,7 +136,7 @@ namespace Wit.Core
         Properties.Settings appSettings = Properties.Settings.Default;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler<ErrorOccurredEventArgs> ErrorOccurred;
+        public event EventHandler ErrorOccurred;
 
         static MainService()
         {
@@ -202,7 +202,7 @@ namespace Wit.Core
             {
                 LastError = result.ErrorType;
                 State = ServiceState.Error;
-                OnErrorOccurred(null, result.Exception.Message);
+                OnErrorOccurred();
 
                 return false;
             }
@@ -254,7 +254,7 @@ namespace Wit.Core
             {
                 LastError = result.ErrorType;
                 State = ServiceState.Error;
-                OnErrorOccurred(null, result.Exception.Message);
+                OnErrorOccurred();
 
                 listUpdateWorker.CancelAsync();
             }
@@ -295,8 +295,8 @@ namespace Wit.Core
         public void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-        public void OnErrorOccurred(string what, string message)
-            => ErrorOccurred?.Invoke(this, new ErrorOccurredEventArgs(what, message));
+        public void OnErrorOccurred()
+            => ErrorOccurred?.Invoke(this, EventArgs.Empty);
 
         #region IDisposable Support
         private bool disposedValue = false;
@@ -319,17 +319,5 @@ namespace Wit.Core
             GC.SuppressFinalize(this);
         }
         #endregion
-    }
-
-    public class ErrorOccurredEventArgs : EventArgs
-    {
-        public string What { get; private set; }
-        public string Message { get; private set; }
-
-        public ErrorOccurredEventArgs(string what, string message) : base()
-        {
-            What = what;
-            Message = message;
-        }
     }
 }

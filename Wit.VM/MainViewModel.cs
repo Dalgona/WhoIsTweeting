@@ -67,7 +67,7 @@ namespace Wit.VM
             Service.Resume();
         }
 
-        private void Service_ErrorOccurred(object sender, ErrorOccurredEventArgs e)
+        private void Service_ErrorOccurred(object sender, EventArgs e)
         {
             isRetrying = false;
             OnPropertyChanged(nameof(IsErrorSet));
