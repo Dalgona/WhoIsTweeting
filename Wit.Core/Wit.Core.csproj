@@ -54,6 +54,7 @@
     <Compile Include="TwitterAdapter.cs" />
     <Compile Include="TwitterApiResult.cs" />
     <Compile Include="UserListItem.cs" />
+    <Compile Include="UserListUpdater.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
