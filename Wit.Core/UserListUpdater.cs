@@ -51,6 +51,7 @@ namespace Wit.Core
         public UserListUpdater(ITwitterAdapter twtAdapter)
         {
             _twtAdapter = twtAdapter;
+
             _worker = new BackgroundWorker
             {
                 WorkerSupportsCancellation = true
@@ -95,21 +96,19 @@ namespace Wit.Core
             }
 
             Status = UpdaterStatus.Updating;
-            TwitterApiResult<IEnumerable<UserListItem>> result = _twtAdapter.RetrieveFollowings(userIds);
 
-            if (result.DidSucceed)
+            _twtAdapter.RetrieveFollowings(userIds).Finally(users =>
             {
-                UserListUpdated?.Invoke(this, result.Data);
+                UserListUpdated?.Invoke(this, users);
 
                 Status = UpdaterStatus.Running;
-            }
-            else
+            }, (errType, ex) =>
             {
-                LastError = result.ErrorType;
+                LastError = errType;
                 Status = UpdaterStatus.Error;
 
                 worker.CancelAsync();
-            }
+            });
         }
 
         private void OnWorkerStarted(object sender, DoWorkEventArgs e)

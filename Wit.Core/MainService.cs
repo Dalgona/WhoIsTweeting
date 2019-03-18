@@ -144,20 +144,17 @@ namespace Wit.Core
 
         public async void SignIn(Func<string, string> callback, Action<Exception> onError)
         {
-            TwitterApiResult<bool> result = await _twt.SetAccessTokenAsync(callback);
-
-            if (result.DidSucceed)
+            (await _twt.SetAccessTokenAsync(callback)).Finally(async _ =>
             {
                 _settings.Token = _twt.AccessToken;
                 _settings.TokenSecret = _twt.AccessTokenSecret;
                 _settings.Save();
 
                 await Task.Run((Action)Resume);
-            }
-            else
+            }, (errType, ex) =>
             {
-                onError(result.Exception);
-            }
+                onError(ex);
+            });
         }
 
         public void Resume()
@@ -167,23 +164,21 @@ namespace Wit.Core
                 return;
             }
 
-            var result = _twt.CheckUser().Then(user =>
+            _twt.CheckUser().Then(user =>
             {
                 Me = user;
 
                 return _twt.RetrieveFollowingIds(user.Id);
-            });
-
-            if (result.DidSucceed)
+            }).Finally(userIds =>
             {
                 State = ServiceState.Ready;
-                _listUpdater.Start(new HashSet<string>(result.Data));
-            }
-            else
+
+                _listUpdater.Start(new HashSet<string>(userIds));
+            }, (errType, ex) =>
             {
-                LastError = result.ErrorType;
+                LastError = errType;
                 State = ServiceState.Error;
-            }
+            });
         }
 
         public void ResetStatistics()
