@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Wit.Core.Properties;
 
 namespace Wit.Core
 {
@@ -28,13 +29,25 @@ namespace Wit.Core
 
         #endregion
 
+        #region Fields
+
+        private readonly Settings _settings = Settings.Default;
+        private readonly ITwitterAdapter _twtAdapter;
+        private readonly UserListUpdater _listUpdater;
+        private ServiceState _state = ServiceState.Initial;
+        private HashSet<string> _userIds;
+
+        #endregion
+
+        #region Properties
+
         public ServiceState State
         {
-            get => state;
+            get => _state;
             private set
             {
-                Log("MainService::State.set", $"{state} -> {value}");
-                state = value;
+                Log("MainService::State.set", $"{_state} -> {value}");
+                _state = value;
                 OnPropertyChanged(nameof(State));
             }
         }
@@ -59,19 +72,69 @@ namespace Wit.Core
             get => _listUpdater.UpdateInterval;
             set
             {
-                appSettings.Interval = _listUpdater.UpdateInterval = value;
+                _settings.Interval = _listUpdater.UpdateInterval = value;
                 _twtAdapter.HttpTimeout = (int)(value * 0.9);
-                appSettings.Save();
+                _settings.Save();
             }
         }
+
+        #endregion
+
+        #region Constructors
+
+        static MainService()
+        {
+            if (Settings.Default.UpgradeSettings)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeSettings = false;
+                Settings.Default.Save();
+            }
+        }
+
+        private MainService()
+        {
+            UserList = new ObservableCollection<UserListItem>();
+            Graph = new ObservableCollection<StatData>();
+
+            _twtAdapter = new TwitterAdapter
+            {
+                ConsumerKey = _settings.ConsumerKey,
+                ConsumerSecret = _settings.ConsumerSecret,
+                AccessToken = _settings.Token,
+                AccessTokenSecret = _settings.TokenSecret
+            };
+
+            _listUpdater = new UserListUpdater(_twtAdapter);
+            _listUpdater.UserListUpdated += OnUserListUpdated;
+
+            UpdateInterval = _settings.Interval;
+
+            if (string.IsNullOrEmpty(_twtAdapter.ConsumerKey)
+                || string.IsNullOrEmpty(_twtAdapter.ConsumerSecret))
+            {
+                State = ServiceState.NeedConsumerKey;
+                return;
+            }
+
+            State = ServiceState.SignInRequired;
+            Resume();
+        }
+
+        #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler ErrorOccurred;
+
+        #region Public Methods
 
         public void SetConsumerKey(string consumerKey, string consumerSecret)
         {
             _listUpdater.Stop();
 
-            appSettings.ConsumerKey = consumerKey;
-            appSettings.ConsumerSecret = consumerSecret;
-            appSettings.Save();
+            _settings.ConsumerKey = consumerKey;
+            _settings.ConsumerSecret = consumerSecret;
+            _settings.Save();
 
             _twtAdapter.ConsumerKey = consumerKey;
             _twtAdapter.ConsumerSecret = consumerSecret;
@@ -95,9 +158,9 @@ namespace Wit.Core
 
             if (result.DidSucceed && ValidateUser())
             {
-                appSettings.Token = _twtAdapter.AccessToken;
-                appSettings.TokenSecret = _twtAdapter.AccessTokenSecret;
-                appSettings.Save();
+                _settings.Token = _twtAdapter.AccessToken;
+                _settings.TokenSecret = _twtAdapter.AccessTokenSecret;
+                _settings.Save();
 
                 State = ServiceState.Ready;
                 Run();
@@ -128,54 +191,7 @@ namespace Wit.Core
 
         public void Dispose() => _listUpdater.Dispose();
 
-        private readonly ITwitterAdapter _twtAdapter;
-        private readonly UserListUpdater _listUpdater;
-        private ServiceState state = ServiceState.Initial;
-        private HashSet<string> idSet;
-
-        Properties.Settings appSettings = Properties.Settings.Default;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler ErrorOccurred;
-
-        static MainService()
-        {
-            if (Properties.Settings.Default.UpgradeSettings)
-            {
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.UpgradeSettings = false;
-                Properties.Settings.Default.Save();
-            }
-        }
-
-        private MainService()
-        {
-            UserList = new ObservableCollection<UserListItem>();
-            Graph = new ObservableCollection<StatData>();
-
-            _twtAdapter = new TwitterAdapter
-            {
-                ConsumerKey = appSettings.ConsumerKey,
-                ConsumerSecret = appSettings.ConsumerSecret,
-                AccessToken = appSettings.Token,
-                AccessTokenSecret = appSettings.TokenSecret
-            };
-
-            _listUpdater = new UserListUpdater(_twtAdapter);
-            _listUpdater.UserListUpdated += OnUserListUpdated;
-
-            UpdateInterval = appSettings.Interval;
-
-            if (string.IsNullOrEmpty(_twtAdapter.ConsumerKey)
-                || string.IsNullOrEmpty(_twtAdapter.ConsumerSecret))
-            {
-                State = ServiceState.NeedConsumerKey;
-                return;
-            }
-
-            State = ServiceState.SignInRequired;
-            Resume();
-        }
+        #endregion
 
         private bool ValidateUser()
         {
@@ -194,7 +210,7 @@ namespace Wit.Core
 
             if (result.DidSucceed)
             {
-                idSet = new HashSet<string>(result.Data);
+                _userIds = new HashSet<string>(result.Data);
 
                 return true;
             }
@@ -210,7 +226,7 @@ namespace Wit.Core
 
         private void Run()
         {
-            _listUpdater.Start(idSet);
+            _listUpdater.Start(_userIds);
         }
 
         private void OnUserListUpdated(object sender, IEnumerable<UserListItem> users)
@@ -255,10 +271,10 @@ namespace Wit.Core
 #endif
         }
 
-        public void OnPropertyChanged(string name)
+        private void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
-        public void OnErrorOccurred()
+        private void OnErrorOccurred()
             => ErrorOccurred?.Invoke(this, EventArgs.Empty);
     }
 }
