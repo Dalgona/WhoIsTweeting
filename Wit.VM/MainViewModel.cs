@@ -1,12 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Threading;
 using Wit.Core;
 using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public class MainViewModel : WindowViewModel, IDisposable
+    public class MainViewModel : WindowViewModel
     {
         public MainService Service { get; } = MainService.Instance;
 
@@ -21,23 +20,11 @@ namespace Wit.VM
         private RelayCommand _openProfileCommand;
         private RelayCommand _quitCommand;
 
-        private const int maxRetryCount = 5;
-        private double retryTimeMultiplier = 1.0;
-        private bool isRetryPending = false;
-        private bool isRetrying = false;
-        private int retryCount = 0;
-        private int retryTimeout = 0;
-
         private UserListItem selectedItem;
-        private BackgroundWorker autoRetryWorker = new BackgroundWorker();
 
         public MainViewModel()
         {
             Service.PropertyChanged += Service_PropertyChanged;
-            Service.ErrorOccurred += Service_ErrorOccurred;
-
-            autoRetryWorker.DoWork += AutoRetryWorker_DoWork;
-            autoRetryWorker.WorkerSupportsCancellation = true;
 
             Title = "WhoIsTweeting";
             Width = 300;
@@ -48,67 +35,12 @@ namespace Wit.VM
 
         #region Event Handlers
 
-        private void AutoRetryWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var worker = sender as BackgroundWorker;
-            for (RetryTimeout = (int)(Service.UpdateInterval * retryTimeMultiplier); RetryTimeout > 0; RetryTimeout--)
-            {
-                if (worker.CancellationPending)
-                {
-                    e.Cancel = true;
-                    return;
-                }
-                Thread.Sleep(1000);
-            }
-            RetryCount += 1;
-            retryTimeMultiplier *= 1.5;
-            isRetrying = true;
-            OnPropertyChanged(nameof(IsErrorSet));
-            Service.Resume();
-        }
-
-        private void Service_ErrorOccurred(object sender, EventArgs e)
-        {
-            isRetrying = false;
-            OnPropertyChanged(nameof(IsErrorSet));
-            while (autoRetryWorker.IsBusy) Thread.Sleep(50); // spin-wait
-            if (RetryCount >= maxRetryCount)
-            {
-                IsRetryPending = false;
-            }
-            else
-            {
-                IsRetryPending = true;
-                autoRetryWorker.RunWorkerAsync();
-            }
-        }
-
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            MainService svc = sender as MainService;
-
-            if (e.PropertyName == "State" && svc.State >= 0)
-            {
-                if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
-                RetryCount = 0;
-                retryTimeMultiplier = 1.0;
-                isRetrying = false;
-            }
-
             OnPropertyChanged("");
         }
 
         #endregion
-
-        public void TryResume()
-        {
-            if (autoRetryWorker.IsBusy) autoRetryWorker.CancelAsync();
-            RetryCount = 0;
-            retryTimeMultiplier = 1.0;
-            isRetrying = true;
-            OnPropertyChanged(nameof(IsErrorSet));
-            Service.Resume();
-        }
 
         public RelayCommand OpenStatCommand
             => _openStatCommand ?? (_openStatCommand = new RelayCommand(() =>
@@ -210,37 +142,7 @@ namespace Wit.VM
 
         public bool IsSignedIn => Service.State >= ServiceState.Ready;
 
-        public bool IsErrorSet => Service.State < 0 && !isRetrying;
-
-        public bool IsRetryPending
-        {
-            get => isRetryPending;
-            set
-            {
-                isRetryPending = value;
-                OnPropertyChanged(nameof(IsRetryPending));
-            }
-        }
-
-        public int RetryCount
-        {
-            get => retryCount;
-            set
-            {
-                retryCount = value;
-                OnPropertyChanged(nameof(RetryCount));
-            }
-        }
-
-        public int RetryTimeout
-        {
-            get => retryTimeout;
-            set
-            {
-                retryTimeout = value;
-                OnPropertyChanged(nameof(RetryTimeout));
-            }
-        }
+        public bool IsErrorSet => Service.State < 0;
 
         public UserListItem SelectedItem
         {
@@ -289,27 +191,5 @@ namespace Wit.VM
         }
 
         public event EventHandler RefreshUserList;
-
-        #region IDisposable Support
-        private bool disposedValue = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    autoRetryWorker.Dispose();
-                }
-                disposedValue = true;
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

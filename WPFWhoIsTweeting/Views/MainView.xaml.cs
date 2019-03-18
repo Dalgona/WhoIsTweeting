@@ -36,9 +36,6 @@ namespace WhoIsTweeting.Views
             base.OnPropertyChanged(e);
         }
 
-        private void OnTryAgainClicked(object sender, RoutedEventArgs e)
-            => viewModel.TryResume();
-
         private void FilterUserList(object sender, FilterEventArgs e)
         {
             if (e.Item is UserListItem item)

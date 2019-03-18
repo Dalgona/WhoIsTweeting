@@ -118,7 +118,6 @@ namespace Wit.Core
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler ErrorOccurred;
 
         #region Public Methods
 
@@ -184,7 +183,6 @@ namespace Wit.Core
             {
                 LastError = result.ErrorType;
                 State = ServiceState.Error;
-                OnErrorOccurred();
             }
         }
 
@@ -250,8 +248,5 @@ namespace Wit.Core
 
         private void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-        private void OnErrorOccurred()
-            => ErrorOccurred?.Invoke(this, EventArgs.Empty);
     }
 }
