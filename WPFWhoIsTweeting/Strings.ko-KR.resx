@@ -199,9 +199,6 @@ MIT 라이센스가 적용됩니다. 첨부된 LICENSE 파일에
   <data name="Interval_Title" xml:space="preserve">
     <value>갱신 주기 설정</value>
   </data>
-  <data name="Menu_Context_DM" xml:space="preserve">
-    <value>쪽지 보내기(_D)...</value>
-  </data>
   <data name="Menu_Context_Mention" xml:space="preserve">
     <value>멘션 보내기(_M)...</value>
   </data>
@@ -235,9 +232,6 @@ MIT 라이센스가 적용됩니다. 첨부된 LICENSE 파일에
   <data name="Menu_View" xml:space="preserve">
     <value>보기(_V)</value>
   </data>
-  <data name="Menu_View_HideBorder" xml:space="preserve">
-    <value>창 테두리 숨기기(_H)</value>
-  </data>
   <data name="Menu_View_ShowAway" xml:space="preserve">
     <value>자리비움(_W)</value>
   </data>
@@ -247,17 +241,8 @@ MIT 라이센스가 적용됩니다. 첨부된 LICENSE 파일에
   <data name="Menu_View_Topmost" xml:space="preserve">
     <value>항상 위(_T)</value>
   </data>
-  <data name="Menu_View_Transparency" xml:space="preserve">
-    <value>반투명창(_A)</value>
-  </data>
-  <data name="Message_Error_DM" xml:space="preserve">
-    <value>지정한 사용자에게 쪽지를 보내지 못했습니다.</value>
-  </data>
   <data name="Message_Error_Mention" xml:space="preserve">
     <value>멘션을 보내지 못했습니다.</value>
-  </data>
-  <data name="Message_Header_DM" xml:space="preserve">
-    <value>쪽지 보내기</value>
   </data>
   <data name="Message_Header_Mention" xml:space="preserve">
     <value>멘션 보내기</value>

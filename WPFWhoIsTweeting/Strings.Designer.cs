@@ -19,7 +19,7 @@ namespace WhoIsTweeting {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -294,15 +294,6 @@ namespace WhoIsTweeting {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send a _Direct Message....
-        /// </summary>
-        public static string Menu_Context_DM {
-            get {
-                return ResourceManager.GetString("Menu_Context_DM", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Send a _Mention....
         /// </summary>
         public static string Menu_Context_Mention {
@@ -402,15 +393,6 @@ namespace WhoIsTweeting {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to _Hide Window Border.
-        /// </summary>
-        public static string Menu_View_HideBorder {
-            get {
-                return ResourceManager.GetString("Menu_View_HideBorder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A_way Users.
         /// </summary>
         public static string Menu_View_ShowAway {
@@ -438,38 +420,11 @@ namespace WhoIsTweeting {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tr_ansparency.
-        /// </summary>
-        public static string Menu_View_Transparency {
-            get {
-                return ResourceManager.GetString("Menu_View_Transparency", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Could not send a direct message to specified user..
-        /// </summary>
-        public static string Message_Error_DM {
-            get {
-                return ResourceManager.GetString("Message_Error_DM", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Could not send a mention..
         /// </summary>
         public static string Message_Error_Mention {
             get {
                 return ResourceManager.GetString("Message_Error_Mention", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Send a Direct Message to.
-        /// </summary>
-        public static string Message_Header_DM {
-            get {
-                return ResourceManager.GetString("Message_Header_DM", resourceCulture);
             }
         }
         
@@ -592,7 +547,7 @@ namespace WhoIsTweeting {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Comma-separated Values|*.csv|JSON|*.json.
+        ///   Looks up a localized string similar to Comma-separated Values|*.csv.
         /// </summary>
         public static string Stat_Export_Filter {
             get {

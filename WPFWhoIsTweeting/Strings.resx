@@ -200,9 +200,6 @@ depending on the number of users you are following.</value>
   <data name="Interval_Title" xml:space="preserve">
     <value>Set Update Interval</value>
   </data>
-  <data name="Menu_Context_DM" xml:space="preserve">
-    <value>Send a _Direct Message...</value>
-  </data>
   <data name="Menu_Context_Mention" xml:space="preserve">
     <value>Send a _Mention...</value>
   </data>
@@ -236,9 +233,6 @@ depending on the number of users you are following.</value>
   <data name="Menu_View" xml:space="preserve">
     <value>_View</value>
   </data>
-  <data name="Menu_View_HideBorder" xml:space="preserve">
-    <value>_Hide Window Border</value>
-  </data>
   <data name="Menu_View_ShowAway" xml:space="preserve">
     <value>A_way Users</value>
   </data>
@@ -248,17 +242,8 @@ depending on the number of users you are following.</value>
   <data name="Menu_View_Topmost" xml:space="preserve">
     <value>Always on _Top</value>
   </data>
-  <data name="Menu_View_Transparency" xml:space="preserve">
-    <value>Tr_ansparency</value>
-  </data>
-  <data name="Message_Error_DM" xml:space="preserve">
-    <value>Could not send a direct message to specified user.</value>
-  </data>
   <data name="Message_Error_Mention" xml:space="preserve">
     <value>Could not send a mention.</value>
-  </data>
-  <data name="Message_Header_DM" xml:space="preserve">
-    <value>Send a Direct Message to</value>
   </data>
   <data name="Message_Header_Mention" xml:space="preserve">
     <value>Send a Mention to</value>
