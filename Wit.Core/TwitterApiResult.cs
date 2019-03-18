@@ -5,7 +5,7 @@ using PicoBird;
 
 namespace Wit.Core
 {
-    enum TwitterErrorType
+    public enum TwitterErrorType
     {
         None,
         NetError,

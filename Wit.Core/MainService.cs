@@ -16,6 +16,7 @@ namespace Wit.Core
         Ready,
         Running,
         Updating,
+        Error = -1,
         ApiError = -1,
         NetError = -2
     };
@@ -40,6 +41,8 @@ namespace Wit.Core
                 OnPropertyChanged(nameof(State));
             }
         }
+
+        public TwitterErrorType LastError { get; private set; } = TwitterErrorType.None;
 
         public UserListItem Me { get; private set; }
         public int OnlineCount { get; private set; }
@@ -125,8 +128,8 @@ namespace Wit.Core
             GraphCount = SumOnline = MinOnline = MaxOnline = 0;
         }
 
-        private ServiceState state = ServiceState.Initial;
         private ITwitterAdapter _twtAdapter;
+        private ServiceState state = ServiceState.Initial;
         private HashSet<string> idSet;
 
         private BackgroundWorker listUpdateWorker;
@@ -201,6 +204,8 @@ namespace Wit.Core
             {
                 string exMessage = result.Exception.Message;
 
+                LastError = result.ErrorType;
+
                 if (result.ErrorType == TwitterErrorType.ApiError)
                 {
                     State = ServiceState.ApiError;
@@ -261,6 +266,8 @@ namespace Wit.Core
             else
             {
                 string exMessage = result.Exception.Message;
+
+                LastError = result.ErrorType;
 
                 if (result.ErrorType == TwitterErrorType.ApiError)
                 {
