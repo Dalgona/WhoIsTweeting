@@ -158,7 +158,7 @@ namespace Wit.VM
 
                     MessageBoxHelper.ShowError(errTitle, errMessage);
                 });
-            }, () => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.ApiError));
+            }, () => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.Error));
 
         public RelayCommand OpenIntervalCommand
             => _openIntervalCommand ?? (_openIntervalCommand = new RelayCommand(() =>

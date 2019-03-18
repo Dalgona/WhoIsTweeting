@@ -97,11 +97,11 @@
                 <Label.Style>
                     <Style TargetType="Label">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="ApiError">
-                                <Setter Property="Content" Value="{x:Static local:Strings.Critical_ApiError}" />
+                            <DataTrigger Binding="{Binding Service.LastError, Mode=OneWay}" Value="ApiError">
+                                <Setter Property="Content" Value="{x:Static local:Strings.Critical_ApiError}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="NetError">
-                                <Setter Property="Content" Value="{x:Static local:Strings.Critical_NetError}" />
+                            <DataTrigger Binding="{Binding Service.LastError, Mode=OneWay}" Value="NetError">
+                                <Setter Property="Content" Value="{x:Static local:Strings.Critical_NetError}"/>
                             </DataTrigger>
                         </Style.Triggers>
                         <Setter Property="Content" Value="No Error" />

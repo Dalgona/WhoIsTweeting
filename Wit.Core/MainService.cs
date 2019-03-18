@@ -17,8 +17,6 @@ namespace Wit.Core
         Running,
         Updating,
         Error = -1,
-        ApiError = -1,
-        NetError = -2
     };
 
     public class MainService : INotifyPropertyChanged, IDisposable
@@ -202,20 +200,9 @@ namespace Wit.Core
             }
             else
             {
-                string exMessage = result.Exception.Message;
-
                 LastError = result.ErrorType;
-
-                if (result.ErrorType == TwitterErrorType.ApiError)
-                {
-                    State = ServiceState.ApiError;
-                    OnErrorOccurred("API Error", exMessage);
-                }
-                else
-                {
-                    State = ServiceState.NetError;
-                    OnErrorOccurred("Network Error", exMessage);
-                }
+                State = ServiceState.Error;
+                OnErrorOccurred(null, result.Exception.Message);
 
                 return false;
             }
@@ -265,20 +252,9 @@ namespace Wit.Core
             }
             else
             {
-                string exMessage = result.Exception.Message;
-
                 LastError = result.ErrorType;
-
-                if (result.ErrorType == TwitterErrorType.ApiError)
-                {
-                    State = ServiceState.ApiError;
-                    OnErrorOccurred("API Error", exMessage);
-                }
-                else
-                {
-                    State = ServiceState.NetError;
-                    OnErrorOccurred("Network Error", exMessage);
-                }
+                State = ServiceState.Error;
+                OnErrorOccurred(null, result.Exception.Message);
 
                 listUpdateWorker.CancelAsync();
             }
