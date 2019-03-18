@@ -12,18 +12,7 @@
     FocusManager.FocusedElement="{Binding ElementName=content}">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top">
-            <Label Background="{x:Null}" Foreground="WhiteSmoke" FontWeight="Bold" Padding="5,5,5,0" HorizontalAlignment="Left">
-                <Label.Style>
-                    <Style TargetType="Label">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Type}" Value="MentionWindow">
-                                <Setter Property="Content" Value="{x:Static local:Strings.Message_Header_Mention}" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                        <Setter Property="Content" Value="{x:Static local:Strings.Message_Header_DM}" />
-                    </Style>
-                </Label.Style>
-            </Label>
+            <Label Content="{x:Static local:Strings.Message_Header_Mention}" Background="{x:Null}" Foreground="WhiteSmoke" FontWeight="Bold" Padding="5,5,5,0" HorizontalAlignment="Left"/>
             <Label Background="{x:Null}" FontSize="16" Padding="5,0,5,5" HorizontalAlignment="Left">
                 <Label.Style>
                     <Style TargetType="Label">

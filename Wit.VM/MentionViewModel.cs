@@ -3,11 +3,8 @@ using Wit.UI.Core;
 
 namespace Wit.VM
 {
-    public enum MessageWindowType { MentionWindow, DirectMessageWindow };
-
     public class MentionViewModel : WindowViewModel
     {
-        private MessageWindowType _type;
         private UserListItem _user;
         private string _content;
         private RelayCommand _sendCommand;
@@ -15,36 +12,18 @@ namespace Wit.VM
 
         public bool Result { get; set; } = false;
 
-        public MessageWindowType Type
-        {
-            get => _type;
-            set
-            {
-                _type = value;
-                ResetContent();
-                OnPropertyChanged(nameof(Type));
-            }
-        }
-
         public UserListItem User
         {
             get => _user;
             set
             {
                 _user = value;
-                ResetContent();
+                Content = _user == null ? "" : $"@{User.ScreenName} ";
                 OnPropertyChanged(nameof(User));
             }
         }
 
-        public int MaxChars
-        {
-            get
-            {
-                if (Type == MessageWindowType.MentionWindow) return 140;
-                else return 10000;
-            }
-        }
+        public int MaxChars { get; } = 140;
 
         public string Content
         {
@@ -77,14 +56,6 @@ namespace Wit.VM
             MinWidth = 400;
             MinHeight = 160;
             MaxWidth = 400;
-        }
-
-        private void ResetContent()
-        {
-            if (Type == MessageWindowType.MentionWindow)
-            {
-                Content = $"@{User?.ScreenName} ";
-            }
         }
     }
 }

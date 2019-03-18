@@ -180,7 +180,6 @@ namespace Wit.VM
             => _openMentionCommand ?? (_openMentionCommand = new RelayCommand(param =>
             {
                 MentionViewModel vm = DepsInjector.Default.Create<MentionViewModel>();
-                vm.Type = MessageWindowType.MentionWindow;
                 vm.User = param as UserListItem;
 
                 WindowManager.ShowModalWindow(vm, this);
