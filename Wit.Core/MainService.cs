@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Wit.Core.Properties;
 
 namespace Wit.Core
@@ -35,7 +34,6 @@ namespace Wit.Core
         private readonly ITwitterAdapter _twt;
         private readonly UserListUpdater _listUpdater;
         private ServiceState _state = ServiceState.Initial;
-        private HashSet<string> _userIds;
 
         #endregion
 
@@ -148,14 +146,13 @@ namespace Wit.Core
         {
             TwitterApiResult<bool> result = await _twt.SetAccessTokenAsync(callback);
 
-            if (result.DidSucceed && ValidateUser())
+            if (result.DidSucceed)
             {
                 _settings.Token = _twt.AccessToken;
                 _settings.TokenSecret = _twt.AccessTokenSecret;
                 _settings.Save();
 
-                State = ServiceState.Ready;
-                _listUpdater.Start(_userIds);
+                Resume();
             }
             else
             {
@@ -165,14 +162,29 @@ namespace Wit.Core
 
         public void Resume()
         {
-            Task.Factory.StartNew(() =>
+            if (_twt.AccessToken == "" || _twt.AccessTokenSecret == "")
             {
-                if (ValidateUser())
-                {
-                    State = ServiceState.Ready;
-                    _listUpdater.Start(_userIds);
-                }
+                return;
+            }
+
+            var result = _twt.CheckUser().Then(user =>
+            {
+                Me = user;
+
+                return _twt.RetrieveFollowingIds(user.Id);
             });
+
+            if (result.DidSucceed)
+            {
+                State = ServiceState.Ready;
+                _listUpdater.Start(new HashSet<string>(result.Data));
+            }
+            else
+            {
+                LastError = result.ErrorType;
+                State = ServiceState.Error;
+                OnErrorOccurred();
+            }
         }
 
         public void ResetStatistics()
@@ -184,37 +196,6 @@ namespace Wit.Core
         public void Dispose() => _listUpdater.Dispose();
 
         #endregion
-
-        private bool ValidateUser()
-        {
-            if (_twt.AccessToken == "" || _twt.AccessTokenSecret == "")
-            {
-                return false;
-            }
-
-            var result =
-                _twt.CheckUser().Then(user =>
-                {
-                    Me = user;
-
-                    return _twt.RetrieveFollowingIds(user.Id);
-                });
-
-            if (result.DidSucceed)
-            {
-                _userIds = new HashSet<string>(result.Data);
-
-                return true;
-            }
-            else
-            {
-                LastError = result.ErrorType;
-                State = ServiceState.Error;
-                OnErrorOccurred();
-
-                return false;
-            }
-        }
 
         private void OnUserListUpdated(object sender, IEnumerable<UserListItem> users)
         {
