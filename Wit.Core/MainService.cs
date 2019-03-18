@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Wit.Core.Properties;
 
 namespace Wit.Core
@@ -152,7 +153,7 @@ namespace Wit.Core
                 _settings.TokenSecret = _twt.AccessTokenSecret;
                 _settings.Save();
 
-                Resume();
+                await Task.Run((Action)Resume);
             }
             else
             {
