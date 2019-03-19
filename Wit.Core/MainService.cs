@@ -8,14 +8,14 @@ using Wit.Core.Properties;
 
 namespace Wit.Core
 {
-    public enum ServiceState
+    public enum AuthStatus
     {
-        Initial,
+        OK,
         NeedConsumerKey,
-        SignInRequired,
-        Ready,
-        Error = -1,
-    };
+        NeedSignIn,
+        Pending,
+        Error = -1
+    }
 
     public class MainService : INotifyPropertyChanged, IDisposable
     {
@@ -33,27 +33,35 @@ namespace Wit.Core
         private readonly ITwitterAdapter _twt;
         private readonly UserListUpdater _listUpdater;
         private readonly StatManager _statManager = new StatManager();
-        private ServiceState _state = ServiceState.Initial;
+        private AuthStatus _authStatus = AuthStatus.NeedConsumerKey;
+        private UserListItem _me;
 
         #endregion
 
         #region Properties
 
-        public ServiceState State
+        public AuthStatus AuthStatus
         {
-            get => _state;
+            get => _authStatus;
             private set
             {
-                Log("MainService::State.set", $"{_state} -> {value}");
-                _state = value;
-                OnPropertyChanged(nameof(State));
+                _authStatus = value;
+                OnPropertyChanged(nameof(AuthStatus));
+            }
+        }
+
+        public UserListItem Me
+        {
+            get => _me;
+            private set
+            {
+                _me = value;
+                OnPropertyChanged(nameof(Me));
             }
         }
 
         public TwitterErrorType LastError { get; private set; } = TwitterErrorType.None;
-
         public bool IsUpdating => _listUpdater.Status == UpdaterStatus.Updating;
-        public UserListItem Me { get; private set; }
         public int OnlineCount => _statManager.OnlineCount;
         public int AwayCount => _statManager.AwayCount;
         public int OfflineCount => _statManager.OfflineCount;
@@ -105,10 +113,10 @@ namespace Wit.Core
 
             UpdateInterval = _settings.Interval;
 
-            State =
+            AuthStatus =
                 string.IsNullOrEmpty(_twt.ConsumerKey) || string.IsNullOrEmpty(_twt.ConsumerSecret)
-                ? ServiceState.NeedConsumerKey
-                : ServiceState.SignInRequired;
+                ? AuthStatus.NeedConsumerKey
+                : AuthStatus.NeedSignIn;
         }
 
         #endregion
@@ -119,13 +127,11 @@ namespace Wit.Core
 
         public void SetConsumerKey(string consumerKey, string consumerSecret)
         {
-            _listUpdater.Stop();
+            SignOut();
 
             _settings.ConsumerKey = _twt.ConsumerKey = consumerKey;
             _settings.ConsumerSecret = _twt.ConsumerSecret = consumerSecret;
             _settings.Save();
-
-            State = ServiceState.SignInRequired;
         }
 
         public void PostTweet(string content, Action<Exception> onError)
@@ -140,8 +146,11 @@ namespace Wit.Core
 
         public async void SignIn(Func<string, string> callback, Action<Exception> onError)
         {
+            SignOut();
+
             (await _twt.SetAccessTokenAsync(callback)).Finally(async _ =>
             {
+                AuthStatus = AuthStatus.Pending;
                 _settings.Token = _twt.AccessToken;
                 _settings.TokenSecret = _twt.AccessTokenSecret;
                 _settings.Save();
@@ -149,6 +158,9 @@ namespace Wit.Core
                 await Task.Run((Action)Resume);
             }, (errType, ex) =>
             {
+                AuthStatus = AuthStatus.NeedSignIn;
+                LastError = errType;
+
                 onError(ex);
             });
         }
@@ -167,13 +179,13 @@ namespace Wit.Core
                 return _twt.RetrieveFollowingIds(user.Id);
             }).Finally(userIds =>
             {
-                State = ServiceState.Ready;
+                AuthStatus = AuthStatus.OK;
 
                 _listUpdater.Start(new HashSet<string>(userIds));
             }, (errType, ex) =>
             {
                 LastError = errType;
-                State = ServiceState.Error;
+                AuthStatus = AuthStatus.Error;
             });
         }
 
@@ -186,6 +198,25 @@ namespace Wit.Core
         public void Dispose() => _listUpdater.Dispose();
 
         #endregion
+
+        private void SignOut()
+        {
+            _listUpdater.Stop();
+            ResetStatistics();
+
+            Me = null;
+
+            _settings.Token = _twt.AccessToken = "";
+            _settings.TokenSecret = _twt.AccessTokenSecret = "";
+            _settings.Save();
+
+            lock (((ICollection)UserList).SyncRoot)
+            {
+                UserList.Clear();
+            }
+
+            AuthStatus = AuthStatus.NeedSignIn;
+        }
 
         private void OnUserListUpdated(object sender, IEnumerable<UserListItem> users)
         {
@@ -220,14 +251,6 @@ namespace Wit.Core
             {
                 OnPropertyChanged(nameof(IsUpdating));
             }
-        }
-
-        private static void Log(string from, string message)
-        {
-#if DEBUG
-            string now = DateTime.Now.ToString("hh:mm:ss.ffff");
-            System.Diagnostics.Debug.WriteLine($"[{now}][{from}] {message}");
-#endif
         }
 
         private void OnPropertyChanged(string name)
