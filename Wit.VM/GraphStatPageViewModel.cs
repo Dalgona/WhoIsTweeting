@@ -28,7 +28,7 @@ namespace Wit.VM
 
         public int MinOnline => service.MinOnline;
         public int MaxOnline => service.MaxOnline;
-        public double AvgOnline => service.SumOnline / (double)service.GraphCount;
+        public double AvgOnline => service.AvgOnline;
 
         public GraphStatPageViewModel() : base() { }
     }

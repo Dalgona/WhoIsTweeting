@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using Wit.Core.Properties;
 
@@ -32,6 +32,7 @@ namespace Wit.Core
         private readonly Settings _settings = Settings.Default;
         private readonly ITwitterAdapter _twt;
         private readonly UserListUpdater _listUpdater;
+        private readonly StatManager _statManager = new StatManager();
         private ServiceState _state = ServiceState.Initial;
 
         #endregion
@@ -53,17 +54,17 @@ namespace Wit.Core
 
         public bool IsUpdating => _listUpdater.Status == UpdaterStatus.Updating;
         public UserListItem Me { get; private set; }
-        public int OnlineCount { get; private set; }
-        public int AwayCount { get; private set; }
-        public int OfflineCount { get; private set; }
-        public int GraphCount { get; private set; } = 0;
-        public int SumOnline { get; private set; } = 0;
-        public int MinOnline { get; private set; } = 0;
-        public int MaxOnline { get; private set; } = 0;
-        public ObservableCollection<UserListItem> UserList { get; private set; }
-        public ObservableCollection<StatData> Graph { get; private set; }
-        public object UserListLock { get; } = new object();
-        public object GraphLock { get; } = new object();
+        public int OnlineCount => _statManager.OnlineCount;
+        public int AwayCount => _statManager.AwayCount;
+        public int OfflineCount => _statManager.OfflineCount;
+        public int GraphCount => _statManager.DataCount;
+        public int MinOnline => _statManager.MinOnline;
+        public int MaxOnline => _statManager.MaxOnline;
+        public double AvgOnline => _statManager.AvgOnline;
+        public ObservableCollection<UserListItem> UserList { get; } = new ObservableCollection<UserListItem>();
+        public ObservableCollection<StatData> Graph => _statManager.Data;
+        public object UserListLock => ((ICollection)UserList).SyncRoot;
+        public object GraphLock => _statManager.SyncRoot;
 
         public int UpdateInterval
         {
@@ -92,9 +93,6 @@ namespace Wit.Core
 
         private MainService()
         {
-            UserList = new ObservableCollection<UserListItem>();
-            Graph = new ObservableCollection<StatData>();
-
             _twt = new TwitterAdapter
             {
                 ConsumerKey = _settings.ConsumerKey,
@@ -183,8 +181,8 @@ namespace Wit.Core
 
         public void ResetStatistics()
         {
-            Graph.Clear();
-            GraphCount = SumOnline = MinOnline = MaxOnline = 0;
+            _statManager.Reset();
+            NotifyStatChanged();
         }
 
         public void Dispose() => _listUpdater.Dispose();
@@ -193,17 +191,6 @@ namespace Wit.Core
 
         private void OnUserListUpdated(object sender, IEnumerable<UserListItem> users)
         {
-            var countQuery =
-                from user in users
-                group user by user.Status into g
-                orderby g.Key
-                select g.Count();
-
-            List<int> counts = new List<int>(countQuery);
-            OnlineCount = counts[0];
-            AwayCount = counts[1];
-            OfflineCount = counts[2];
-
             lock (UserListLock)
             {
                 UserList.Clear();
@@ -214,15 +201,19 @@ namespace Wit.Core
                 }
             }
 
-            lock (GraphLock)
-            {
-                SumOnline += OnlineCount;
-                MinOnline = GraphCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
-                MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
+            _statManager.Update(users);
+            NotifyStatChanged();
+        }
 
-                Graph.Add(new StatData(OnlineCount, AwayCount, OfflineCount));
-                GraphCount++;
-            }
+        private void NotifyStatChanged()
+        {
+            OnPropertyChanged(nameof(OnlineCount));
+            OnPropertyChanged(nameof(AwayCount));
+            OnPropertyChanged(nameof(OfflineCount));
+            OnPropertyChanged(nameof(GraphCount));
+            OnPropertyChanged(nameof(MinOnline));
+            OnPropertyChanged(nameof(MaxOnline));
+            OnPropertyChanged(nameof(AvgOnline));
         }
 
         private void OnUpdaterPropertyChanged(object sender, PropertyChangedEventArgs e)
