@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Wit.Core;
 using Wit.UI.Core;
@@ -7,8 +8,10 @@ namespace Wit.VM
 {
     public class MainViewModel : WindowViewModel
     {
-        public MainService Service { get; } = MainService.Instance;
+        #region Fields
 
+        private readonly MainService _service = MainService.Instance;
+        private UserListItem _selectedItem;
         private ViewModelBase _statViewModel;
 
         private RelayCommand _openStatCommand;
@@ -20,11 +23,13 @@ namespace Wit.VM
         private RelayCommand _openProfileCommand;
         private RelayCommand _quitCommand;
 
-        private UserListItem selectedItem;
+        #endregion
+
+        public event EventHandler RefreshUserList;
 
         public MainViewModel()
         {
-            Service.PropertyChanged += Service_PropertyChanged;
+            _service.PropertyChanged += Service_PropertyChanged;
 
             Title = "WhoIsTweeting";
             Width = 300;
@@ -33,14 +38,7 @@ namespace Wit.VM
             MinHeight = 400;
         }
 
-        #region Event Handlers
-
-        private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            OnPropertyChanged("");
-        }
-
-        #endregion
+        #region Command Properties
 
         public RelayCommand OpenStatCommand
             => _openStatCommand ?? (_openStatCommand = new RelayCommand(() =>
@@ -63,7 +61,7 @@ namespace Wit.VM
 
                 if (vm.Result && (vm.ConsumerKey != coreSettings.ConsumerKey || vm.ConsumerSecret != coreSettings.ConsumerSecret))
                 {
-                    Service.SetConsumerKey(vm.ConsumerKey, vm.ConsumerSecret);
+                    _service.SetConsumerKey(vm.ConsumerKey, vm.ConsumerSecret);
                 }
             }));
 
@@ -75,7 +73,7 @@ namespace Wit.VM
 
                 MessageBoxHelper.ShowInfo(confirmTitle, confirmMessage);
 
-                Service.SignIn(url =>
+                _service.SignIn(url =>
                 {
                     PinViewModel vm = DepsInjector.Default.Create<PinViewModel>();
 
@@ -90,7 +88,7 @@ namespace Wit.VM
 
                     MessageBoxHelper.ShowError(errTitle, errMessage);
                 });
-            }, () => Service.State >= ServiceState.SignInRequired || Service.State == ServiceState.Error));
+            }, () => _service.AuthStatus == AuthStatus.NeedSignIn || _service.AuthStatus == AuthStatus.Error));
 
         public RelayCommand OpenIntervalCommand
             => _openIntervalCommand ?? (_openIntervalCommand = new RelayCommand(() =>
@@ -118,7 +116,7 @@ namespace Wit.VM
 
                 if (vm.Result)
                 {
-                    Service.PostTweet(vm.Content, ex =>
+                    _service.PostTweet(vm.Content, ex =>
                     {
                         string errTitle = StringProvider.GetString("Title_Error");
                         string errMessage = StringProvider.GetString("Message_Error_Mention");
@@ -140,23 +138,32 @@ namespace Wit.VM
         public RelayCommand QuitCommand
             => _quitCommand ?? (_quitCommand = new RelayCommand(() => WindowManager.CloseWindow(this)));
 
-        public bool IsSignedIn => Service.State >= ServiceState.Ready;
+        #endregion
 
-        public bool IsErrorSet => Service.State < 0;
+        #region Properties
+
+        public AuthStatus AuthStatus => _service.AuthStatus;
+        public UserListItem Me => _service.Me;
+        public IEnumerable<UserListItem> UserList => _service.UserList;
+
+        public int OnlineCount => _service.OnlineCount;
+        public int AwayCount => _service.AwayCount;
+        public int OfflineCount => _service.OfflineCount;
+
+        public bool IsUpdating => _service.IsUpdating;
+        public TwitterErrorType LastError => _service.LastError;
+
+        //public bool IsErrorSet => _service.State < 0;
 
         public UserListItem SelectedItem
         {
-            get => selectedItem;
+            get => _selectedItem;
             set
             {
-                selectedItem = value;
+                _selectedItem = value;
                 OnPropertyChanged(nameof(SelectedItem));
             }
         }
-
-        public int StatOnline => Service.OnlineCount;
-        public int StatAway => Service.AwayCount;
-        public int StatOffline => Service.OfflineCount;
 
         public override bool AlwaysOnTop
         {
@@ -190,6 +197,11 @@ namespace Wit.VM
             }
         }
 
-        public event EventHandler RefreshUserList;
+        #endregion
+
+        private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e.PropertyName);
+        }
     }
 }

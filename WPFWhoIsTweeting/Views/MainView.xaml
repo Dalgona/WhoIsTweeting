@@ -16,7 +16,7 @@
     d:DesignHeight="600"
     d:DesignWidth="300">
     <UserControl.Resources>
-        <CollectionViewSource x:Key="UserListSource" Source="{Binding Service.UserList}" Filter="FilterUserList" IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="True">
+        <CollectionViewSource x:Key="UserListSource" Source="{Binding UserList}" Filter="FilterUserList" IsLiveFilteringRequested="True" IsLiveSortingRequested="True" IsLiveGroupingRequested="True">
             <CollectionViewSource.LiveFilteringProperties>
                 <sys:String>Status</sys:String>
             </CollectionViewSource.LiveFilteringProperties>
@@ -52,14 +52,14 @@
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="NeedConsumerKey">
+                                    <DataTrigger Binding="{Binding AuthStatus}" Value="NeedConsumerKey">
                                         <Setter Property="Text" Value="{x:Static local:Strings.Menu_Main_NeedConsumer}" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Service.State, Mode=OneWay}" Value="SignInRequired">
+                                    <DataTrigger Binding="{Binding AuthStatus}" Value="NeedSignIn">
                                         <Setter Property="Text" Value="{x:Static local:Strings.Menu_Main_NeedSignIn}" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsSignedIn}" Value="True">
-                                        <Setter Property="Text" Value="{Binding Service.Me.ScreenName, StringFormat={}@{0}}" />
+                                    <DataTrigger Binding="{Binding AuthStatus}" Value="OK">
+                                        <Setter Property="Text" Value="{Binding Me.ScreenName, StringFormat={}@{0}}" />
                                     </DataTrigger>
                                 </Style.Triggers>
                                 <Setter Property="Text" Value="--" />
@@ -97,10 +97,10 @@
                 <Label.Style>
                     <Style TargetType="Label">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Service.LastError, Mode=OneWay}" Value="ApiError">
+                            <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="ApiError">
                                 <Setter Property="Content" Value="{x:Static local:Strings.Critical_ApiError}"/>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Service.LastError, Mode=OneWay}" Value="NetError">
+                            <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="NetError">
                                 <Setter Property="Content" Value="{x:Static local:Strings.Critical_NetError}"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -195,16 +195,16 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <StatusBar Grid.Row="4" Background="#FF333333">
-            <Label Content="{Binding StatOnline, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
-            <Label Content="{Binding StatAway, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Away}" Padding="0" Foreground="LightGray"/>
-            <Label Content="{Binding StatOffline, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Offline}" Padding="0" Foreground="DimGray"/>
+            <Label Content="{Binding OnlineCount}" ContentStringFormat="{x:Static local:Strings.Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
+            <Label Content="{Binding AwayCount, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Away}" Padding="0" Foreground="LightGray"/>
+            <Label Content="{Binding OfflineCount, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Offline}" Padding="0" Foreground="DimGray"/>
             <Label Padding="0" Foreground="#FFFF8000">
                 <Label.Style>
                     <Style TargetType="Label">
                         <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
                         <Setter Property="Content" Value=""/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Service.IsUpdating, Mode=OneWay}" Value="True">
+                            <DataTrigger Binding="{Binding IsUpdating}" Value="True">
                                 <Setter Property="Content" Value="&#xe117;"/>
                             </DataTrigger>
                         </Style.Triggers>
