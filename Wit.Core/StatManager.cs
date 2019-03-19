@@ -50,7 +50,7 @@ namespace Wit.Core
                 Data.Clear();
             }
 
-            MinOnline = MaxOnline = 0;
+            _sumOnline = MinOnline = MaxOnline = 0;
         }
     }
 }
