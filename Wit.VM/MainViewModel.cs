@@ -88,7 +88,7 @@ namespace Wit.VM
 
                     MessageBoxHelper.ShowError(errTitle, errMessage);
                 });
-            }, () => _service.AuthStatus == AuthStatus.NeedSignIn || _service.AuthStatus == AuthStatus.Error));
+            }, () => AuthStatus != AuthStatus.NeedConsumerKey));
 
         public RelayCommand OpenIntervalCommand
             => _openIntervalCommand ?? (_openIntervalCommand = new RelayCommand(() =>
@@ -143,15 +143,13 @@ namespace Wit.VM
         #region Properties
 
         public AuthStatus AuthStatus => _service.AuthStatus;
+        public UpdaterStatus UpdaterStatus => _service.UpdaterStatus;
+        public TwitterErrorType LastError => _service.LastError;
         public UserListItem Me => _service.Me;
         public IEnumerable<UserListItem> UserList => _service.UserList;
-
         public int OnlineCount => _service.OnlineCount;
         public int AwayCount => _service.AwayCount;
         public int OfflineCount => _service.OfflineCount;
-
-        public bool IsUpdating => _service.IsUpdating;
-        public TwitterErrorType LastError => _service.LastError;
 
         //public bool IsErrorSet => _service.State < 0;
 

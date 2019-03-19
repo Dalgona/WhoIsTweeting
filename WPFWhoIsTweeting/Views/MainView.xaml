@@ -87,10 +87,14 @@
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsErrorSet}" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed"/>
+                        <DataTrigger Binding="{Binding UpdaterStatus}" Value="Error">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding AuthStatus}" Value="Error">
+                            <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
+                    <Setter Property="Visibility" Value="Collapsed"/>
                 </Style>
             </StackPanel.Style>
             <Label FontWeight="Bold" Foreground="White" Margin="2,0" Padding="5,5,5,2">
@@ -204,7 +208,7 @@
                         <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
                         <Setter Property="Content" Value=""/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsUpdating}" Value="True">
+                            <DataTrigger Binding="{Binding UpdaterStatus}" Value="Updating">
                                 <Setter Property="Content" Value="&#xe117;"/>
                             </DataTrigger>
                         </Style.Triggers>

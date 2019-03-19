@@ -34,6 +34,7 @@ namespace Wit.Core
         private readonly UserListUpdater _listUpdater;
         private readonly StatManager _statManager = new StatManager();
         private AuthStatus _authStatus = AuthStatus.NeedConsumerKey;
+        private TwitterErrorType _lastError = TwitterErrorType.None;
         private UserListItem _me;
 
         #endregion
@@ -50,6 +51,16 @@ namespace Wit.Core
             }
         }
 
+        public TwitterErrorType LastError
+        {
+            get => _lastError;
+            private set
+            {
+                _lastError = value;
+                OnPropertyChanged(nameof(LastError));
+            }
+        }
+
         public UserListItem Me
         {
             get => _me;
@@ -60,8 +71,7 @@ namespace Wit.Core
             }
         }
 
-        public TwitterErrorType LastError { get; private set; } = TwitterErrorType.None;
-        public bool IsUpdating => _listUpdater.Status == UpdaterStatus.Updating;
+        public UpdaterStatus UpdaterStatus => _listUpdater.Status;
         public int OnlineCount => _statManager.OnlineCount;
         public int AwayCount => _statManager.AwayCount;
         public int OfflineCount => _statManager.OfflineCount;
@@ -249,7 +259,11 @@ namespace Wit.Core
         {
             if (e.PropertyName == nameof(UserListUpdater.Status))
             {
-                OnPropertyChanged(nameof(IsUpdating));
+                OnPropertyChanged(nameof(UpdaterStatus));
+            }
+            else if (e.PropertyName == nameof(UserListUpdater.LastError))
+            {
+                LastError = ((UserListUpdater)sender).LastError;
             }
         }
 
