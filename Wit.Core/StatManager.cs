@@ -10,7 +10,6 @@ namespace Wit.Core
         private int _sumOnline = 0;
 
         public ObservableCollection<StatData> Data { get; } = new ObservableCollection<StatData>();
-        public object SyncRoot => ((ICollection)Data).SyncRoot;
 
         public int DataCount => Data.Count;
         public int OnlineCount { get; private set; } = 0;
@@ -38,7 +37,7 @@ namespace Wit.Core
             MinOnline = DataCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
             MaxOnline = OnlineCount > MaxOnline ? OnlineCount : MaxOnline;
 
-            lock (SyncRoot)
+            lock (((ICollection)Data).SyncRoot)
             {
                 Data.Add(new StatData(OnlineCount, AwayCount, OfflineCount));
             }
@@ -46,7 +45,7 @@ namespace Wit.Core
 
         public void Reset()
         {
-            lock (SyncRoot)
+            lock (((ICollection)Data).SyncRoot)
             {
                 Data.Clear();
             }

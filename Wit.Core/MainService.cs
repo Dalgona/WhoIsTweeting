@@ -63,8 +63,6 @@ namespace Wit.Core
         public double AvgOnline => _statManager.AvgOnline;
         public ObservableCollection<UserListItem> UserList { get; } = new ObservableCollection<UserListItem>();
         public ObservableCollection<StatData> Graph => _statManager.Data;
-        public object UserListLock => ((ICollection)UserList).SyncRoot;
-        public object GraphLock => _statManager.SyncRoot;
 
         public int UpdateInterval
         {
@@ -191,7 +189,7 @@ namespace Wit.Core
 
         private void OnUserListUpdated(object sender, IEnumerable<UserListItem> users)
         {
-            lock (UserListLock)
+            lock (((ICollection)UserList).SyncRoot)
             {
                 UserList.Clear();
 

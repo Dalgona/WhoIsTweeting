@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
@@ -22,8 +23,8 @@ namespace WhoIsTweeting
             MainService service = MainService.Instance;
             DepsInjector ioc = DepsInjector.Default;
 
-            BindingOperations.EnableCollectionSynchronization(service.UserList, service.UserListLock);
-            BindingOperations.EnableCollectionSynchronization(service.Graph, service.GraphLock);
+            BindingOperations.EnableCollectionSynchronization(service.UserList, ((ICollection)service.UserList).SyncRoot);
+            BindingOperations.EnableCollectionSynchronization(service.Graph, ((ICollection)service.Graph).SyncRoot);
             Task.Run((Action)service.Resume);
 
             ioc.Register<IWindowManager, WindowManager>();
