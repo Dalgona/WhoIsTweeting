@@ -29,11 +29,11 @@ namespace Wit.Twitter
 
         private HttpClient _client;
 
-        public string ConsumerKey { get; set; }
-        public string ConsumerSecret { get; set; }
-        public string Token { get; set; }
-        public string TokenSecret { get; set; }
-        public string OAuthCallback { get; set; }
+        public string ConsumerKey { get; set; } = "";
+        public string ConsumerSecret { get; set; } = "";
+        public string Token { get; set; } = "";
+        public string TokenSecret { get; set; } = "";
+        public string OAuthCallback { get; set; } = "oob";
 
         public int HttpTimeout
         {
@@ -41,16 +41,20 @@ namespace Wit.Twitter
             set => _client = new HttpClient { Timeout = TimeSpan.FromSeconds(value) };
         }
 
-        // Constructor
-        public API(string consumerKey, string consumerSecret)
+        #region Constructors
+
+        public API()
         {
-            _client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+            HttpTimeout = 10;
+        }
+
+        public API(string consumerKey, string consumerSecret) : this()
+        {
             ConsumerKey = consumerKey;
             ConsumerSecret = consumerSecret;
-            Token = "";
-            TokenSecret = "";
-            OAuthCallback = "";
         }
+
+        #endregion
 
         // Send OAuth signed requests.
         private async Task<HttpResponseMessage> SendRequest(
