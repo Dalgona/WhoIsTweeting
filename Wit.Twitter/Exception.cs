@@ -7,7 +7,7 @@ namespace Wit.Twitter
 {
     public class APIException : Exception
     {
-        public Objects.Errors Info { get; private set; }
+        public Objects.ApiErrors Info { get; private set; }
         public HttpResponseMessage Response { get; private set; }
 
         public APIException(HttpResponseMessage res) : base("Twitter API Server returned an error.")
@@ -19,7 +19,7 @@ namespace Wit.Twitter
         {
             try
             {
-                Info = JsonConvert.DeserializeObject<Objects.Errors>(await res.Content.ReadAsStringAsync());
+                Info = JsonConvert.DeserializeObject<Objects.ApiErrors>(await res.Content.ReadAsStringAsync());
             }
             catch (Exception)
             {

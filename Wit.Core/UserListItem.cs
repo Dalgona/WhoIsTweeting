@@ -26,7 +26,7 @@ namespace Wit.Core
             Name = name;
             ScreenName = screenName;
             if (lastTweet == null) LastTweet = DateTime.FromBinary(0);
-            else LastTweet = lastTweet.created_at.ToLocalTime();
+            else LastTweet = lastTweet.CreatedAt.ToLocalTime();
         }
     }
 }

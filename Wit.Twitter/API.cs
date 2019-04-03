@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,28 +14,37 @@ namespace Wit.Twitter
 {
     public class API
     {
-        private static readonly string APIROOT = "https://api.twitter.com";
-        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
+        private static readonly string _apiRoot = "https://api.twitter.com";
+
+        private static readonly IContractResolver _contractResolver = new DefaultContractResolver()
         {
-            DateFormatString = "ddd MMM dd HH:mm:ss +0000 yyyy"
+            NamingStrategy = new SnakeCaseNamingStrategy()
         };
 
-        private HttpClient client;
+        private static readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        {
+            DateFormatString = "ddd MMM dd HH:mm:ss +0000 yyyy",
+            ContractResolver = _contractResolver
+        };
+
+        private HttpClient _client;
+
         public string ConsumerKey { get; set; }
         public string ConsumerSecret { get; set; }
         public string Token { get; set; }
         public string TokenSecret { get; set; }
         public string OAuthCallback { get; set; }
+
         public int HttpTimeout
         {
-            get => (int)client.Timeout.TotalSeconds;
-            set => client = new HttpClient { Timeout = TimeSpan.FromSeconds(value) };
+            get => (int)_client.Timeout.TotalSeconds;
+            set => _client = new HttpClient { Timeout = TimeSpan.FromSeconds(value) };
         }
 
         // Constructor
         public API(string consumerKey, string consumerSecret)
         {
-            client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+            _client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
             ConsumerKey = consumerKey;
             ConsumerSecret = consumerSecret;
             Token = "";
@@ -49,7 +59,7 @@ namespace Wit.Twitter
             NameValueCollection query = null,
             NameValueCollection data = null)
         {
-            string baseUrl = APIROOT + resource;    // api url without query string
+            string baseUrl = _apiRoot + resource;    // api url without query string
             string requestUrl = baseUrl;    // api url with query string (if any)
             string queryString = query != null ? PercentEncode(query) : "";
             if (!queryString.Equals("")) requestUrl += "?" + queryString;
@@ -62,7 +72,7 @@ namespace Wit.Twitter
                 request.Content = new FormUrlEncodedContent(
                     from k in data.AllKeys from v in data.GetValues(k) select new KeyValuePair<string, string>(k, v));
 
-            HttpResponseMessage res = await client.SendAsync(request);
+            HttpResponseMessage res = await _client.SendAsync(request);
 
             if (res.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new APIException(res);
@@ -79,7 +89,7 @@ namespace Wit.Twitter
             string resource,
             NameValueCollection query = null)
             => JsonConvert.DeserializeObject<T>(
-                await (await SendRequest(HttpMethod.Get, resource, query)).Content.ReadAsStringAsync(), JsonSettings);
+                await (await SendRequest(HttpMethod.Get, resource, query)).Content.ReadAsStringAsync(), _jsonSettings);
 
         public async Task<HttpResponseMessage> Post(
             string resource,
@@ -92,7 +102,7 @@ namespace Wit.Twitter
             NameValueCollection query = null,
             NameValueCollection data = null)
             => JsonConvert.DeserializeObject<T>(
-                await (await SendRequest(HttpMethod.Post, resource, query, data)).Content.ReadAsStringAsync(), JsonSettings);
+                await (await SendRequest(HttpMethod.Post, resource, query, data)).Content.ReadAsStringAsync(), _jsonSettings);
 
         public async Task RequestToken(Func<string, string> callback)
         {
@@ -104,7 +114,7 @@ namespace Wit.Twitter
             Token = dict["oauth_token"];
             TokenSecret = dict["oauth_token_secret"];
 
-            var pin = callback(APIROOT + $"/oauth/authenticate?oauth_token={Token}");
+            var pin = callback(_apiRoot + $"/oauth/authenticate?oauth_token={Token}");
 
             res = await Post("/oauth/access_token", null, new NameValueCollection { { "oauth_verifier", pin } });
             tokens = from i in (await res.Content.ReadAsStringAsync()).Split('&')
@@ -124,7 +134,7 @@ namespace Wit.Twitter
             foreach (var i in tokens) dict.Add(i[0], i[1]);
             Token = dict["oauth_token"];
             TokenSecret = dict["oauth_token_secret"];
-            return APIROOT + $"/oauth/authenticate?oauth_token={Token}";
+            return _apiRoot + $"/oauth/authenticate?oauth_token={Token}";
         }
 
         public async Task GetTokenFromPin(string pin)

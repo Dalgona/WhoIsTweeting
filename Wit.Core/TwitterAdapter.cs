@@ -72,7 +72,7 @@ namespace Wit.Core
             {
                 User user = Task.Run(() => _api.Get<User>("/1.1/account/verify_credentials.json")).Result;
 
-                return new UserListItem(user.id_str, user.name, user.screen_name, user.status);
+                return new UserListItem(user.IdStr, user.Name, user.ScreenName, user.Status);
             }
             catch (AggregateException e)
             {
@@ -99,7 +99,7 @@ namespace Wit.Core
                         }
                     )).Result;
 
-                return ids.ids;
+                return ids.Ids;
             }
             catch (AggregateException e)
             {
@@ -131,7 +131,7 @@ namespace Wit.Core
                             { "include_entities", "true" }
                         })).Result;
 
-                    list.AddRange(from u in tmp select new UserListItem(u.id_str, u.name, u.screen_name, u.status));
+                    list.AddRange(from u in tmp select new UserListItem(u.IdStr, u.Name, u.ScreenName, u.Status));
                     userIdsCopy.ExceptWith(batch);
                 } while (userIdsCopy.Count != 0);
 
