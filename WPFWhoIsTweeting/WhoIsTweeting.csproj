@@ -224,10 +224,6 @@
     <Resource Include="wit.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PicoBird\libpb\libpb.csproj">
-      <Project>{e611194b-22fb-44fd-863d-7bb756069c5b}</Project>
-      <Name>libpb</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Wit.Core\Wit.Core.csproj">
       <Project>{0b682b25-2490-4136-ba5d-2cc9ccd91dd6}</Project>
       <Name>Wit.Core</Name>
