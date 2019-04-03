@@ -97,18 +97,21 @@ namespace Wit.Core
 
             Status = UpdaterStatus.Updating;
 
-            _twtAdapter.RetrieveFollowings(userIds).Finally(users =>
-            {
-                UserListUpdated?.Invoke(this, users);
+            var result = _twtAdapter.RetrieveFollowings(userIds);
 
-                Status = UpdaterStatus.Running;
-            }, (errType, ex) =>
+            if (!result.DidSucceed)
             {
-                LastError = errType;
+                LastError = result.ErrorType;
                 Status = UpdaterStatus.Error;
 
                 worker.CancelAsync();
-            });
+
+                return;
+            }
+
+            UserListUpdated?.Invoke(this, result.Data);
+
+            Status = UpdaterStatus.Running;
         }
 
         private void OnWorkerStarted(object sender, DoWorkEventArgs e)

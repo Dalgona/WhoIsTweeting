@@ -31,24 +31,6 @@ namespace Wit.Core
             Exception = exception;
         }
 
-        public TwitterApiResult<U> Then<U>(Func<T, TwitterApiResult<U>> func)
-            => DidSucceed ? func(Data) : Exception;
-
-        public U Finally<U>(Func<T, U> onSuccess, Func<TwitterErrorType, Exception, U> onFailure)
-            => DidSucceed ? onSuccess(Data) : onFailure(ErrorType, Exception);
-
-        public void Finally(Action<T> onSuccess, Action<TwitterErrorType, Exception> onFailure)
-        {
-            if (DidSucceed)
-            {
-                onSuccess(Data);
-            }
-            else
-            {
-                onFailure(ErrorType, Exception);
-            }
-        }
-
         public static implicit operator TwitterApiResult<T>(T data)
             => new TwitterApiResult<T>(true, data, TwitterErrorType.None, null);
 

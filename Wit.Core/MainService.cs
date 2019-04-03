@@ -158,21 +158,24 @@ namespace Wit.Core
         {
             SignOut();
 
-            (await _twt.SetAccessTokenAsync(callback)).Finally(async _ =>
-            {
-                AuthStatus = AuthStatus.Pending;
-                _settings.Token = _twt.AccessToken;
-                _settings.TokenSecret = _twt.AccessTokenSecret;
-                _settings.Save();
+            var result = await _twt.SetAccessTokenAsync(callback);
 
-                await Task.Run((Action)Resume);
-            }, (errType, ex) =>
+            if (!result.DidSucceed)
             {
-                AuthStatus = AuthStatus.NeedSignIn;
-                LastError = errType;
+                AuthStatus = AuthStatus.Error;
+                LastError = result.ErrorType;
 
-                onError(ex);
-            });
+                onError(result.Exception);
+
+                return;
+            }
+
+            AuthStatus = AuthStatus.Pending;
+            _settings.Token = _twt.AccessToken;
+            _settings.TokenSecret = _twt.AccessTokenSecret;
+            _settings.Save();
+
+            await Task.Run((Action)Resume);
         }
 
         public void Resume()
@@ -182,21 +185,30 @@ namespace Wit.Core
                 return;
             }
 
-            _twt.CheckUser().Then(user =>
-            {
-                Me = user;
+            var userResult = _twt.CheckUser();
 
-                return _twt.RetrieveFollowingIds(user.Id);
-            }).Finally(userIds =>
+            if (!userResult.DidSucceed)
             {
-                AuthStatus = AuthStatus.OK;
-
-                _listUpdater.Start(new HashSet<string>(userIds));
-            }, (errType, ex) =>
-            {
-                LastError = errType;
                 AuthStatus = AuthStatus.Error;
-            });
+                LastError = userResult.ErrorType;
+
+                return;
+            }
+
+            var retrieveResult = _twt.RetrieveFollowingIds(userResult.Data.Id);
+
+            if (!retrieveResult.DidSucceed)
+            {
+                AuthStatus = AuthStatus.Error;
+                LastError = retrieveResult.ErrorType;
+
+                return;
+            }
+
+            AuthStatus = AuthStatus.OK;
+            Me = userResult.Data;
+
+            _listUpdater.Start(new HashSet<string>(retrieveResult.Data));
         }
 
         public void ResetStatistics()
