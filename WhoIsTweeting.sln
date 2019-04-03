@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wit.VM", "Wit.VM\Wit.VM.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wit.UI.Core", "Wit.UI.Core\Wit.UI.Core.csproj", "{E627C86D-F685-4DD6-B3AF-93DDD8A52257}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wit.Twitter", "Wit.Twitter\Wit.Twitter.csproj", "{605F7DED-3A60-48F5-BDB5-CF634A682DE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{E627C86D-F685-4DD6-B3AF-93DDD8A52257}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E627C86D-F685-4DD6-B3AF-93DDD8A52257}.Release|x86.ActiveCfg = Release|Any CPU
 		{E627C86D-F685-4DD6-B3AF-93DDD8A52257}.Release|x86.Build.0 = Release|Any CPU
+		{605F7DED-3A60-48F5-BDB5-CF634A682DE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{605F7DED-3A60-48F5-BDB5-CF634A682DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{605F7DED-3A60-48F5-BDB5-CF634A682DE9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{605F7DED-3A60-48F5-BDB5-CF634A682DE9}.Debug|x86.Build.0 = Debug|Any CPU
+		{605F7DED-3A60-48F5-BDB5-CF634A682DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{605F7DED-3A60-48F5-BDB5-CF634A682DE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{605F7DED-3A60-48F5-BDB5-CF634A682DE9}.Release|x86.ActiveCfg = Release|Any CPU
+		{605F7DED-3A60-48F5-BDB5-CF634A682DE9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
