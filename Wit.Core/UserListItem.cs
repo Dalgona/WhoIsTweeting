@@ -1,5 +1,5 @@
 ﻿using System;
-using PicoBird.Objects;
+using Wit.Twitter.Objects;
 
 namespace Wit.Core
 {

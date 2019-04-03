@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -65,9 +66,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PicoBird\libpb\libpb.csproj">
-      <Project>{e611194b-22fb-44fd-863d-7bb756069c5b}</Project>
-      <Name>libpb</Name>
+    <ProjectReference Include="..\Wit.Twitter\Wit.Twitter.csproj">
+      <Project>{605f7ded-3a60-48f5-bdb5-cf634a682de9}</Project>
+      <Name>Wit.Twitter</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

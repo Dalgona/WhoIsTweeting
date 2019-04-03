@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using PicoBird;
+using Wit.Twitter;
 
 namespace Wit.Core
 {
