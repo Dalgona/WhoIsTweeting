@@ -144,9 +144,9 @@ namespace Wit.Core
             _settings.Save();
         }
 
-        public void PostTweet(string content, Action<Exception> onError)
+        public async Task PostTweet(string content, Action<Exception> onError)
         {
-            TwitterApiResult<bool> result = _twt.PostTweet(content);
+            TwitterApiResult<bool> result = await _twt.PostTweet(content);
 
             if (!result.DidSucceed)
             {
@@ -154,11 +154,11 @@ namespace Wit.Core
             }
         }
 
-        public async void SignIn(Func<string, string> callback, Action<Exception> onError)
+        public async Task SignIn(Func<string, string> callback, Action<Exception> onError)
         {
             SignOut();
 
-            var result = await _twt.SetAccessTokenAsync(callback);
+            var result = await _twt.SetAccessToken(callback);
 
             if (!result.DidSucceed)
             {
@@ -175,17 +175,17 @@ namespace Wit.Core
             _settings.TokenSecret = _twt.AccessTokenSecret;
             _settings.Save();
 
-            await Task.Run((Action)Resume);
+            await Resume();
         }
 
-        public void Resume()
+        public async Task Resume()
         {
             if (_twt.AccessToken == "" || _twt.AccessTokenSecret == "")
             {
                 return;
             }
 
-            var userResult = _twt.CheckUser();
+            var userResult = await _twt.CheckUser();
 
             if (!userResult.DidSucceed)
             {

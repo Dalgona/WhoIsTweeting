@@ -47,7 +47,7 @@ namespace Wit.Core
 
         #endregion
 
-        public async Task<TwitterApiResult<bool>> SetAccessTokenAsync(Func<string, string> getVerifier)
+        public async Task<TwitterApiResult<bool>> SetAccessToken(Func<string, string> getVerifier)
         {
             try
             {
@@ -67,14 +67,14 @@ namespace Wit.Core
             }
         }
 
-        public TwitterApiResult<UserListItem> CheckUser()
+        public async Task<TwitterApiResult<UserListItem>> CheckUser()
         {
             try
             {
-                User user = Task.Run(() => _api.Get<User>("/1.1/account/verify_credentials.json")).Result;
+                User user = await _api.Get<User>("/1.1/account/verify_credentials.json");
 
                 CursoredIdStrings ids =
-                    Task.Run(() => _api.Get<CursoredIdStrings>(
+                    await _api.Get<CursoredIdStrings>(
                         "/1.1/friends/ids.json",
                         new NameValueCollection
                         {
@@ -82,7 +82,7 @@ namespace Wit.Core
                             { "stringify_id", "true" },
                             { "count", "5000" }
                         }
-                    )).Result;
+                    );
 
                 _userIds = new HashSet<string>(ids.Ids);
 
@@ -98,7 +98,7 @@ namespace Wit.Core
             }
         }
 
-        public TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings()
+        public async Task<TwitterApiResult<IEnumerable<UserListItem>>> RetrieveFollowings()
         {
             UserListItem.lastUpdated = DateTime.Now;
             HashSet<string> userIdsCopy = new HashSet<string>(_userIds ?? Enumerable.Empty<string>());
@@ -112,11 +112,11 @@ namespace Wit.Core
                     string data = string.Join(",", batch);
 
                     List<User> tmp =
-                        Task.Run(() => _api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
+                        await _api.Post<List<User>>("/1.1/users/lookup.json", null, new NameValueCollection
                         {
                             { "user_id", data },
                             { "include_entities", "true" }
-                        })).Result;
+                        });
 
                     list.AddRange(from u in tmp select new UserListItem(u.IdStr, u.Name, u.ScreenName, u.Status));
                     userIdsCopy.ExceptWith(batch);
@@ -134,14 +134,14 @@ namespace Wit.Core
             }
         }
 
-        public TwitterApiResult<bool> PostTweet(string content)
+        public async Task<TwitterApiResult<bool>> PostTweet(string content)
         {
             try
             {
-                Task.Run(() => _api.Post("/1.1/statuses/update.json", null, new NameValueCollection
+                await _api.Post("/1.1/statuses/update.json", null, new NameValueCollection
                 {
                     { "status", content }
-                })).Wait();
+                });
 
                 return true;
             }

@@ -25,7 +25,7 @@ namespace WhoIsTweeting
 
             BindingOperations.EnableCollectionSynchronization(service.UserList, ((ICollection)service.UserList).SyncRoot);
             BindingOperations.EnableCollectionSynchronization(service.Graph, ((ICollection)service.Graph).SyncRoot);
-            Task.Run((Action)service.Resume);
+            Task.Run(service.Resume);
 
             ioc.Register<IWindowManager, WindowManager>();
             ioc.Register<IMessageBoxHelper, MessageBoxHelper>();

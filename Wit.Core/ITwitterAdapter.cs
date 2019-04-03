@@ -12,9 +12,9 @@ namespace Wit.Core
         string AccessTokenSecret { get; set; }
         int HttpTimeout { get; set; }
 
-        Task<TwitterApiResult<bool>> SetAccessTokenAsync(Func<string, string> getVerifier);
-        TwitterApiResult<UserListItem> CheckUser();
-        TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings();
-        TwitterApiResult<bool> PostTweet(string content);
+        Task<TwitterApiResult<bool>> SetAccessToken(Func<string, string> getVerifier);
+        Task<TwitterApiResult<UserListItem>> CheckUser();
+        Task<TwitterApiResult<IEnumerable<UserListItem>>> RetrieveFollowings();
+        Task<TwitterApiResult<bool>> PostTweet(string content);
     }
 }

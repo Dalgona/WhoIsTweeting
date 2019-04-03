@@ -88,7 +88,7 @@ namespace Wit.Core
 
         public void Dispose() => _worker.Dispose();
 
-        private void UpdateUserList(BackgroundWorker worker)
+        private async Task UpdateUserList(BackgroundWorker worker)
         {
             if (Status < UpdaterStatus.Ready || Status == UpdaterStatus.Updating)
             {
@@ -97,7 +97,7 @@ namespace Wit.Core
 
             Status = UpdaterStatus.Updating;
 
-            var result = _twtAdapter.RetrieveFollowings();
+            var result = await _twtAdapter.RetrieveFollowings();
 
             if (!result.DidSucceed)
             {
