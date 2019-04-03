@@ -7,23 +7,14 @@ namespace Wit.Core
     interface ITwitterAdapter
     {
         string ConsumerKey { get; set; }
-
         string ConsumerSecret { get; set; }
-
         string AccessToken { get; set; }
-
         string AccessTokenSecret { get; set; }
-
         int HttpTimeout { get; set; }
 
         Task<TwitterApiResult<bool>> SetAccessTokenAsync(Func<string, string> getVerifier);
-
         TwitterApiResult<UserListItem> CheckUser();
-
-        TwitterApiResult<IEnumerable<string>> RetrieveFollowingIds(string userId);
-
-        TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings(ISet<string> userIds);
-
+        TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings();
         TwitterApiResult<bool> PostTweet(string content);
     }
 }

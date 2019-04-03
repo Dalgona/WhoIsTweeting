@@ -195,20 +195,10 @@ namespace Wit.Core
                 return;
             }
 
-            var retrieveResult = _twt.RetrieveFollowingIds(userResult.Data.Id);
-
-            if (!retrieveResult.DidSucceed)
-            {
-                AuthStatus = AuthStatus.Error;
-                LastError = retrieveResult.ErrorType;
-
-                return;
-            }
-
             AuthStatus = AuthStatus.OK;
             Me = userResult.Data;
 
-            _listUpdater.Start(new HashSet<string>(retrieveResult.Data));
+            _listUpdater.Start();
         }
 
         public void ResetStatistics()

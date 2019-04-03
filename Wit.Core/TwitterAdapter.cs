@@ -10,11 +10,10 @@ namespace Wit.Core
 {
     class TwitterAdapter : ITwitterAdapter
     {
-        API _api = new API("", "")
-        {
-            HttpTimeout = 10,
-            OAuthCallback = "oob"
-        };
+        private readonly API _api = new API();
+        private HashSet<string> _userIds;
+
+        #region Properties
 
         public string ConsumerKey
         {
@@ -46,6 +45,8 @@ namespace Wit.Core
             set => _api.HttpTimeout = value;
         }
 
+        #endregion
+
         public async Task<TwitterApiResult<bool>> SetAccessTokenAsync(Func<string, string> getVerifier)
         {
             try
@@ -72,6 +73,19 @@ namespace Wit.Core
             {
                 User user = Task.Run(() => _api.Get<User>("/1.1/account/verify_credentials.json")).Result;
 
+                CursoredIdStrings ids =
+                    Task.Run(() => _api.Get<CursoredIdStrings>(
+                        "/1.1/friends/ids.json",
+                        new NameValueCollection
+                        {
+                            { "user_id", user.IdStr },
+                            { "stringify_id", "true" },
+                            { "count", "5000" }
+                        }
+                    )).Result;
+
+                _userIds = new HashSet<string>(ids.Ids);
+
                 return new UserListItem(user.IdStr, user.Name, user.ScreenName, user.Status);
             }
             catch (AggregateException e)
@@ -84,37 +98,10 @@ namespace Wit.Core
             }
         }
 
-        public TwitterApiResult<IEnumerable<string>> RetrieveFollowingIds(string userId)
-        {
-            try
-            {
-                CursoredIdStrings ids =
-                    Task.Run(() => _api.Get<CursoredIdStrings>(
-                        "/1.1/friends/ids.json",
-                        new NameValueCollection
-                        {
-                            { "user_id", userId },
-                            { "stringify_id", "true" },
-                            { "count", "5000" }
-                        }
-                    )).Result;
-
-                return ids.Ids;
-            }
-            catch (AggregateException e)
-            {
-                return e.InnerException;
-            }
-            catch (Exception e)
-            {
-                return e;
-            }
-        }
-
-        public TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings(ISet<string> userIds)
+        public TwitterApiResult<IEnumerable<UserListItem>> RetrieveFollowings()
         {
             UserListItem.lastUpdated = DateTime.Now;
-            HashSet<string> userIdsCopy = new HashSet<string>(userIds);
+            HashSet<string> userIdsCopy = new HashSet<string>(_userIds ?? Enumerable.Empty<string>());
             List<UserListItem> list = new List<UserListItem>();
 
             try

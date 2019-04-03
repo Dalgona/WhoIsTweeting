@@ -61,7 +61,7 @@ namespace Wit.Core
             _worker.RunWorkerCompleted += OnWorkerCompeted;
         }
 
-        public void Start(ISet<string> userIds)
+        public void Start()
         {
             if (Status != UpdaterStatus.Running)
             {
@@ -72,7 +72,7 @@ namespace Wit.Core
                     Thread.Sleep(50); // FIXME: naive spin-wait
                 }
 
-                _worker.RunWorkerAsync(userIds);
+                _worker.RunWorkerAsync();
             }
         }
 
@@ -88,7 +88,7 @@ namespace Wit.Core
 
         public void Dispose() => _worker.Dispose();
 
-        private void UpdateUserList(BackgroundWorker worker, ISet<string> userIds)
+        private void UpdateUserList(BackgroundWorker worker)
         {
             if (Status < UpdaterStatus.Ready || Status == UpdaterStatus.Updating)
             {
@@ -97,7 +97,7 @@ namespace Wit.Core
 
             Status = UpdaterStatus.Updating;
 
-            var result = _twtAdapter.RetrieveFollowings(userIds);
+            var result = _twtAdapter.RetrieveFollowings();
 
             if (!result.DidSucceed)
             {
@@ -130,7 +130,7 @@ namespace Wit.Core
                 if (timer % UpdateInterval == 0)
                 {
                     timer = 0;
-                    Task.Run(() => UpdateUserList(worker, e.Argument as ISet<string>));
+                    Task.Run(() => UpdateUserList(worker));
                 }
 
                 Thread.Sleep(TimeSpan.FromSeconds(1.0));
