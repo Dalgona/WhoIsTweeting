@@ -51,6 +51,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="RxUserListUpdater.cs" />
     <Compile Include="StatData.cs" />
     <Compile Include="StatManager.cs" />
     <Compile Include="TwitterAdapter.cs" />
