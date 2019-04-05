@@ -66,14 +66,14 @@ namespace Wit.VM
             }));
 
         public RelayCommand SignInCommand
-            => _signInCommand ?? (_signInCommand = new RelayCommand(() =>
+            => _signInCommand ?? (_signInCommand = new RelayCommand(async () =>
             {
                 string confirmTitle = StringProvider.GetString("SignIn_Title");
                 string confirmMessage = StringProvider.GetString("SignIn_Confirm");
 
                 MessageBoxHelper.ShowInfo(confirmTitle, confirmMessage);
 
-                _service.SignIn(url =>
+                await _service.SignIn(url =>
                 {
                     PinViewModel vm = DepsInjector.Default.Create<PinViewModel>();
 
@@ -107,7 +107,7 @@ namespace Wit.VM
             }));
 
         public RelayCommand OpenMentionCommand
-            => _openMentionCommand ?? (_openMentionCommand = new RelayCommand(param =>
+            => _openMentionCommand ?? (_openMentionCommand = new RelayCommand(async param =>
             {
                 MentionViewModel vm = DepsInjector.Default.Create<MentionViewModel>();
                 vm.User = param as UserListItem;
@@ -116,7 +116,7 @@ namespace Wit.VM
 
                 if (vm.Result)
                 {
-                    _service.PostTweet(vm.Content, ex =>
+                    await _service.PostTweet(vm.Content, ex =>
                     {
                         string errTitle = StringProvider.GetString("Title_Error");
                         string errMessage = StringProvider.GetString("Message_Error_Mention");
@@ -149,8 +149,7 @@ namespace Wit.VM
         public int OnlineCount => _service.OnlineCount;
         public int AwayCount => _service.AwayCount;
         public int OfflineCount => _service.OfflineCount;
-
-        //public bool IsErrorSet => _service.State < 0;
+        public bool IsUpdating => _service.IsUpdating;
 
         public UserListItem SelectedItem
         {

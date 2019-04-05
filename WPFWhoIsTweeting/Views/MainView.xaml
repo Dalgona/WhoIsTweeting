@@ -202,14 +202,12 @@
             <Label Content="{Binding OnlineCount}" ContentStringFormat="{x:Static local:Strings.Status_Online}" Padding="0" Foreground="MediumSpringGreen"/>
             <Label Content="{Binding AwayCount, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Away}" Padding="0" Foreground="LightGray"/>
             <Label Content="{Binding OfflineCount, Mode=OneWay}" ContentStringFormat="{x:Static local:Strings.Status_Offline}" Padding="0" Foreground="DimGray"/>
-            <Label Padding="0" Foreground="#FFFF8000">
+            <Label Padding="0" Foreground="#FFFF8000" FontFamily="Segoe UI Symbol" Content="&#xe117;">
                 <Label.Style>
                     <Style TargetType="Label">
-                        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-                        <Setter Property="Content" Value=""/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding UpdaterStatus}" Value="Updating">
-                                <Setter Property="Content" Value="&#xe117;"/>
+                            <DataTrigger Binding="{Binding IsUpdating}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
