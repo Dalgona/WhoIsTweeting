@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reactive;
 using System.Threading.Tasks;
 using Wit.Core.Properties;
 
@@ -31,11 +31,15 @@ namespace Wit.Core
 
         private readonly Settings _settings = Settings.Default;
         private readonly ITwitterAdapter _twt;
-        private readonly UserListUpdater _listUpdater;
+        private readonly RxUserListUpdater _rxListUpdater;
         private readonly StatManager _statManager = new StatManager();
+        private readonly IObserver<UserListUpdaterEvent> _updaterObserver;
         private AuthStatus _authStatus = AuthStatus.NeedConsumerKey;
         private TwitterErrorType _lastError = TwitterErrorType.None;
         private UserListItem _me;
+        private IDisposable _updaterSubscription;
+        private bool _isUpdating = false;
+        private bool _isActive = false;
 
         #endregion
 
@@ -71,7 +75,6 @@ namespace Wit.Core
             }
         }
 
-        public UpdaterStatus UpdaterStatus => _listUpdater.Status;
         public int OnlineCount => _statManager.OnlineCount;
         public int AwayCount => _statManager.AwayCount;
         public int OfflineCount => _statManager.OfflineCount;
@@ -84,12 +87,27 @@ namespace Wit.Core
 
         public int UpdateInterval
         {
-            get => _listUpdater.UpdateInterval;
+            get => _settings.Interval;
             set
             {
-                _settings.Interval = _listUpdater.UpdateInterval = value;
-                _twt.HttpTimeout = (int)(value * 0.9);
+                _settings.Interval = value;
                 _settings.Save();
+
+                if (_isActive)
+                {
+                    _updaterSubscription?.Dispose();
+                    _updaterSubscription = _rxListUpdater.GetObservable(value).Subscribe(_updaterObserver);
+                }
+            }
+        }
+
+        public bool IsUpdating
+        {
+            get => _isUpdating;
+            set
+            {
+                _isUpdating = value;
+                OnPropertyChanged(nameof(IsUpdating));
             }
         }
 
@@ -117,10 +135,8 @@ namespace Wit.Core
                 AccessTokenSecret = _settings.TokenSecret
             };
 
-            _listUpdater = new UserListUpdater(_twt);
-            _listUpdater.UserListUpdated += OnUserListUpdated;
-            _listUpdater.PropertyChanged += OnUpdaterPropertyChanged;
-
+            _rxListUpdater = new RxUserListUpdater(_twt);
+            _updaterObserver = Observer.Create<UserListUpdaterEvent>(OnNext, OnError, OnCompleted);
             UpdateInterval = _settings.Interval;
 
             AuthStatus =
@@ -197,8 +213,7 @@ namespace Wit.Core
 
             AuthStatus = AuthStatus.OK;
             Me = userResult.Data;
-
-            _listUpdater.Start();
+            _updaterSubscription = _rxListUpdater.GetObservable(UpdateInterval).Subscribe(_updaterObserver);
         }
 
         public void ResetStatistics()
@@ -207,13 +222,13 @@ namespace Wit.Core
             NotifyStatChanged();
         }
 
-        public void Dispose() => _listUpdater.Dispose();
+        public void Dispose() => _updaterSubscription?.Dispose();
 
         #endregion
 
         private void SignOut()
         {
-            _listUpdater.Stop();
+            _updaterSubscription?.Dispose();
             ResetStatistics();
 
             Me = null;
@@ -230,22 +245,6 @@ namespace Wit.Core
             AuthStatus = AuthStatus.NeedSignIn;
         }
 
-        private void OnUserListUpdated(object sender, IEnumerable<UserListItem> users)
-        {
-            lock (((ICollection)UserList).SyncRoot)
-            {
-                UserList.Clear();
-
-                foreach (UserListItem user in users)
-                {
-                    UserList.Add(user);
-                }
-            }
-
-            _statManager.Update(users);
-            NotifyStatChanged();
-        }
-
         private void NotifyStatChanged()
         {
             OnPropertyChanged(nameof(OnlineCount));
@@ -257,17 +256,45 @@ namespace Wit.Core
             OnPropertyChanged(nameof(AvgOnline));
         }
 
-        private void OnUpdaterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnNext(UserListUpdaterEvent item)
         {
-            if (e.PropertyName == nameof(UserListUpdater.Status))
+            _isActive = true;
+
+            switch (item)
             {
-                OnPropertyChanged(nameof(UpdaterStatus));
-            }
-            else if (e.PropertyName == nameof(UserListUpdater.LastError))
-            {
-                LastError = ((UserListUpdater)sender).LastError;
+                case UpdateStartedEvent _:
+                    IsUpdating = true;
+                    LastError = TwitterErrorType.None;
+                    break;
+
+                case UpdateCompletedEvent completed:
+                    IsUpdating = false;
+                    LastError = TwitterErrorType.None;
+
+                    lock (((ICollection)UserList).SyncRoot)
+                    {
+                        UserList.Clear();
+
+                        foreach (UserListItem user in completed.Users)
+                        {
+                            UserList.Add(user);
+                        }
+                    }
+
+                    _statManager.Update(completed.Users);
+                    NotifyStatChanged();
+                    break;
+
+                case ErrorEvent error:
+                    IsUpdating = false;
+                    LastError = error.ErrorType;
+                    break;
             }
         }
+
+        void OnCompleted() => _isActive = false;
+
+        void OnError(Exception _) => _isActive = false;
 
         private void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

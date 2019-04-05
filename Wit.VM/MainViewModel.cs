@@ -143,7 +143,6 @@ namespace Wit.VM
         #region Properties
 
         public AuthStatus AuthStatus => _service.AuthStatus;
-        public UpdaterStatus UpdaterStatus => _service.UpdaterStatus;
         public TwitterErrorType LastError => _service.LastError;
         public UserListItem Me => _service.Me;
         public IEnumerable<UserListItem> UserList => _service.UserList;
