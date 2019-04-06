@@ -89,68 +89,83 @@
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <ItemsControl ItemsSource="{Binding Graph}">
+        <ItemsControl x:Name="graph" ItemsSource="{Binding Graph}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel
-                            VirtualizingPanel.IsVirtualizing="True"
-                            VirtualizingPanel.VirtualizationMode="Recycling"
-                            Orientation="Horizontal"/>
+                        VirtualizingPanel.IsVirtualizing="True"
+                        VirtualizingPanel.VirtualizationMode="Recycling"
+                        Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:StatData}">
-                    <ctrl:StatHistogramBar Margin="1" Width="18" OnlineBrush="MediumSpringGreen" AwayBrush="Gray" />
+                    <ctrl:StatHistogramBar
+                        Margin="1" Width="18"
+                        OnlineBrush="MediumSpringGreen"
+                        AwayBrush="Gray"
+                        local:HoverHelper.HoverCommand="{Binding DataContext.SetHoverItemCommand, ElementName=graph}">
+                        <ctrl:StatHistogramBar.Style>
+                            <Style TargetType="ctrl:StatHistogramBar">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#10FFFFFF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ctrl:StatHistogramBar.Style>
+                    </ctrl:StatHistogramBar>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.Template>
                 <ControlTemplate TargetType="ItemsControl">
                     <ScrollViewer
-                            local:ScrollHelper.ShiftWheelHorizontalScroll="True"
-                            local:ScrollHelper.AutoScroll="True"
-                            local:ScrollHelper.AutoScrollDirection="RightEnd"
-                            HorizontalScrollBarVisibility="Visible"
-                            VerticalScrollBarVisibility="Hidden">
+                        local:ScrollHelper.ShiftWheelHorizontalScroll="True"
+                        local:ScrollHelper.AutoScroll="True"
+                        local:ScrollHelper.AutoScrollDirection="RightEnd"
+                        HorizontalScrollBarVisibility="Visible"
+                        VerticalScrollBarVisibility="Hidden">
                         <ItemsPresenter Margin="1" SnapsToDevicePixels="True" UseLayoutRounding="True" />
                     </ScrollViewer>
                 </ControlTemplate>
             </ItemsControl.Template>
         </ItemsControl>
-        <!--<Popup x:Name="peek" IsHitTestVisible="False" AllowsTransparency="True" PopupAnimation="Fade">
-            <Popup.Resources>
-                <Style x:Key="NoPadding" TargetType="Label">
-                    <Setter Property="Padding" Value="0"/>
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5" Padding="5,3" Background="#80000000" CornerRadius="5" IsHitTestVisible="False"> 
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HoverItem}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
-                <Style x:Key="PeekKey" BasedOn="{StaticResource NoPadding}" TargetType="Label">
-                    <Setter Property="Foreground" Value="{x:Static SystemColors.GrayTextBrush}"/>
-                </Style>
-                <Style x:Key="PeekValue" BasedOn="{StaticResource NoPadding}" TargetType="Label">
-                    <Setter Property="Margin" Value="15,0,0,0"/>
-                </Style>
-            </Popup.Resources>
-            <Border Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}" BorderBrush="{StaticResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" Padding="3">
-                <StackPanel>
-                    <Label Style="{StaticResource NoPadding}" FontWeight="Bold" Content="{Binding Key, FallbackValue=Date}" ContentStringFormat="{}{0:yyyy-MM-dd HH:mm:ss}"/>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Label Style="{StaticResource PeekKey}" Content="{x:Static local:Strings.Stat_Online}" ContentStringFormat="{}{0}:"/>
-                        <Label Style="{StaticResource PeekKey}" Content="{x:Static local:Strings.Stat_Away}" ContentStringFormat="{}{0}:" Grid.Row="1"/>
-                        <Label Style="{StaticResource PeekKey}" Content="{x:Static local:Strings.Stat_Offline}" ContentStringFormat="{}{0}:" Grid.Row="2"/>
-                        <Label Style="{StaticResource PeekValue}" Content="{Binding Value[0], FallbackValue=0}" Grid.Column="1"/>
-                        <Label Style="{StaticResource PeekValue}" Content="{Binding Value[1], FallbackValue=0}" Grid.Column="1" Grid.Row="1"/>
-                        <Label Style="{StaticResource PeekValue}" Content="{Binding Value[2], FallbackValue=0}" Grid.Column="1" Grid.Row="2"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
-        </Popup>-->
+            </Border.Style>
+            <Grid DataContext="{Binding HoverItem}" d:DataContext="{d:DesignInstance Type={x:Type core:StatData}}">
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="WhiteSmoke"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.ColumnSpan="3" Text="{Binding Date, StringFormat={}{0:yyyy-MM-dd HH:mm}}" FontSize="16"/>
+                <TextBlock Grid.Row="1" Text="Online" FontWeight="Bold"/>
+                <TextBlock Grid.Row="2" Text="Away" FontWeight="Bold"/>
+                <TextBlock Grid.Row="3" Text="Offline" FontWeight="Bold"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding OnlineCount}"/>
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding AwayCount}"/>
+                <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding OfflineCount}"/>
+            </Grid>
+        </Border>
         <StackPanel Grid.Row="1" Margin="10">
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                 <StackPanel Margin="0,0,20,0">
