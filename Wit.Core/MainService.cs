@@ -232,6 +232,7 @@ namespace Wit.Core
             ResetStatistics();
 
             Me = null;
+            LastError = TwitterErrorType.None;
 
             _settings.Token = _twt.AccessToken = "";
             _settings.TokenSecret = _twt.AccessTokenSecret = "";
