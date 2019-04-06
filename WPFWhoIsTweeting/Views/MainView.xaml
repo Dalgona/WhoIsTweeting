@@ -87,63 +87,63 @@
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding UpdaterStatus}" Value="Error">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding AuthStatus}" Value="Error">
+                        <DataTrigger Binding="{Binding IsErrorSet}" Value="True">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
                     <Setter Property="Visibility" Value="Collapsed"/>
                 </Style>
             </StackPanel.Style>
-            <Label FontWeight="Bold" Foreground="White" Margin="2,0" Padding="5,5,5,2">
+            <Label FontWeight="Bold" Foreground="White" Padding="5,5,5,0">
+                <TextBlock>
+                    <Run>
+                        <Run.Style>
+                            <Style TargetType="Run">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AuthStatus}" Value="Error">
+                                        <Setter Property="Text" Value="{x:Static local:Strings.Critical_AuthFailed}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                                <Setter Property="Text" Value="{x:Static local:Strings.Critical_UpdateFailed}"/>
+                            </Style>
+                        </Run.Style>
+                    </Run>
+                    <Run>
+                        <Run.Style>
+                            <Style TargetType="Run">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="ApiError">
+                                        <Setter Property="Text" Value="{x:Static local:Strings.Critical_ApiError}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="NetError">
+                                        <Setter Property="Text" Value="{x:Static local:Strings.Critical_NetError}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="Unknown">
+                                        <Setter Property="Text" Value="{x:Static local:Strings.Critical_UnknownError}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                                <Setter Property="Text" Value="No Error"/>
+                            </Style>
+                        </Run.Style>
+                    </Run>
+                </TextBlock>
+            </Label>
+            <Label Foreground="White">
+                <Label.Content>
+                    <TextBlock Text="{x:Static local:Strings.Critical_Message}" TextWrapping="WrapWithOverflow"/>
+                </Label.Content>
+            </Label>
+            <Label Content="{x:Static local:Strings.Critical_Retry}" Foreground="White" Padding="5,0,5,5">
                 <Label.Style>
                     <Style TargetType="Label">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="ApiError">
-                                <Setter Property="Content" Value="{x:Static local:Strings.Critical_ApiError}"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="NetError">
-                                <Setter Property="Content" Value="{x:Static local:Strings.Critical_NetError}"/>
+                            <DataTrigger Binding="{Binding AuthStatus}" Value="Error">
+                                <Setter Property="Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
-                        <Setter Property="Content" Value="No Error" />
                     </Style>
                 </Label.Style>
             </Label>
-            <Label Foreground="White" Margin="2,0" Padding="5,2,5,5">
-                <Label.Content>
-                    <TextBlock TextWrapping="WrapWithOverflow">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding IsErrorSet}" Value="True" />
-                                            <Condition Binding="{Binding IsRetryPending}" Value="True" />
-                                        </MultiDataTrigger.Conditions>
-                                        <MultiDataTrigger.Setters>
-                                            <Setter Property="Text" Value="{Binding RetryTimeout, StringFormat={x:Static local:Strings.Critical_AutoRetry_Message}}" />
-                                        </MultiDataTrigger.Setters>
-                                    </MultiDataTrigger>
-                                    <MultiDataTrigger>
-                                        <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding IsErrorSet}" Value="True" />
-                                            <Condition Binding="{Binding IsRetryPending}" Value="False" />
-                                        </MultiDataTrigger.Conditions>
-                                        <MultiDataTrigger.Setters>
-                                            <Setter Property="Text" Value="{Binding RetryCount, StringFormat={x:Static local:Strings.Critical_AutoRetry_Failed}}" />
-                                        </MultiDataTrigger.Setters>
-                                    </MultiDataTrigger>
-                                </Style.Triggers>
-                                <Setter Property="Text" Value="This program is running normally." />
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                </Label.Content>
-            </Label>
-            <Button Content="{x:Static local:Strings.Button_TryAgain}" HorizontalAlignment="Right" Margin="5" Padding="15,3"/>
         </StackPanel>
         <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding Source={StaticResource UserListSource}}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
             <ListBox.ContextMenu>

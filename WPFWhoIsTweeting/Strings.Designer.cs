@@ -19,7 +19,7 @@ namespace WhoIsTweeting {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -228,6 +228,15 @@ namespace WhoIsTweeting {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auth Failed:.
+        /// </summary>
+        public static string Critical_AuthFailed {
+            get {
+                return ResourceManager.GetString("Critical_AuthFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not recover from errors after {0} retries. Please retry manually..
         /// </summary>
         public static string Critical_AutoRetry_Failed {
@@ -246,11 +255,47 @@ namespace WhoIsTweeting {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check your Internet connection or try signing in again..
+        /// </summary>
+        public static string Critical_Message {
+            get {
+                return ResourceManager.GetString("Critical_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Network Error.
         /// </summary>
         public static string Critical_NetError {
             get {
                 return ResourceManager.GetString("Critical_NetError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retrying in a few moments....
+        /// </summary>
+        public static string Critical_Retry {
+            get {
+                return ResourceManager.GetString("Critical_Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown Error.
+        /// </summary>
+        public static string Critical_UnknownError {
+            get {
+                return ResourceManager.GetString("Critical_UnknownError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Failed:.
+        /// </summary>
+        public static string Critical_UpdateFailed {
+            get {
+                return ResourceManager.GetString("Critical_UpdateFailed", resourceCulture);
             }
         }
         

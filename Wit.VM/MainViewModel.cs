@@ -144,6 +144,7 @@ namespace Wit.VM
 
         public AuthStatus AuthStatus => _service.AuthStatus;
         public TwitterErrorType LastError => _service.LastError;
+        public bool IsErrorSet => AuthStatus == AuthStatus.Error || LastError != TwitterErrorType.None;
         public UserListItem Me => _service.Me;
         public IEnumerable<UserListItem> UserList => _service.UserList;
         public int OnlineCount => _service.OnlineCount;
@@ -198,6 +199,11 @@ namespace Wit.VM
         private void Service_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             OnPropertyChanged(e.PropertyName);
+
+            if (e.PropertyName == nameof(MainService.AuthStatus) || e.PropertyName == nameof(MainService.LastError))
+            {
+                OnPropertyChanged(nameof(IsErrorSet));
+            }
         }
     }
 }

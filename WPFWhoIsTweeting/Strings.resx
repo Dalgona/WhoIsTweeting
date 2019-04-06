@@ -339,4 +339,19 @@ to complete the sign-in process.</value>
   <data name="Title_Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="Critical_UnknownError" xml:space="preserve">
+    <value>Unknown Error</value>
+  </data>
+  <data name="Critical_Message" xml:space="preserve">
+    <value>Check your Internet connection or try signing in again.</value>
+  </data>
+  <data name="Critical_Retry" xml:space="preserve">
+    <value>Retrying in a few moments...</value>
+  </data>
+  <data name="Critical_AuthFailed" xml:space="preserve">
+    <value>Auth Failed:</value>
+  </data>
+  <data name="Critical_UpdateFailed" xml:space="preserve">
+    <value>Update Failed:</value>
+  </data>
 </root>
