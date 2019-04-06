@@ -83,9 +83,9 @@
                 <MenuItem Header="{x:Static local:Strings.Menu_View_ShowOffline}" IsChecked="{Binding ShowOffline, Mode=TwoWay}" IsCheckable="True"/>
             </MenuItem>
         </Menu>
-        <StackPanel Grid.Row="2" Background="#FFFF4000">
-            <StackPanel.Style>
-                <Style TargetType="StackPanel">
+        <view:ErrorMessageView Grid.Row="2" AuthStatus="{Binding AuthStatus}" LastError="{Binding LastError}">
+            <view:ErrorMessageView.Style>
+                <Style TargetType="view:ErrorMessageView">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsErrorSet}" Value="True">
                             <Setter Property="Visibility" Value="Visible"/>
@@ -93,58 +93,8 @@
                     </Style.Triggers>
                     <Setter Property="Visibility" Value="Collapsed"/>
                 </Style>
-            </StackPanel.Style>
-            <Label FontWeight="Bold" Foreground="White" Padding="5,5,5,0">
-                <TextBlock>
-                    <Run>
-                        <Run.Style>
-                            <Style TargetType="Run">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding AuthStatus}" Value="Error">
-                                        <Setter Property="Text" Value="{x:Static local:Strings.Critical_AuthFailed}"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                                <Setter Property="Text" Value="{x:Static local:Strings.Critical_UpdateFailed}"/>
-                            </Style>
-                        </Run.Style>
-                    </Run>
-                    <Run>
-                        <Run.Style>
-                            <Style TargetType="Run">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="ApiError">
-                                        <Setter Property="Text" Value="{x:Static local:Strings.Critical_ApiError}"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="NetError">
-                                        <Setter Property="Text" Value="{x:Static local:Strings.Critical_NetError}"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="Unknown">
-                                        <Setter Property="Text" Value="{x:Static local:Strings.Critical_UnknownError}"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                                <Setter Property="Text" Value="No Error"/>
-                            </Style>
-                        </Run.Style>
-                    </Run>
-                </TextBlock>
-            </Label>
-            <Label Foreground="White">
-                <Label.Content>
-                    <TextBlock Text="{x:Static local:Strings.Critical_Message}" TextWrapping="WrapWithOverflow"/>
-                </Label.Content>
-            </Label>
-            <Label Content="{x:Static local:Strings.Critical_Retry}" Foreground="White" Padding="5,0,5,5">
-                <Label.Style>
-                    <Style TargetType="Label">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding AuthStatus}" Value="Error">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Label.Style>
-            </Label>
-        </StackPanel>
+            </view:ErrorMessageView.Style>
+        </view:ErrorMessageView>
         <ListBox x:Name="listBox" Grid.Row="3" ItemsSource="{Binding Source={StaticResource UserListSource}}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" BorderThickness="0">
             <ListBox.ContextMenu>
                 <ContextMenu>

@@ -1,0 +1,66 @@
+﻿<UserControl
+    x:Name="root"
+    x:Class="WhoIsTweeting.Views.ErrorMessageView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WhoIsTweeting"
+    mc:Ignorable="d"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel DataContext="{Binding ElementName=root}" Background="OrangeRed">
+        <Label FontWeight="Bold" Padding="5,5,5,0">
+            <TextBlock>
+                <Run>
+                    <Run.Style>
+                        <Style TargetType="Run">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AuthStatus}" Value="Error">
+                                    <Setter Property="Text" Value="{x:Static local:Strings.Critical_AuthFailed}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Text" Value="{x:Static local:Strings.Critical_UpdateFailed}"/>
+                        </Style>
+                    </Run.Style>
+                </Run>
+                <Run>
+                    <Run.Style>
+                        <Style TargetType="Run">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="ApiError">
+                                    <Setter Property="Text" Value="{x:Static local:Strings.Critical_ApiError}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="NetError">
+                                    <Setter Property="Text" Value="{x:Static local:Strings.Critical_NetError}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding LastError, Mode=OneWay}" Value="Unknown">
+                                    <Setter Property="Text" Value="{x:Static local:Strings.Critical_UnknownError}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                            <Setter Property="Text" Value="No Error"/>
+                        </Style>
+                    </Run.Style>
+                </Run>
+            </TextBlock>
+        </Label>
+        <Label>
+            <TextBlock Text="{x:Static local:Strings.Critical_Message}" TextWrapping="WrapWithOverflow"/>
+        </Label>
+        <Label Content="{x:Static local:Strings.Critical_Retry}" Padding="5,0,5,5">
+            <Label.Style>
+                <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AuthStatus}" Value="Error">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+    </StackPanel>
+</UserControl>
