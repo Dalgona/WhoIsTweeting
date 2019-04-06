@@ -100,7 +100,7 @@ namespace Wit.Core
 
         public async Task<TwitterApiResult<IEnumerable<UserListItem>>> RetrieveFollowings()
         {
-            UserListItem.lastUpdated = DateTime.Now;
+            UserListItem.LastUpdated = DateTime.Now;
             HashSet<string> userIdsCopy = new HashSet<string>(_userIds ?? Enumerable.Empty<string>());
             List<UserListItem> list = new List<UserListItem>();
 

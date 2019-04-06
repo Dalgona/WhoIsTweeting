@@ -7,14 +7,16 @@ namespace Wit.Core
 
     public class UserListItem
     {
-        public static DateTime lastUpdated;
+        private static readonly DateTime _zeroDateTime = new DateTime(0L).ToLocalTime();
 
-        public string Id { get; private set; }
-        public string Name { get; private set; }
-        public string ScreenName { get; private set; }
-        public DateTime LastTweet { get; private set; }
+        public static DateTime LastUpdated { get; internal set; }
 
-        public int MinutesFromLastTweet => (int)(lastUpdated - LastTweet).TotalMinutes;
+        public string Id { get; }
+        public string Name { get; internal set; }
+        public string ScreenName { get; internal set; }
+        public DateTime LastTweet { get; internal set; }
+
+        public int MinutesFromLastTweet => (int)(LastUpdated - LastTweet).TotalMinutes;
 
         public UserStatus Status
             => MinutesFromLastTweet <= 5 ? UserStatus.Online
@@ -25,8 +27,7 @@ namespace Wit.Core
             Id = idStr;
             Name = name;
             ScreenName = screenName;
-            if (lastTweet == null) LastTweet = DateTime.FromBinary(0);
-            else LastTweet = lastTweet.CreatedAt.ToLocalTime();
+            LastTweet = lastTweet?.CreatedAt.ToLocalTime() ?? _zeroDateTime;
         }
     }
 }
