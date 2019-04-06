@@ -78,12 +78,12 @@ namespace Wit.Core
         public int OnlineCount => _statManager.OnlineCount;
         public int AwayCount => _statManager.AwayCount;
         public int OfflineCount => _statManager.OfflineCount;
-        public int GraphCount => _statManager.DataCount;
+        public int StatDataCount => _statManager.DataCount;
         public int MinOnline => _statManager.MinOnline;
         public int MaxOnline => _statManager.MaxOnline;
         public double AvgOnline => _statManager.AvgOnline;
         public ObservableCollection<UserListItem> UserList { get; } = new ObservableCollection<UserListItem>();
-        public ObservableCollection<StatData> Graph => _statManager.Data;
+        public ObservableCollection<StatData> StatData => _statManager.Data;
 
         public int UpdateInterval
         {
@@ -251,7 +251,7 @@ namespace Wit.Core
             OnPropertyChanged(nameof(OnlineCount));
             OnPropertyChanged(nameof(AwayCount));
             OnPropertyChanged(nameof(OfflineCount));
-            OnPropertyChanged(nameof(GraphCount));
+            OnPropertyChanged(nameof(StatDataCount));
             OnPropertyChanged(nameof(MinOnline));
             OnPropertyChanged(nameof(MaxOnline));
             OnPropertyChanged(nameof(AvgOnline));

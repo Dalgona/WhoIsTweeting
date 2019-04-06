@@ -46,7 +46,7 @@ namespace WhoIsTweeting.Views
                 {
                     byte[] utfstr;
 
-                    foreach (var x in service.Graph)
+                    foreach (var x in service.StatData)
                     {
                         string date = x.Date.ToString("yyyy-MM-dd HH:mm:ss");
                         utfstr = Encoding.UTF8.GetBytes($"\"{date}\",{x.OnlineCount},{x.AwayCount},{x.OfflineCount}{Environment.NewLine}");

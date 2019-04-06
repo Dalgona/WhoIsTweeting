@@ -11,14 +11,14 @@ namespace Wit.VM
 
         public abstract string DisplayName { get; }
 
-        public virtual int DataCount => service.GraphCount;
-        public virtual INotifyCollectionChanged Graph => service.Graph;
+        public virtual int DataCount => service.StatDataCount;
+        public virtual INotifyCollectionChanged Graph => service.StatData;
 
         public StatPageViewModel()
         {
             service = MainService.Instance;
             service.PropertyChanged += OnServicePropertyChanged;
-            service.Graph.CollectionChanged += OnGraphCollectionChanged;
+            service.StatData.CollectionChanged += OnGraphCollectionChanged;
         }
 
         protected virtual void OnServicePropertyChanged(object sender, PropertyChangedEventArgs e)

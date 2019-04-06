@@ -12,8 +12,8 @@ namespace Wit.VM
         {
             get
             {
-                if (service.Graph.Count == 0) return "N/A";
-                return service.Graph[0].Date.ToString(_dateFormat);
+                if (service.StatData.Count == 0) return "N/A";
+                return service.StatData[0].Date.ToString(_dateFormat);
             }
         }
 
@@ -21,8 +21,8 @@ namespace Wit.VM
         {
             get
             {
-                if (service.Graph.Count == 0) return "N/A";
-                return service.Graph.Last().Date.ToString(_dateFormat);
+                if (service.StatData.Count == 0) return "N/A";
+                return service.StatData.Last().Date.ToString(_dateFormat);
             }
         }
 

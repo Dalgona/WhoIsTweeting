@@ -24,7 +24,7 @@ namespace WhoIsTweeting
             DepsInjector ioc = DepsInjector.Default;
 
             BindingOperations.EnableCollectionSynchronization(service.UserList, ((ICollection)service.UserList).SyncRoot);
-            BindingOperations.EnableCollectionSynchronization(service.Graph, ((ICollection)service.Graph).SyncRoot);
+            BindingOperations.EnableCollectionSynchronization(service.StatData, ((ICollection)service.StatData).SyncRoot);
             Task.Run(service.Resume);
 
             ioc.Register<IWindowManager, WindowManager>();
