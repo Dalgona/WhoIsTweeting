@@ -84,6 +84,7 @@
       <DependentUpon>StatHistogramBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\WindowBase.cs" />
+    <Compile Include="HoverHelper.cs" />
     <Compile Include="LastTweetConverter.cs" />
     <Compile Include="LocalizedStringProvider.cs" />
     <Compile Include="MessageBoxHelper.cs" />
