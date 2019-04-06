@@ -25,13 +25,23 @@ namespace Wit.Core
             var countQuery =
                 from user in users
                 group user by user.Status into g
-                orderby g.Key
-                select g.Count();
+                select g;
 
-            List<int> counts = new List<int>(countQuery);
-            OnlineCount = counts[0];
-            AwayCount = counts[1];
-            OfflineCount = counts[2];
+            Dictionary<UserStatus, int> counts = new Dictionary<UserStatus, int>()
+            {
+                { UserStatus.Online, 0 },
+                { UserStatus.Away, 0 },
+                { UserStatus.Offline, 0 }
+            };
+
+            foreach (var group in countQuery)
+            {
+                counts[group.Key] = group.Count();
+            }
+
+            OnlineCount = counts[UserStatus.Online];
+            AwayCount = counts[UserStatus.Away];
+            OfflineCount = counts[UserStatus.Offline];
 
             _sumOnline += OnlineCount;
             MinOnline = DataCount == 0 ? OnlineCount : (OnlineCount < MinOnline ? OnlineCount : MinOnline);
