@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type={x:Type core:StatData}}"
     d:DesignHeight="100" d:DesignWidth="20">
-    <Grid Background="Transparent">
+    <Grid Background="Transparent" Margin="1">
         <Grid.RowDefinitions>
             <RowDefinition x:Name="row00" />
             <RowDefinition x:Name="row01" />

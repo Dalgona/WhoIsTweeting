@@ -101,7 +101,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type core:StatData}">
                     <ctrl:StatHistogramBar
-                        Margin="1" Width="18"
+                        Width="20"
                         OnlineBrush="MediumSpringGreen"
                         AwayBrush="Gray"
                         local:HoverHelper.HoverCommand="{Binding DataContext.SetHoverItemCommand, ElementName=graph}">
@@ -157,7 +157,7 @@
                     <ColumnDefinition Width="10"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.ColumnSpan="3" Text="{Binding Date, StringFormat={}{0:yyyy-MM-dd HH:mm}}" FontSize="16"/>
+                <TextBlock Grid.ColumnSpan="3" Text="{Binding Date, StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}" FontSize="16"/>
                 <TextBlock Grid.Row="1" Text="Online" FontWeight="Bold"/>
                 <TextBlock Grid.Row="2" Text="Away" FontWeight="Bold"/>
                 <TextBlock Grid.Row="3" Text="Offline" FontWeight="Bold"/>
